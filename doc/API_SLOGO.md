@@ -25,7 +25,7 @@ API
 * External: between the view (front end) and model (back end) modules
     * All visualization, we don't have any External API planned (yet), since the model is NOT going to call it. Only the other way around.
     * For the backend,
-        * We need to think
+        * We need to think more about this.
 * Internal: within each module (i.e., for its future programmers/maintainers)
     * SLogoDisplay: This class handles the Turtle on the Screen
         * Turtle updateTurtleInfo();
@@ -34,7 +34,7 @@ API
         * Grid updateBackGroundInfo();
         * void drawBackGround();
         * Map<String, String> handleUserOperations()
-        *
+
     * SLogoREPL:
         * handleParsingException(ParsingException e)
         * fetchCurrentLine()
