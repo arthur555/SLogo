@@ -17,10 +17,11 @@ public class SLogoApp extends Application {
         primaryStage.setResizable(false);
 
         var modelModule = new ModelModule();
-        var viewModule = new ViewModule(primaryStage, modelModule);
+        var viewModule = new ViewModule(modelModule);
         var controllerModule = new ControllerModule(modelModule, viewModule);
 
         startTick();
+        viewModule.show(primaryStage);
     }
 
     private void tick(double elapsedTime) {

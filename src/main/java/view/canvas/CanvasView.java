@@ -1,15 +1,16 @@
 package view.canvas;
 
 import controller.canvas.CanvasController;
-import javafx.scene.Group;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import model.turtle.TurtleModel;
 
-public class CanvasView extends Group {
+public class CanvasView extends Pane {
     private CanvasController canvasController;
 
     public CanvasView(TurtleModel turtleModel) {
-        getChildren().add(new Text("Canvas"));
+        getStyleClass().add("canvas");
+        getChildren().add(new Rectangle(200, 200, 200, 200));
     }
 
     public void registerController(CanvasController controller) {
