@@ -52,7 +52,7 @@ public class EditorController {
     }
 
     private void submitCommand() {
-        editorView.commandHistory().appendText(editorView.currentCommand().getText());
+        editorView.commandHistory().appendText(editorView.currentCommand().getText().trim()+"\n");
         editorView.currentCommand().clear();
     }
 }
