@@ -19,9 +19,9 @@ public class ViewModule {
     private CanvasView canvasView;
 
     public ViewModule(Stage primaryStage, ModelModule modelModule) {
-        // assemble view using models from modelModule
         canvasView = new CanvasView(modelModule.turtleModel());
         editorView = new EditorView();
+
         mainView = new MainView(canvasView, editorView);
 
         show(primaryStage);

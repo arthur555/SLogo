@@ -1,18 +1,22 @@
 package view.editor;
 
-import javafx.scene.layout.VBox;
+import controller.editor.EditorController;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-import java.util.ResourceBundle;
-
-public class EditorView extends VBox {
+public class EditorView extends GridPane {
     private static final String DEFAULT_LANGUAGE = "languages/English";
 
-    private ResourceBundle langPack;
+    private EditorController editorController;
 
-    public EditorView() {
-        super(10);
-        langPack = ResourceBundle.getBundle(DEFAULT_LANGUAGE);
+    public EditorView() { this(DEFAULT_LANGUAGE); }
+
+    public EditorView(String language) {
+        super();
         getChildren().add(new Text("Editor"));
+    }
+
+    public void registerController(EditorController controller) {
+        editorController = controller;
     }
 }

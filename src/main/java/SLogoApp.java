@@ -25,6 +25,8 @@ public class SLogoApp extends Application {
 
     private void tick(double elapsedTime) {
         // propagate tick to whichever module -> classes necessary
+        // for this application, it would probably be view,
+        // since it will consume TurtleModel's intermediate positions every x milliseconds
     }
 
     private void startTick() {
