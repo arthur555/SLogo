@@ -1,2 +1,3 @@
 module backend {
+    exports model
 }
