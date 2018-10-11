@@ -1,4 +1,4 @@
-package controller.editor;
+package slogo.controller.editor;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.input.KeyCode;

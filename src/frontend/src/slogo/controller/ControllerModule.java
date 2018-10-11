@@ -1,7 +1,7 @@
-package controller;
+package slogo.controller;
 
-import controller.canvas.CanvasController;
-import controller.editor.EditorController;
+import slogo.controller.canvas.CanvasController;
+import slogo.controller.editor.EditorController;
 import model.ModelModule;
 import view.ViewModule;
 
