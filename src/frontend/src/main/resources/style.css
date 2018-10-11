@@ -1,0 +1,10 @@
+.canvas {
+    -fx-background-color: white;
+}
+
+.command-line {
+    -fx-control-inner-background: #000000;
+    -fx-font-family: Consolas;
+    -fx-opacity: 0.8;
+    -fx-highlight-fill: #444444;
+}

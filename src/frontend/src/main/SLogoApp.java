@@ -1,3 +1,5 @@
+package main;
+
 import main.java.controller.ControllerModule;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
