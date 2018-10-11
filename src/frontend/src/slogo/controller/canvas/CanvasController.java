@@ -1,4 +1,4 @@
-package controller.canvas;
+package slogo.controller.canvas;
 
 import model.turtle.TurtleModel;
 import view.canvas.CanvasView;

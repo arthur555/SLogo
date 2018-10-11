@@ -1,6 +1,6 @@
 package view.editor;
 
-import controller.editor.EditorController;
+import slogo.controller.editor.EditorController;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
