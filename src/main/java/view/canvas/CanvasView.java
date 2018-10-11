@@ -1,6 +1,6 @@
 package view.canvas;
 
-import slogo.controller.canvas.CanvasController;
+import main.java.controller.canvas.CanvasController;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import model.turtle.TurtleModel;

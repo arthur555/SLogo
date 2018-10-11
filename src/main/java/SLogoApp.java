@@ -1,4 +1,4 @@
-import slogo.controller.ControllerModule;
+import main.java.controller.ControllerModule;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
