@@ -7,33 +7,40 @@ import model.ModelModule;
 import java.util.ResourceBundle;
 
 public class ViewModule {
-    public static final int SCREEN_WIDTH = 1000;
-    public static final int SCREEN_HEIGHT = 600;
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 800;
 
     private static final ResourceBundle APP_PROPERTIES = ResourceBundle.getBundle("slogo");
     private static final String STYLESHEET = "style.css";
 
     private MainView mainView;
-    private EditorView editorView;
-    private TurtleView turtleView;
     private SidebarView sidebarView;
+    private TurtleView turtleView;
+    private VariableView variableView;
+    private HistoryView historyView;
+    private CommandView commandView;
 
     public ViewModule(ModelModule modelModule) {
-        turtleView = new TurtleView(modelModule.turtleModel());
-        editorView = new EditorView();
         sidebarView = new SidebarView();
+        turtleView = new TurtleView(modelModule.turtleModel());
+        variableView = new VariableView();
+        historyView = new HistoryView();
+        commandView = new CommandView();
 
-        mainView = new MainView(turtleView, editorView, sidebarView);
+        mainView = new MainView(sidebarView, turtleView, variableView, historyView, commandView);
     }
 
     public void show(Stage primaryStage) {
         primaryStage.setTitle(APP_PROPERTIES.getString("Title"));
-        var scene = new Scene(mainView, SCREEN_WIDTH, SCREEN_HEIGHT);
+        var scene = new Scene(mainView.view(), SCREEN_WIDTH, SCREEN_HEIGHT);
         scene.getStylesheets().add(STYLESHEET);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public EditorView editorView() { return editorView; }
+    public SidebarView sidebarView() { return sidebarView; }
     public TurtleView turtleView() { return turtleView; }
+    public VariableView variableView() { return variableView; }
+    public HistoryView historyView() { return historyView; }
+    public CommandView commandView() { return commandView; }
 }

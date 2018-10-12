@@ -3,46 +3,49 @@ package controller;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import view.EditorView;
+import view.CommandView;
+import view.HistoryView;
 
 public class EditorController {
     public static final String COMMAND_PREFIX = ">> ";
 
-    private EditorView editorView;
+    private CommandView commandView;
+    private HistoryView historyView;
 
-    public EditorController(EditorView editorView) {
-        this.editorView = editorView;
+    public EditorController(CommandView commandView, HistoryView historyView) {
+        this.commandView = commandView;
+        this.historyView = historyView;
         setupHandlers();
     }
 
     private void setupHandlers() {
-        editorView.currentCommand().setOnKeyPressed(this::handleKeyPressed);
-        editorView.currentCommand().caretPositionProperty().addListener(this::handleCaretPositionChanged);
-        editorView.currentCommand().textProperty().addListener(this::handleTextChanged);
-        editorView.commandHistory().setOnKeyPressed(e -> {
-            if(!e.isMetaDown()) editorView.currentCommand().requestFocus();
+        commandView.view().setOnKeyPressed(this::handleKeyPressed);
+        commandView.view().caretPositionProperty().addListener(this::handleCaretPositionChanged);
+        commandView.view().textProperty().addListener(this::handleTextChanged);
+        historyView.view().setOnKeyPressed(e -> {
+            if(!e.isMetaDown()) commandView.view().requestFocus();
         });
     }
 
     private void handleKeyPressed(KeyEvent e) {
-        if(e.getCode() == KeyCode.ESCAPE) editorView.currentCommand().clear();
+        if(e.getCode() == KeyCode.ESCAPE) commandView.view().clear();
         else if(e.getCode() == KeyCode.ENTER) {
             if(e.isShiftDown()) {
-                editorView.currentCommand().insertText(editorView.currentCommand().getCaretPosition(), "\n");
+                commandView.view().insertText(commandView.view().getCaretPosition(), "\n");
             } else submitCommand();
         }
     }
 
     private void handleCaretPositionChanged(ObservableValue<? extends Number> ob, Number ov, Number nv) {
         if(nv.intValue() < COMMAND_PREFIX.length()) {
-            editorView.currentCommand().positionCaret(COMMAND_PREFIX.length());
+            commandView.view().positionCaret(COMMAND_PREFIX.length());
         }
     }
 
     private void handleTextChanged(ObservableValue<? extends String> ob, String ov, String nv) {
         if(!nv.startsWith(COMMAND_PREFIX)) {
-            editorView.currentCommand().setText(COMMAND_PREFIX + nv.substring(findCorruptPrefix(nv)));
-            editorView.currentCommand().positionCaret(COMMAND_PREFIX.length());
+            commandView.view().setText(COMMAND_PREFIX + nv.substring(findCorruptPrefix(nv)));
+            commandView.view().positionCaret(COMMAND_PREFIX.length());
         }
     }
 
@@ -53,8 +56,8 @@ public class EditorController {
     }
 
     private void submitCommand() {
-        editorView.commandHistory().appendText(editorView.currentCommand().getText().trim()+"\n");
-        editorView.currentCommand().clear();
+        historyView.view().appendText(historyView.view().getText().trim()+"\n");
+        commandView.view().clear();
     }
 
 }

@@ -15,8 +15,8 @@
 }
 
 .sidebar-box {
-    -fx-stroke: white;
-    -fx-stroke-type: centered;
+    -fx-stroke: #f8f7ff;
+    -fx-stroke-type: outside;
     -fx-stroke-width: 3pt;
     -fx-fill: rgba(0,0,0,0);
     -fx-arc-width: 12pt;
@@ -24,7 +24,7 @@
 }
 
 .sidebar-box:hover {
-    -fx-stroke: #2e2370;
-    -fx-stroke-type: centered;
+    -fx-stroke: #b5aee2;
+    -fx-stroke-type: outside;
     -fx-stroke-width: 3pt;
 }

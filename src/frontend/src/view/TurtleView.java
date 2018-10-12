@@ -1,7 +1,6 @@
 package view;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -20,7 +19,7 @@ public class TurtleView {
         root.getChildren().add(new Rectangle(200, 200, 200, 200));
     }
 
-    public Node view() { return root; }
+    public Pane view() { return root; }
     public void setBackgroundColor(Color c) { root.setBackground(BackgroundUtils.coloredBackground(c)); }
     public void setTurtleImage(int idx, ImageView v) { }
     public void setPenColor(int idx, Color c) { }

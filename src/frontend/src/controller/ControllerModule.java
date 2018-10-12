@@ -9,6 +9,6 @@ public class ControllerModule {
 
     public ControllerModule(ModelModule modelModule, ViewModule viewModule) {
         canvasController = new TurtleController(modelModule.turtleModel(), viewModule.turtleView());
-        editorController = new EditorController(viewModule.editorView());
+        editorController = new EditorController(viewModule.commandView(), viewModule.historyView());
     }
 }
