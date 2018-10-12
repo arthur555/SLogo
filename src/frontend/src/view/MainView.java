@@ -56,8 +56,8 @@ public class MainView {
         right = new SplitPane();
         right.setMinHeight(SCREEN_HEIGHT);
         right.setMaxHeight(SCREEN_HEIGHT);
-        right.setMinWidth(SCREEN_WIDTH-SCREEN_HEIGHT);
-        right.setMaxWidth(SCREEN_WIDTH-SCREEN_HEIGHT);
+        right.setMinWidth(HistoryView.HISTORY_VIEW_WIDTH);
+        right.setMaxWidth(HistoryView.HISTORY_VIEW_WIDTH);
         right.setOrientation(Orientation.VERTICAL);
         right.setDividerPositions(0.5f);
 

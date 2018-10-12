@@ -28,3 +28,8 @@
     -fx-stroke-type: outside;
     -fx-stroke-width: 3pt;
 }
+
+.variable-view {
+    -fx-background-color: #f8f7ff;
+    -fx-padding: 0 10 0 10;
+}

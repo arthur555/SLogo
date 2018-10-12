@@ -5,6 +5,8 @@ import engine.errors.RuntimeError;
 import javafx.scene.control.TextArea;
 
 public class HistoryView {
+    public static final int HISTORY_VIEW_WIDTH =
+            MainView.SCREEN_WIDTH - SidebarView.SIDEBAR_VIEW_WIDTH - TurtleView.TURTLE_VIEW_WIDTH;
     private TextArea root;
 
     HistoryView() {
