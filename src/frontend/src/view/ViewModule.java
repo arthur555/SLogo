@@ -16,12 +16,14 @@ public class ViewModule {
     private MainView mainView;
     private EditorView editorView;
     private TurtleView turtleView;
+    private SidebarView sidebarView;
 
     public ViewModule(ModelModule modelModule) {
         turtleView = new TurtleView(modelModule.turtleModel());
         editorView = new EditorView();
+        sidebarView = new SidebarView();
 
-        mainView = new MainView(turtleView, editorView);
+        mainView = new MainView(turtleView, editorView, sidebarView);
     }
 
     public void show(Stage primaryStage) {

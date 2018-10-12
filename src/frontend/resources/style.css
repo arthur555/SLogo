@@ -3,8 +3,28 @@
 }
 
 .command-line {
-    -fx-control-inner-background: #000000;
+    -fx-control-inner-background: #f8f7ff;
     -fx-font-family: Consolas;
-    -fx-opacity: 0.8;
-    -fx-highlight-fill: #444444;
+    -fx-highlight-fill: #e6e2ff;
+    -fx-highlight-text-fill: #2e2370;
+}
+
+.sidebar {
+    -fx-padding: 5 5 5 5;
+    -fx-background-color: #f8f7ff;
+}
+
+.sidebar-box {
+    -fx-stroke: white;
+    -fx-stroke-type: centered;
+    -fx-stroke-width: 3pt;
+    -fx-fill: rgba(0,0,0,0);
+    -fx-arc-width: 12pt;
+    -fx-arc-height: 12pt;
+}
+
+.sidebar-box:hover {
+    -fx-stroke: #2e2370;
+    -fx-stroke-type: centered;
+    -fx-stroke-width: 3pt;
 }

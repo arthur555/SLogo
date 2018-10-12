@@ -1,6 +1,5 @@
 package controller;
 
-
 import model.TurtleModel;
 import view.TurtleView;
 
