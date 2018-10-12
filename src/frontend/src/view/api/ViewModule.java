@@ -1,10 +1,11 @@
-package view;
+package view.api;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.ModelModule;
-import view.canvas.CanvasView;
-import view.editor.EditorView;
+import view.EditorView;
+import view.MainView;
+import view.TurtleViewView;
 
 import java.util.ResourceBundle;
 
@@ -17,13 +18,13 @@ public class ViewModule {
 
     private MainView mainView;
     private EditorView editorView;
-    private CanvasView canvasView;
+    private TurtleViewView turtleView;
 
     public ViewModule(ModelModule modelModule) {
-        canvasView = new CanvasView(modelModule.turtleModel());
+        turtleView = new TurtleViewView(modelModule.turtleModel());
         editorView = new EditorView();
 
-        mainView = new MainView(canvasView, editorView);
+        mainView = new MainView(turtleView, editorView);
     }
 
     public void show(Stage primaryStage) {
@@ -34,6 +35,6 @@ public class ViewModule {
         primaryStage.show();
     }
 
-    public EditorView editorView() { return editorView; }
-    public CanvasView canvasView() { return canvasView; }
+    public EditorViewAPI editorView() { return editorView; }
+    public TurtleViewAPI turtleView() { return turtleView; }
 }

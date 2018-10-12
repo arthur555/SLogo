@@ -1,18 +1,17 @@
 package view;
 
+import view.api.ViewModule;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import view.canvas.CanvasView;
-import view.editor.EditorView;
 
 public class MainView extends GridPane {
-    public static final String ROOT_CSS_CLASS = "root";
+    private static final String ROOT_CSS_CLASS = "root";
 
-    public MainView(CanvasView canvas, EditorView editor) {
+    public MainView(TurtleViewView turtleView, EditorView editorView) {
         getStyleClass().add(ROOT_CSS_CLASS);
         getColumnConstraints().add(new ColumnConstraints(ViewModule.SCREEN_HEIGHT));
 
-        add(canvas, 0, 0);
-        add(editor, 1, 0);
+        add(turtleView.getView(), 0, 0);
+        add(editorView.getView(), 1, 0);
     }
 }

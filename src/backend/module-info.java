@@ -1,3 +1,4 @@
 module backend {
-    exports model
+    exports model;
+    exports engine.errors;
 }
