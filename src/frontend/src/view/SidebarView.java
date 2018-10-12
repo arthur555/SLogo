@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SidebarView {
-    public static final int SIDEBAR_VIEW_WIDTH = 70;
+    static final int SIDEBAR_VIEW_WIDTH = 70;
 
     private static final int BUTTON_MARGIN = 10;
     private static final int BUTTON_SIZE = 50;
@@ -42,10 +42,9 @@ public class SidebarView {
     ));
 
     private VBox root;
-
     private List<StackPane> buttons;
 
-    public SidebarView() {
+    SidebarView() {
         root = new VBox(BUTTON_MARGIN);
         root.getStyleClass().add("sidebar");
 

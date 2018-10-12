@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 public class CommandView {
     private TextArea root;
 
-    public CommandView() {
+    CommandView() {
         root = new TextArea();
         root.getStyleClass().add("command-line");
         root.setWrapText(true);

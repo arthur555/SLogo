@@ -9,11 +9,11 @@ import model.TurtleModel;
 import view.utils.BackgroundUtils;
 
 public class TurtleView {
-    public static int TURTLE_VIEW_WIDTH = ViewModule.SCREEN_HEIGHT;
+    static int TURTLE_VIEW_WIDTH = MainView.SCREEN_HEIGHT;
 
     private Pane root;
 
-    public TurtleView(TurtleModel turtleModel) {
+    TurtleView(TurtleModel turtleModel) {
         root = new Pane();
         root.getStyleClass().add("canvas");
         root.getChildren().add(new Rectangle(200, 200, 200, 200));

@@ -56,7 +56,7 @@ public class EditorController {
     }
 
     private void submitCommand() {
-        historyView.view().appendText(historyView.view().getText().trim()+"\n");
+        historyView.view().appendText(commandView.view().getText().trim()+"\n");
         commandView.view().clear();
     }
 

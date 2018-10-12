@@ -7,7 +7,7 @@ import javafx.scene.control.TextArea;
 public class HistoryView {
     private TextArea root;
 
-    public HistoryView() {
+    HistoryView() {
         root = new TextArea();
         root.getStyleClass().add("command-line");
         root.setEditable(false);

@@ -11,9 +11,10 @@ public class VariableView<T> implements MapChangeListener<String, T> {
     private ScrollPane root;
     private HBox variableView;
 
-    public VariableView() {
+    VariableView() {
         root = new ScrollPane();
         variableView = new HBox();
+        root.setContent(variableView);
     }
 
     public ScrollPane view() { return root; }
