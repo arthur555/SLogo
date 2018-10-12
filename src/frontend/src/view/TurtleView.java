@@ -1,6 +1,5 @@
 package view;
 
-import view.api.TurtleViewAPI;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -8,12 +7,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
-import utils.BackgroundUtils;
+import view.utils.BackgroundUtils;
 
-public class TurtleViewView implements TurtleViewAPI {
+public class TurtleView {
     private Pane root;
 
-    public TurtleViewView(TurtleModel turtleModel) {
+    public TurtleView(TurtleModel turtleModel) {
         root = new Pane();
         root.getStyleClass().add("canvas");
         root.getChildren().add(new Rectangle(200, 200, 200, 200));

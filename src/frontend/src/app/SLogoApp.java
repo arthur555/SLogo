@@ -1,4 +1,7 @@
-import view.api.ViewModule;
+package app;
+
+import controller.ControllerModule;
+import view.ViewModule;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -15,7 +18,7 @@ public class SLogoApp extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
 
-        ModelModule modelModule = new ModelModuleMock();
+        ModelModule modelModule = new ModelModule();
         ViewModule viewModule = new ViewModule(modelModule);
         ControllerModule controllerModule = new ControllerModule(modelModule, viewModule);
 

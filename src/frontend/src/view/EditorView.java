@@ -1,7 +1,6 @@
 package view;
 
-import view.api.EditorViewAPI;
-import view.api.ViewModule;
+import controller.EditorController;
 import engine.errors.ParsingError;
 import engine.errors.RuntimeError;
 import javafx.geometry.Orientation;
@@ -9,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 
-public class EditorView implements EditorViewAPI {
+public class EditorView {
     private SplitPane root;
 
     private TextArea commandHistory;
@@ -43,7 +42,10 @@ public class EditorView implements EditorViewAPI {
         root.getItems().addAll(commandHistory, currentCommand);
     }
 
-    Node getView() { return root; }
+    public Node view() { return root; }
+    public TextArea commandHistory() { return commandHistory; }
+    public TextArea currentCommand() { return currentCommand; }
+
     public void displayError(ParsingError e) { }
     public void displayError(RuntimeError e) { }
     public void setLanguage(String lang) { }

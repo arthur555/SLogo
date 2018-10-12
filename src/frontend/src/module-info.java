@@ -5,5 +5,5 @@ module frontend {
 
     requires backend;
 
-    exports view.api;
+    exports app;
 }

@@ -1,4 +1,4 @@
-package utils;
+package view.utils;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
