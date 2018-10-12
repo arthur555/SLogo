@@ -1,7 +1,8 @@
 package view.canvas;
 
 
-import java.awt.*;
+import javafx.scene.layout.Pane;
+import model.turtle.TurtleModel;
 
 public class CanvasView extends Pane {
     private CanvasController canvasController;
