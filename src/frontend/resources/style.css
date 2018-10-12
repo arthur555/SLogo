@@ -33,3 +33,11 @@
     -fx-background-color: #f8f7ff;
     -fx-padding: 0 10 0 10;
 }
+
+.variable-box-even {
+    -fx-background-color: #f8f7ff;
+}
+
+.variable-box-odd {
+    -fx-background-color: #e8e7ef;
+}
