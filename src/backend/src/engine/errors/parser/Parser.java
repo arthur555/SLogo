@@ -1,4 +1,4 @@
-package engine;
+package engine.errors.parser;
 
 /**
  * Take in the String input that the user types into the editor window.
@@ -7,5 +7,6 @@ package engine;
  * Recognize various languages.
  * (maybe) Suggest the closest command before throwing a CommandSyntaxException.
  */
-public class Parser {
+public interface Parser {
+    public void 
 }
