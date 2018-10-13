@@ -16,6 +16,7 @@
         * The interpreter executes the parsed AST step-by-step; once it reaches a point where a TurtleCommand is produced, it stops and notifies the EditorController of it, and resumes every tick(). The period of this tick() should be made very carefully or dynamically depending on the context of the computation within a separate controller.
         * The `TurtleModel` receives a `TurtleCommands` and processes it, and notifies the TurtleController of the new position/angle pair.
         * The `TurtleController`, subscribed to new position/angle pair, fetches it when notified; It then interpolates the intermediate position/angle pairs between (the lastest pair -> new pair) and updates the view accordingly on every tick(). This tick() is fed by the javaFX loop, and the update interval should be handled by another controller (although not shown on the diagram).
+        * The turtle view is just the actual representation of the turtle. This will work with the graph/grid, to ensure the turtle is drawn in the right place, facing the right place, and appropriately draws stroke marks.
 
     * Diagram
     <a href="https://ibb.co/jUQOEU"><img src="https://preview.ibb.co/muJzop/SLogo.png" alt="SLogo" border="0"></a>
@@ -25,11 +26,11 @@
     * The user will have a textbox in the bottom right to type in any command they wish to input. Once they hit the enter button, the turtle will execute the given command.
     * After any command is entered and executed, the command will appear in a history log right above the command input pane.
     * However, if the user wants to input more complicated program structures such as a loop or function definition, the code will not execute until the entire advanced body is read in.
-    *
     * The turtle will live inside a grid of boxes, and when commands are given, the turle will move from box to box, either leaving or not leaving  a trail behind (depending on the user input).
     * The user will also be able to load in files that contain scripts of Slogo. The user will then hit a "run" button, which will execute the script.
     * Any time a syntax error is discovered, the user will receive appropriate feedback. For example, if the user inputs a string when the system is expecting a number, the user will receive a note mentioning the error
-This section describes how the user will interact with your program (keep it simple to start). Describe the overall appearance of program's user interface components and how users interact with these components (especially those specific to your program, i.e., means of input other than menus or toolbars). Include one or more pictures of the user interface (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a dummy program that serves as a exemplar). Describe any erroneous situations that are reported to the user (i.e., bad input data, empty data, etc.)
+
+    We plan to keep it as simple as possible. If any new features make sense, or are necessary to the function of the program, we will consider adding them.
 
 * API Details
 
@@ -55,8 +56,6 @@ This section describes how the user will interact with your program (keep it sim
                     * querying the turtle image
                     * querying the color of the pen
                     * querying the language used
-                * and has methods
-                    *
             * *VariableDisplay*
                 * VariableDisplay is reponsible for
                     * displaying the name/value of the user-defined variables (including the ones defined on the ConfigMenu such as the color of the pen)
@@ -81,7 +80,6 @@ This section describes how the user will interact with your program (keep it sim
                 * taking in abstract syntax tree from Parser
                 * generating a list of TurtleAction from the abstract syntax tree
                 * Or alternatively, instead of creating a TurtleAction object, outputting the desired coordinates and direction for the turtle after the end of each tick cycle
-                *
 
 * API Example Code
     * `fd 50`
@@ -118,3 +116,5 @@ Back end - Rahul, Haotian, and some Inchan
     Parsing input
     creating abstract syntax tree
     reading abstract syntax tree to input commands to turtle
+
+We will work on parts as individually as possible, making sure to collaborate and communicate with the other person working on the same half of the code.
