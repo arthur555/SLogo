@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * @author Robert C. Duvall
  */
 public class ProgramParser {
-    private static final String NO_MATCH = "Some keywords are not defined in the syntax file";
+    private static final String NO_MATCH = " is not defined in the syntax file.";
 
     // "types" and the regular expression patterns that recognize those types
     // note, it is a list because order matters (some patterns may be more generic)
@@ -39,8 +39,12 @@ public class ProgramParser {
         }
     }
 
+
     /**
      * Returns language's type associated with the given text if one exists
+     * @param text: The input raw String
+     * @return The associated String symbol that the raw string represents.
+     * @throws CommandSyntaxException: When the input raw String is not defined in the resources/languages properties files, a CommandSyntaxException is thrown, containing a message about which String is not defined.
      */
     public String getSymbol (String text) throws CommandSyntaxException {
         for (var e : mySymbols) {
@@ -48,7 +52,7 @@ public class ProgramParser {
                 return e.getKey();
             }
         }
-        throw new CommandSyntaxException(NO_MATCH);
+        throw new CommandSyntaxException("\"" + text + "\"" + NO_MATCH);
     }
 
     /**
