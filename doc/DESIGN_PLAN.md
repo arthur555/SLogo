@@ -16,7 +16,6 @@
         * The interpreter executes the parsed AST step-by-step; once it reaches a point where a TurtleCommand is produced, it stops and notifies the EditorController of it, and resumes every tick(). The period of this tick() should be made very carefully or dynamically depending on the context of the computation within a separate controller.
         * The `TurtleModel` receives a `TurtleCommands` and processes it, and notifies the TurtleController of the new position/angle pair.
         * The `TurtleController`, subscribed to new position/angle pair, fetches it when notified; It then interpolates the intermediate position/angle pairs between (the lastest pair -> new pair) and updates the view accordingly on every tick(). This tick() is fed by the javaFX loop, and the update interval should be handled by another controller (although not shown on the diagram).
-        * The turtle view is just the actual representation of the turtle. This will work with the graph/grid, to ensure the turtle is drawn in the right place, facing the right place, and appropriately draws stroke marks.
 
     * Diagram
     <a href="https://ibb.co/jUQOEU"><img src="https://preview.ibb.co/muJzop/SLogo.png" alt="SLogo" border="0"></a>
@@ -29,8 +28,7 @@
     * The turtle will live inside a grid of boxes, and when commands are given, the turle will move from box to box, either leaving or not leaving  a trail behind (depending on the user input).
     * The user will also be able to load in files that contain scripts of Slogo. The user will then hit a "run" button, which will execute the script.
     * Any time a syntax error is discovered, the user will receive appropriate feedback. For example, if the user inputs a string when the system is expecting a number, the user will receive a note mentioning the error
-
-    We plan to keep it as simple as possible. If any new features make sense, or are necessary to the function of the program, we will consider adding them.
+This section describes how the user will interact with your program (keep it simple to start). Describe the overall appearance of program's user interface components and how users interact with these components (especially those specific to your program, i.e., means of input other than menus or toolbars). Include one or more pictures of the user interface (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a dummy program that serves as a exemplar). Describe any erroneous situations that are reported to the user (i.e., bad input data, empty data, etc.)
 
 * API Details
 
@@ -41,28 +39,41 @@
                     * receiving user inputs
                     * displaying history of commands
                     * displaying the parsing/runtime error
-                * and has methods
+                * and has *external* methods
                     * displayError(ParsingError e)
                     * displayError(RuntimeError e)
-            * *TurtleView*
+                * and *internal* methods
+                    * setLanguage(String lang)
+            * *TurtleView* - Observes TurtleModel
                 * TurtleView is responsible for
                     * displaying the turtle(s) in the right position/angle
                     * displaying the lines that turtle(s) draw
-                * and has methods
-                    * setTurtlePositionAndAngle(Point pos, double angle)
+                * and has *external* methods
+                    * moveTurtlePositionAndAngle(Point pos, double angle)
+                * and *internal* methods
+                    * setBackgroundColor(Color c)
+                    * setTurtleImage(ImageView v)
+                    * setPenColor(Color c)
             * *ConfigMenu*
                 * ConfigMenu and its dialogs are responsible for
                     * querying the background color
                     * querying the turtle image
                     * querying the color of the pen
                     * querying the language used
-            * *VariableDisplay*
+                * and has *internal* methods
+                    * setLanguage(String lang)
+            * *VariableDisplay* - Observes VariableStorage/CommandStorage
                 * VariableDisplay is reponsible for
                     * displaying the name/value of the user-defined variables (including the ones defined on the ConfigMenu such as the color of the pen)
                     * displaying the names of the user-defined commands
+                * and has *external* methods
+                    * update(String name, Variable v)
+                    * update(String name, Command c)
             * *CommandHelpDialog*
                 * CommandHelpDialog is reponsible for
                     * displaying the reference pages for each built-in commands
+                * and has *internal* methods
+                    * setLanguage(String lang)
 
     * **Internal Model**
         * The internal model consists of the turtle model, the parser and the interpreter
@@ -106,15 +117,13 @@ This section describes any issues which need to be addressed or resolved before 
 * Team Responsibilities
 This section describes the program components each team member plans to take primary and secondary responsibility for and a high-level plan of how the team will complete the program.
 
-Front end - Inchan and Arthur
-    Turtle/Movement
-    Grid/Controller
-    Coding Panes
-    File input
-    error checking
-Back end - Rahul, Haotian, and some Inchan
-    Parsing input
-    creating abstract syntax tree
-    reading abstract syntax tree to input commands to turtle
-
-We will work on parts as individually as possible, making sure to collaborate and communicate with the other person working on the same half of the code.
+* Front end - Inchan and Arthur
+    * Turtle/Movement
+    * Grid/Controller
+    * Coding Panes
+    * File input
+    * error checking
+* Back end - Rahul, Haotian, and some Inchan
+    * Parsing input
+    * creating abstract syntax tree
+    * reading abstract syntax tree to input commands to turtle
