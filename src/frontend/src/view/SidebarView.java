@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SidebarView {
+public class
+SidebarView {
     static final int SIDEBAR_VIEW_WIDTH = 70;
 
     private static final int BUTTON_MARGIN = 10;
