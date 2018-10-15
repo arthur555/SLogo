@@ -59,7 +59,6 @@ public class SidebarController {
 
         try {
             var is = new FileInputStream(file);
-            // TODO: turtle view should automatically translate (w/2,h/2) to (0,0)
             turtleView.setTurtleImage(
                     TurtleView.TURTLE_VIEW_WIDTH/2,
                     TurtleView.TURTLE_VIEW_WIDTH/2,
