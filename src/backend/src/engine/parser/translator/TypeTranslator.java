@@ -20,10 +20,20 @@ public class TypeTranslator implements Translator {
 
 
     /**
-     * Create an empty parser.
+     * Create an empty translator.
      */
     public TypeTranslator() {
         mySymbols = new ArrayList<>();
+    }
+
+    /**
+     * Create a tranlator with a resource file as its starting recognized types.
+     *
+     * @param syntax: A resource file.
+     */
+    public TypeTranslator(String syntax) {
+        this();
+        setPatterns(syntax);
     }
 
     /**

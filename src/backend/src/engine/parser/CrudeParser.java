@@ -1,6 +1,7 @@
 package engine.parser;
 
 import engine.SLogoAST;
+import engine.parser.translator.LanguageTranslator;
 import engine.parser.translator.TypeTranslator;
 
 /**
@@ -9,12 +10,17 @@ import engine.parser.translator.TypeTranslator;
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
-    private static final String[] languages = {"Syntax", "Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish", "Syntax"};
+    private static final String PREFIX = "engine/parser/languages";
+    private static final String[] LANGUAGES = {"Syntax", "Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish"};
+    private static final String DEFAULT_LANGUAGE = "English";
+    private static final String SYNTAX = "Syntax";
 
-    private TypeTranslator rawProcessor;
+    private TypeTranslator myType;
+    private LanguageTranslator myLanguage;
 
     public CrudeParser() {
-        rawProcessor = new TypeTranslator();
+        myType = new TypeTranslator();
+        myLanguage = new LanguageTranslator();
     }
 
     public CrudeParser(String language) {

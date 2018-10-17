@@ -16,10 +16,20 @@ public class LanguageTranslator implements Translator {
     private Map<String, Pattern> mySymbols;
 
     /**
-     * Create an empty parser.
+     * Create an empty translator.
      */
     public LanguageTranslator() {
         mySymbols = new HashMap<>();
+    }
+
+    /**
+     * Create a translator with a resource file as its starting recognized languages.
+     *
+     * @param language: A resource file.
+     */
+    public LanguageTranslator(String language) {
+        this();
+        setPatterns(language);
     }
 
     /**
