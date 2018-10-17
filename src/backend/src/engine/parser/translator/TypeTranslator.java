@@ -29,7 +29,8 @@ public class TypeTranslator implements Translator {
     /**
      * Adds the given resource file to this language's recognized types
      */
-    public void addPatterns (String syntax) {
+    @Override
+    public void addPatterns (String syntax) throws MissingResourceException{
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
@@ -39,17 +40,20 @@ public class TypeTranslator implements Translator {
         }
     }
 
-    public void setPatterns(String syntax) {
+    @Override
+    public void setPatterns(String syntax) throws MissingResourceException{
         mySymbols.clear();
         addPatterns(syntax);
     }
 
     /**
      * Returns language's type associated with the given text if one exists
+     *
      * @param text: The input raw String
      * @return The associated String symbol that the raw string represents.
      * @throws CommandSyntaxException: When the input raw String is not defined in the resources/languages properties files, a CommandSyntaxException is thrown, containing a message about which String is not defined.
      */
+    @Override
     public String getSymbol (String text) throws CommandSyntaxException {
         for (var e : mySymbols) {
             if (match(text, e.getValue())) {
