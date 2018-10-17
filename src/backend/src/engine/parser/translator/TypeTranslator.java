@@ -1,4 +1,4 @@
-package engine.parser;
+package engine.parser.translator;
 
 import engine.errors.CommandSyntaxException;
 
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  *
  * @author Robert C. Duvall
  */
-public class ProgramParser {
+public class TypeTranslator implements Translator {
     private static final String NO_MATCH = " is not defined in the syntax file.";
 
     // "types" and the regular expression patterns that recognize those types
@@ -22,14 +22,15 @@ public class ProgramParser {
     /**
      * Create an empty parser.
      */
-    public ProgramParser () {
+    public TypeTranslator() {
         mySymbols = new ArrayList<>();
     }
 
     /**
      * Adds the given resource file to this language's recognized types
      */
-    public void addPatterns (String syntax) {
+    @Override
+    public void addPatterns (String syntax) throws MissingResourceException{
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
@@ -39,13 +40,20 @@ public class ProgramParser {
         }
     }
 
+    @Override
+    public void setPatterns(String syntax) throws MissingResourceException{
+        mySymbols.clear();
+        addPatterns(syntax);
+    }
 
     /**
      * Returns language's type associated with the given text if one exists
+     *
      * @param text: The input raw String
      * @return The associated String symbol that the raw string represents.
      * @throws CommandSyntaxException: When the input raw String is not defined in the resources/languages properties files, a CommandSyntaxException is thrown, containing a message about which String is not defined.
      */
+    @Override
     public String getSymbol (String text) throws CommandSyntaxException {
         for (var e : mySymbols) {
             if (match(text, e.getValue())) {
