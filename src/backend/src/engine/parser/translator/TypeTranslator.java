@@ -33,7 +33,7 @@ public class TypeTranslator implements Translator {
      */
     public TypeTranslator(String syntax) {
         this();
-        setPatterns(syntax);
+        addPatterns(syntax);
     }
 
     /**

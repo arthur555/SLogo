@@ -29,7 +29,7 @@ public class LanguageTranslator implements Translator {
      */
     public LanguageTranslator(String language) {
         this();
-        setPatterns(language);
+        addPatterns(language);
     }
 
     /**
