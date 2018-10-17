@@ -10,23 +10,23 @@
 }
 
 .sidebar {
-    -fx-padding: 5 5 5 5;
+    -fx-padding: 5 5 5 10;
     -fx-background-color: #f8f7ff;
+    /*-fx-background-color: white;*/
 }
 
 .sidebar-box {
-    -fx-stroke: #f8f7ff;
-    -fx-stroke-type: outside;
-    -fx-stroke-width: 3pt;
+    -fx-border-color: #f8f7ff;
+    -fx-border-type: outside;
+    -fx-border-width: 3pt;
+    -fx-border-radius: 12px;
+
     -fx-fill: rgba(0,0,0,0);
-    -fx-arc-width: 12pt;
-    -fx-arc-height: 12pt;
 }
 
 .sidebar-box:hover {
-    -fx-stroke: #b5aee2;
-    -fx-stroke-type: outside;
-    -fx-stroke-width: 3pt;
+    -fx-border-color: #b5aee2;
+    -fx-cursor: hand;
 }
 
 .variable-view {
@@ -40,4 +40,28 @@
 
 .variable-box-odd {
     -fx-background-color: #e8e7ef;
+}
+
+.background-button .label {
+    -fx-graphic: url("background_button.png");
+    -fx-padding: 0;
+}
+
+.pen-color-button .label {
+    -fx-graphic: url("pen_color_button.png");
+    -fx-padding: 0;
+    -fx-label-padding: 0;
+}
+
+.color-picker .arrow, .color-picker .arrow-button {
+    -fx-padding: 0;
+}
+
+.color-picker {
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-background-color: transparent;
+    /*-fx-border-style: solid;*/
+    /*-fx-border-color: black;*/
+    /*-fx-border-width: 5pt;*/
 }
