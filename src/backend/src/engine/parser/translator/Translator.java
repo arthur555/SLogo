@@ -8,6 +8,10 @@ import engine.errors.CommandSyntaxException;
  * @author Haotian Wang
  */
 public interface Translator {
+    /**
+     *
+     * @param file: This is a String identifying the location of the file to be read, starting from backend/src/,
+     */
     void addPatterns(String file);
 
     void setPatterns(String file);
