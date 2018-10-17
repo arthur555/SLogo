@@ -1,4 +1,4 @@
-package engine.parser;
+package engine.parser.translator;
 
 import engine.errors.CommandSyntaxException;
 
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  *
  * @author Robert C. Duvall
  */
-public class ProgramParser {
+public class TypeTranslator implements Translator {
     private static final String NO_MATCH = " is not defined in the syntax file.";
 
     // "types" and the regular expression patterns that recognize those types
@@ -22,7 +22,7 @@ public class ProgramParser {
     /**
      * Create an empty parser.
      */
-    public ProgramParser () {
+    public TypeTranslator() {
         mySymbols = new ArrayList<>();
     }
 
@@ -39,6 +39,10 @@ public class ProgramParser {
         }
     }
 
+    public void setPatterns(String syntax) {
+        mySymbols.clear();
+        addPatterns(syntax);
+    }
 
     /**
      * Returns language's type associated with the given text if one exists
