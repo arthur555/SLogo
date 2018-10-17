@@ -8,6 +8,8 @@ import engine.SLogoAST;
  * Throw CommandSyntaxException.
  * Recognize various languages.
  * (maybe) Suggest the closest command before throwing a CommandSyntaxException.
+ *
+ * @author Haotian Wang
  */
 public interface Parser {
     /**
