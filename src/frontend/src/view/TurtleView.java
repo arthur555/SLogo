@@ -1,15 +1,13 @@
 package view;
 
+import fake_model.TurtleModel;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -18,13 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
-import fake_model.TurtleModel;
 import javafx.util.Duration;
 import view.utils.BackgroundUtils;
-import view.utils.ImageUtils;
-
-import java.util.EventListener;
 
 public class TurtleView {
     public static final int TURTLE_SIZE = 50;
@@ -97,19 +90,9 @@ public class TurtleView {
 
     public Pane view() { return root; }
     public void setBackgroundColor(Color c) { root.setBackground(BackgroundUtils.coloredBackground(c)); }
-    public void setTurtleImage(int x, int y, Image v) {
-        System.out.println(x + " " + y);
+    public void setTurtleImage(Image v) {
         turtle.setImage(v);
-        turtle.setX(x);
-        turtle.setY(y);
         turtle.setRotate(0);
     }
     public void setPenColor(Color c) {penColor = c;}
-
-
-
-
-
-
-
 }

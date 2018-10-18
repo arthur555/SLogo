@@ -1,4 +1,14 @@
 package controller.dialog;
 
-public class ReferenceDialog {
+import javafx.scene.control.Dialog;
+
+public class ReferenceDialog extends Dialog<Void> {
+    private ReferenceDialogPane dialogPane;
+
+    public ReferenceDialog() {
+        dialogPane = new ReferenceDialogPane();
+        setDialogPane(dialogPane);
+        setResultConverter(e -> null);
+    }
 }
+
