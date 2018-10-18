@@ -1,4 +1,4 @@
-package engine.parser;
+package engine.parser.translator;
 
 import engine.errors.CommandSyntaxException;
 
@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
  *
  * @author Robert C. Duvall
  */
-public class ProgramParser {
-    private static final String NO_MATCH = "Some keywords are not defined in the syntax file";
+public class TypeTranslator implements Translator {
+    private static final String NO_MATCH = " is not defined in the syntax file.";
 
     // "types" and the regular expression patterns that recognize those types
     // note, it is a list because order matters (some patterns may be more generic)
@@ -20,16 +20,27 @@ public class ProgramParser {
 
 
     /**
-     * Create an empty parser.
+     * Create an empty translator.
      */
-    public ProgramParser () {
+    public TypeTranslator() {
         mySymbols = new ArrayList<>();
+    }
+
+    /**
+     * Create a tranlator with a resource file as its starting recognized types.
+     *
+     * @param syntax: A resource file.
+     */
+    public TypeTranslator(String syntax) {
+        this();
+        addPatterns(syntax);
     }
 
     /**
      * Adds the given resource file to this language's recognized types
      */
-    public void addPatterns (String syntax) {
+    @Override
+    public void addPatterns (String syntax) throws MissingResourceException{
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
@@ -39,16 +50,27 @@ public class ProgramParser {
         }
     }
 
+    @Override
+    public void setPatterns(String syntax) throws MissingResourceException{
+        mySymbols.clear();
+        addPatterns(syntax);
+    }
+
     /**
      * Returns language's type associated with the given text if one exists
+     *
+     * @param text: The input raw String
+     * @return The associated String symbol that the raw string represents.
+     * @throws CommandSyntaxException: When the input raw String is not defined in the resources/languages properties files, a CommandSyntaxException is thrown, containing a message about which String is not defined.
      */
+    @Override
     public String getSymbol (String text) throws CommandSyntaxException {
         for (var e : mySymbols) {
             if (match(text, e.getValue())) {
                 return e.getKey();
             }
         }
-        throw new CommandSyntaxException(NO_MATCH);
+        throw new CommandSyntaxException("\"" + text + "\"" + NO_MATCH);
     }
 
     /**
