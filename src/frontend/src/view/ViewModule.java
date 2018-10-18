@@ -1,8 +1,8 @@
 package view;
 
+import fake_model.ModelModule;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.ModelModule;
 
 import java.util.ResourceBundle;
 
@@ -19,7 +19,7 @@ public class ViewModule {
 
     public ViewModule(ModelModule modelModule) {
         sidebarView = new SidebarView();
-        //turtleView = new TurtleView(modelModule.turtleModel());
+        turtleView = new TurtleView(modelModule.turtleModel());
         variableView = new VariableView();
         historyView = new HistoryView();
         commandView = new CommandView();

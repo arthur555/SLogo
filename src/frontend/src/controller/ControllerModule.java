@@ -1,6 +1,6 @@
 package controller;
 
-import model.ModelModule;
+import fake_model.ModelModule;
 import view.ViewModule;
 
 import java.util.Collections;

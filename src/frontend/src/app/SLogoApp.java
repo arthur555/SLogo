@@ -2,13 +2,13 @@ package app;
 
 import controller.ControllerModule;
 
+import fake_model.ModelModule;
 import view.ViewModule;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.ModelModule;
 
 public class SLogoApp extends Application {
     public static final int FRAMES_PER_SECOND = 10;
