@@ -21,6 +21,7 @@ public class fakeApp extends Application {
         TurtleModel turtle = new TurtleModel();
         TurtleView view = new TurtleView(turtle);
         turtle.setX(100);
+        turtle.move(true);
         //turtle.setY(200);
 
     }

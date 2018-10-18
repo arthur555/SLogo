@@ -10,42 +10,47 @@ import javafx.collections.ObservableList;
 import java.util.Observer;
 
 public class TurtleModel{
-    private Integer x;
-    private Integer y;
-    private SimpleDoubleProperty angle;
+    private Double x;
+    private Double y;
+    private Double angle;
+    private SimpleBooleanProperty move;
     private SimpleBooleanProperty visible;
     private SimpleBooleanProperty penDown;
-    private ObservableList<Integer> points;
+    private ObservableList<Double> points;
 
 
     public TurtleModel(){
-        x = 0;
-        y = 0;
+        x = 0.0;
+        y = 0.0;
         points = FXCollections.observableArrayList();
         points.add(x);
         points.add(y);
-        angle = new SimpleDoubleProperty(0);
+        angle = 0.0;
         visible = new SimpleBooleanProperty(true);
         penDown = new SimpleBooleanProperty(true);
+        move = new SimpleBooleanProperty(false);
 
     }
 
 
     public SimpleBooleanProperty isPenDown(){return penDown;}
     public SimpleBooleanProperty isVisible(){return visible;}
+    public SimpleBooleanProperty isMove(){return move;}
     public void setPenDown(boolean down){penDown.setValue(down);}
     public void setVisible(boolean visible){this.visible.setValue(visible);}
+    public void move(boolean move){this.move.set(move);}
 
-    public int getX(){return x;}
-    public int getY(){return y;}
-    public SimpleDoubleProperty getAnlge(){return angle;}
+    public double getX(){return x;}
+    public double getY(){return y;}
+    public double getAnlge(){return angle;}
 
-    public void setX(int x){this.x=x;
+    public void setX(double x){this.x=x;
     points.set(0,x);
-    points.set(1,y);}
-    public void setY(int y){this.y=y;
-    points.set(1,y);}
-    public void setAngle(int angle){this.angle.setValue(angle);}
+    }
+    public void setY(double y){this.y=y;
+    points.set(1,y);
+    }
+    public void setAngle(double angle){this.angle = angle;}
 
-    public ObservableList<Integer> getPoints (){ return points;}
+    public ObservableList<Double> getPoints (){ return points;}
 }
