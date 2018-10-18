@@ -1,11 +1,13 @@
 package view;
 
+import javafx.scene.Node;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import view.utils.ImageUtils;
 
@@ -13,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class
-SidebarView {
-    static final int SIDEBAR_VIEW_WIDTH = 70;
+public class SidebarView {
+    public static final int SIDEBAR_VIEW_WIDTH = 75;
 
     private static final int BUTTON_MARGIN = 10;
     private static final int BUTTON_SIZE = 50;
@@ -42,19 +43,39 @@ SidebarView {
             "Open documentation"
     ));
 
-    private VBox root;
+    private Pane root;
+    private VBox icons;
     private List<StackPane> buttons;
+    private ColorPicker backgroundColor, penColor;
 
     SidebarView() {
-        root = new VBox(BUTTON_MARGIN);
+        root = new Pane();
         root.getStyleClass().add("sidebar");
 
+        icons = new VBox(BUTTON_MARGIN);
+        icons.getStyleClass().add("sidebar");
+
+        backgroundColor = new ColorPicker();
+        backgroundColor.getStyleClass().add("background-button");
+        penColor = new ColorPicker();
+        penColor.getStyleClass().add("pen-color-button");
+        setupButtons();
+
+        icons.getChildren().addAll(buttons);
+        root.getChildren().add(icons);
+    }
+
+    private void setupButtons() {
         buttons = new ArrayList<>();
         for(int i = 0 ; i < ICONS.size() ; i ++) {
-            var image = new ImageView(ICONS.get(i));
-            var box = new Rectangle(BUTTON_SIZE, BUTTON_SIZE);
-            box.getStyleClass().add("sidebar-box");
-            var button = new StackPane(image, box);
+            StackPane button;
+            Node image;
+            if(i == BACKGROUND_BUTTON || i == PEN_COLOR_BUTTON) {
+                image = i == BACKGROUND_BUTTON ? backgroundColor : penColor;
+            } else image = new ImageView(ICONS.get(i));
+            button = new StackPane(image);
+            button.getStyleClass().add("sidebar-box");
+
             var tooltip = new Tooltip(TOOLTIPS.get(i));
             tooltip.setShowDelay(Duration.ZERO);
             tooltip.setHideDelay(Duration.ZERO);
@@ -62,15 +83,15 @@ SidebarView {
             buttons.add(button);
         }
         buttons = Collections.unmodifiableList(buttons);
-
-        root.getChildren().addAll(buttons);
     }
 
-    public VBox view() { return root; }
+    public Pane view() { return root; }
 
     public StackPane backgroundButton() { return buttons.get(BACKGROUND_BUTTON); }
     public StackPane turtleImageButton() { return buttons.get(TURTLE_IMAGE_BUTTON); }
     public StackPane penColorButton() { return buttons.get(PEN_COLOR_BUTTON); }
     public StackPane languageButton() { return buttons.get(LANGUAGE_BUTTON); }
     public StackPane helpButton() { return buttons.get(HELP_BUTTON); }
+    public ColorPicker backgroundColor() { return backgroundColor; }
+    public ColorPicker penColor() { return penColor; }
 }
