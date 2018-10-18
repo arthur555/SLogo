@@ -46,6 +46,7 @@ public class SidebarView {
     private Pane root;
     private VBox icons;
     private List<StackPane> buttons;
+    private List<Tooltip> tooltips;
     private ColorPicker backgroundColor, penColor;
 
     SidebarView() {
@@ -67,6 +68,7 @@ public class SidebarView {
 
     private void setupButtons() {
         buttons = new ArrayList<>();
+        tooltips = new ArrayList<>();
         for(int i = 0 ; i < ICONS.size() ; i ++) {
             StackPane button;
             Node image;
@@ -75,23 +77,31 @@ public class SidebarView {
             } else image = new ImageView(ICONS.get(i));
             button = new StackPane(image);
             button.getStyleClass().add("sidebar-box");
-
-            var tooltip = new Tooltip(TOOLTIPS.get(i));
-            tooltip.setShowDelay(Duration.ZERO);
-            tooltip.setHideDelay(Duration.ZERO);
-            Tooltip.install(button, tooltip);
+            var tooltip = setTooltip(button, TOOLTIPS.get(i));
             buttons.add(button);
+            tooltips.add(tooltip);
         }
+        appendLanguageTooltip("current: English");
         buttons = Collections.unmodifiableList(buttons);
+    }
+
+    private Tooltip setTooltip(Node node, String text) {
+        var tooltip = new Tooltip(text);
+        tooltip.setShowDelay(Duration.ZERO);
+        tooltip.setHideDelay(Duration.ZERO);
+        Tooltip.install(node, tooltip);
+        return tooltip;
+    }
+
+    public void appendLanguageTooltip(String appended) {
+        tooltips.get(LANGUAGE_BUTTON).setText(TOOLTIPS.get(LANGUAGE_BUTTON) + "\n" + appended);
     }
 
     public Pane view() { return root; }
 
-    public StackPane backgroundButton() { return buttons.get(BACKGROUND_BUTTON); }
+    public ColorPicker backgroundColor() { return backgroundColor; }
     public StackPane turtleImageButton() { return buttons.get(TURTLE_IMAGE_BUTTON); }
-    public StackPane penColorButton() { return buttons.get(PEN_COLOR_BUTTON); }
+    public ColorPicker penColor() { return penColor; }
     public StackPane languageButton() { return buttons.get(LANGUAGE_BUTTON); }
     public StackPane helpButton() { return buttons.get(HELP_BUTTON); }
-    public ColorPicker backgroundColor() { return backgroundColor; }
-    public ColorPicker penColor() { return penColor; }
 }

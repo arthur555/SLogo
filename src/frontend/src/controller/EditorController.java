@@ -11,11 +11,17 @@ public class EditorController {
 
     private CommandView commandView;
     private HistoryView historyView;
+    private String lang;
 
-    public EditorController(CommandView commandView, HistoryView historyView) {
+    public EditorController(String lang, CommandView commandView, HistoryView historyView) {
+        this.lang = lang;
         this.commandView = commandView;
         this.historyView = historyView;
         setupHandlers();
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 
     private void setupHandlers() {
@@ -59,5 +65,4 @@ public class EditorController {
         historyView.view().appendText(commandView.view().getText().trim()+"\n");
         commandView.view().clear();
     }
-
 }

@@ -28,19 +28,17 @@ public class TurtleView {
         root.setPrefWidth(TURTLE_VIEW_WIDTH);
         root.setPrefHeight(TURTLE_VIEW_WIDTH);
         turtle = new ImageView();
-        setTurtleImage(TURTLE_VIEW_WIDTH/2, TURTLE_VIEW_WIDTH/2, DEFAULT_TURTLE_IMG);
+        penColor = Color.BLACK;
+        setTurtleImage(DEFAULT_TURTLE_IMG);
         root.getChildren().add(turtle);
     }
 
     public Pane view() { return root; }
     public void setBackgroundColor(Color c) { root.setBackground(BackgroundUtils.coloredBackground(c)); }
-    public void setTurtleImage(int x, int y, Image v) {
-        System.out.println(x + " " + y);
+    public void setTurtleImage(Image v) {
         turtle.setImage(v);
-        turtle.setX(x);
-        turtle.setY(y);
         turtle.setRotate(0);
     }
-    public void setPenColor(Color c) {penColor = c;}
+    public void setPenColor(Color c) { penColor = c; }
     public void toWards(Point2D pos) { }
 }
