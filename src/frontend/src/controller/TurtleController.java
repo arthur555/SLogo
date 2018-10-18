@@ -1,6 +1,6 @@
 package controller;
 
-import model.TurtleModel;
+import fake_model.TurtleModel;
 import view.TurtleView;
 
 public class TurtleController {

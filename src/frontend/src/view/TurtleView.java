@@ -41,12 +41,10 @@ public class TurtleView {
         root.setPrefWidth(200);
         root.setPrefHeight(200);
 
-
         penDown = true;
         turtle.visibleProperty().bind(turtleModel.isVisible());
 
         bindObservable(turtleModel);
-
     }
 
     private void bindObservable(TurtleModel turtleModel) {
