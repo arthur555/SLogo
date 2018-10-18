@@ -1,35 +1,57 @@
 package view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableObjectValue;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import model.TurtleModel;
+import javafx.scene.shape.Rectangle;
+import fake_model.TurtleModel;
 import view.utils.BackgroundUtils;
 import view.utils.ImageUtils;
+
+import java.util.EventListener;
 
 public class TurtleView {
     public static final int TURTLE_SIZE = 50;
     public static final int TURTLE_VIEW_WIDTH = MainView.SCREEN_HEIGHT;
 
-    private static final Image DEFAULT_TURTLE_IMG =
-            ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
-
-
-    private Pane root;
+    private int x;
+    private int y;
+    private boolean penDown;
+    private GridPane root;
     private ImageView turtle;
     private Color penColor;
 
-    TurtleView(TurtleModel turtleModel) {
+    public TurtleView(TurtleModel turtleModel) {
+        turtle = new ImageView();
         root = new GridPane();
         root.getStyleClass().add("canvas");
-        root.setPrefWidth(TURTLE_VIEW_WIDTH);
-        root.setPrefHeight(TURTLE_VIEW_WIDTH);
-        turtle = new ImageView();
-        setTurtleImage(TURTLE_VIEW_WIDTH/2, TURTLE_VIEW_WIDTH/2, DEFAULT_TURTLE_IMG);
-        root.getChildren().add(turtle);
+        root.setPrefWidth(200);
+        root.setPrefHeight(200);
+
+
+        turtle.rotateProperty().bind(turtleModel.getAnlge());
+        turtle.visibleProperty().bind(turtleModel.isVisible());
+
+        turtleModel.getPoints().addListener(new ListChangeListener<Integer>() {
+            @Override
+            public void onChanged(Change<? extends Integer> c) {
+                System.out.println(c.getList().get(0));
+                System.out.println(c.getList().get(1));
+            }
+        });
+
+
+
+        //
+
     }
 
     public Pane view() { return root; }
@@ -43,4 +65,11 @@ public class TurtleView {
     }
     public void setPenColor(Color c) {penColor = c;}
     public void toWards(Point2D pos) { }
+    public void forWards(int distance){ }
+
+    String command;
+
+
+
+
 }

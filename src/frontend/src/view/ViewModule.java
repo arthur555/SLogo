@@ -19,7 +19,7 @@ public class ViewModule {
 
     public ViewModule(ModelModule modelModule) {
         sidebarView = new SidebarView();
-        turtleView = new TurtleView(modelModule.turtleModel());
+        //turtleView = new TurtleView(modelModule.turtleModel());
         variableView = new VariableView();
         historyView = new HistoryView();
         commandView = new CommandView();
