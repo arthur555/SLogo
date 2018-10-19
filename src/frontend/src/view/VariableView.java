@@ -6,9 +6,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import view.utils.PrettyUI;
 
 public class VariableView implements MapChangeListener<String, Object> {
-    private static final int VARIABLE_VIEW_WIDTH = HistoryView.HISTORY_VIEW_WIDTH;
+    private static final int VARIABLE_VIEW_WIDTH = HistoryView.HISTORY_VIEW_WIDTH - 20;
     private static final int KEY_VALUE_MARGIN = 150;
     private static final int VALUE_WIDTH = 150;
 
@@ -47,10 +48,10 @@ public class VariableView implements MapChangeListener<String, Object> {
         var keyPane = new StackPane(new Text(key));
         keyPane.setPrefWidth(KEY_VALUE_MARGIN);
         keyPane.setAlignment(Pos.CENTER_LEFT);
-        keyPane.getStyleClass().add(idx % 2 == 0 ? "variable-box-even" : "variable-box-odd");
+        PrettyUI.alternatePurple(idx, keyPane);
         var valuePane = new StackPane(new Text(value.toString()));
         valuePane.setPrefWidth(VALUE_WIDTH);
-        valuePane.getStyleClass().add(idx % 2 == 1 ? "variable-box-even" : "variable-box-odd");
+        PrettyUI.alternatePurple(idx+1, valuePane);
         valuePane.setAlignment(Pos.CENTER_LEFT);
         grid.add(keyPane, 0, 0);
         grid.add(valuePane, 1, 0);

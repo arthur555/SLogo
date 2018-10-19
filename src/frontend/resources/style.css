@@ -1,3 +1,24 @@
+.purple-bg {
+    -fx-background-color: #e8e7ef;
+    -fx-padding: 5 5 5 5;
+}
+
+.light-purple-bg {
+    -fx-background-color: #f8f7ff;
+    -fx-padding: 5 5 5 5;
+}
+
+.text-header {
+    -fx-font-family: "sans-serif";
+    -fx-font-size: 16pt;
+    -fx-font-weight: bold;
+}
+
+.text-body {
+    -fx-font-family: "sans-serif";
+    -fx-font-size: 12pt;
+}
+
 .canvas {
     -fx-background-color: white;
 }
@@ -32,14 +53,6 @@
 .variable-view {
     -fx-background-color: #f8f7ff;
     -fx-padding: 0 10 0 10;
-}
-
-.variable-box-even {
-    -fx-background-color: #f8f7ff;
-}
-
-.variable-box-odd {
-    -fx-background-color: #e8e7ef;
 }
 
 .background-button .label {

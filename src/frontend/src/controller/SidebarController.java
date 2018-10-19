@@ -1,5 +1,6 @@
 package controller;
 
+import view.reference.ReferenceDialog;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -21,6 +22,7 @@ public class SidebarController {
 
     private SidebarView sidebar;
     private TurtleView turtleView;
+
     private TurtleController turtleController;
     private EditorController editorController;
 
@@ -95,6 +97,7 @@ public class SidebarController {
     }
 
     private void helpOnClick(MouseEvent e) {
-
+        var dialog = new ReferenceDialog();
+        dialog.show();
     }
 }
