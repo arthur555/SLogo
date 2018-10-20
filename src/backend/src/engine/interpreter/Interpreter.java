@@ -10,6 +10,11 @@ import engine.parser.SLogoAST;
  * @author Haotian Wang
  */
 public interface Interpreter {
+    /**
+     * Read in the commands
+     *
+     * @param ast: SLogoAST representing the command tree.
+     */
     void readCommands(SLogoAST ast);
 
     void applyCommands();
