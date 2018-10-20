@@ -1,6 +1,8 @@
 package engine.parser;
 
 import engine.SLogoAST;
+import engine.StateMachine;
+import engine.errors.CommandSyntaxException;
 import engine.parser.translator.LanguageTranslator;
 import engine.parser.translator.TypeTranslator;
 
@@ -13,6 +15,7 @@ import java.util.Map;
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
+    private static final String[] ALL = {"Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish"};
     private static final String PREFIX = "engine/parser/languages/";
     private static final String ALL_LANGUAGES = "all languages";
     private static final String DEFAULT_LANGUAGE = "English";
@@ -20,15 +23,13 @@ public class CrudeParser implements Parser {
 
     private TypeTranslator myType;
     private LanguageTranslator myLanguage;
-    private Map<String, Object> myVariables;
+    private StateMachine myVariables;
 
     /**
      * The default constructor will choose English.properties as its starting recognized languages and Syntax.properties as its starting recognized syntax.
      */
     public CrudeParser() {
-        myType = new TypeTranslator(PREFIX + SYNTAX);
-        myLanguage = new LanguageTranslator(PREFIX + "English");
-        myVariables = new HashMap<>();
+        this(DEFAULT_LANGUAGE);
     }
 
     /**
@@ -39,12 +40,41 @@ public class CrudeParser implements Parser {
     public CrudeParser(String language) {
         myType = new TypeTranslator(PREFIX + SYNTAX);
         myLanguage = new LanguageTranslator(PREFIX + language);
-        myVariables = new HashMap<>();
+        myVariables = new StateMachine();
     }
 
+    /**
+     * Reset the language dictionary to use the default language only, which is English.
+     */
+    public void resetLanguage() {
+        myLanguage.setPatterns(PREFIX + DEFAULT_LANGUAGE);
+    }
+
+    /**
+     * This reads in a String representing a complete command.
+     *
+     * @param rawCommand: A String that the user types in exactly as it appears in the editor view.
+     */
     @Override
     public void readRawCommand(String rawCommand) {
-
+        if (rawCommand.isEmpty()) { return; }
+        String[] arr = rawCommand.split("\\s+");
+        String[] typeArray = new String[arr.length];
+        String[] langArray = new String[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            try {
+                typeArray[i] = myType.getSymbol(arr[i]);
+            } catch (CommandSyntaxException e) {
+                // TODO
+                e.printStackTrace();
+            }
+            try {
+                langArray[i] = myLanguage.getSymbol(arr[i]);
+            } catch (CommandSyntaxException e) {
+                // TODO
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
