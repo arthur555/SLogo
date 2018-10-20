@@ -1,9 +1,8 @@
 package engine.parser;
 
-import engine.StateMachine;
 import engine.errors.CommandSyntaxException;
-import engine.parser.translator.LanguageTranslator;
-import engine.parser.translator.TypeTranslator;
+import engine.translator.LanguageTranslator;
+import engine.translator.TypeTranslator;
 
 /**
  * A version 1 implementation of the Parser interface. It takes user raw input Strings and output ASTs or store variables.
@@ -11,15 +10,13 @@ import engine.parser.translator.TypeTranslator;
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
-    private static final String[] ALL = {"Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish"};
-    private static final String PREFIX = "engine/parser/languages/";
-    private static final String ALL_LANGUAGES = "all languages";
+    private static final String PREFIX = "engine/translator/languages/";
     private static final String DEFAULT_LANGUAGE = "English";
     private static final String SYNTAX = "Syntax";
 
     private TypeTranslator myType;
     private LanguageTranslator myLanguage;
-    private StateMachine myVariables;
+    private SLogoAST myAST;
 
     /**
      * The default constructor will choose English.properties as its starting recognized languages and Syntax.properties as its starting recognized syntax.
@@ -36,7 +33,6 @@ public class CrudeParser implements Parser {
     public CrudeParser(String language) {
         myType = new TypeTranslator(PREFIX + SYNTAX);
         myLanguage = new LanguageTranslator(PREFIX + language);
-        myVariables = new StateMachine();
     }
 
     /**
@@ -71,6 +67,7 @@ public class CrudeParser implements Parser {
                 e.printStackTrace();
             }
         }
+        myAST = new SLogoAST(typeArray, langArray);
     }
 
     /**
@@ -78,6 +75,6 @@ public class CrudeParser implements Parser {
      */
     @Override
     public SLogoAST returnAST() {
-        return null;
+        return myAST;
     }
 }

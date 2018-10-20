@@ -1,6 +1,10 @@
 package engine.interpreter;
 
+import engine.commands.TurtleCommand;
 import engine.parser.SLogoAST;
+import model.TurtleModel;
+
+import java.util.List;
 
 /**
  * Take in abstract syntax tree from Parser.
@@ -17,7 +21,15 @@ public interface Interpreter {
      */
     void readCommands(SLogoAST ast);
 
-    void applyCommands();
+    /**
+     * This returns a list of actionable TurtleCommand after the interpreter interprets the SLogoAST.
+     *
+     * @return A list of actionable TurtleCommand.
+     */
+    List<TurtleCommand<TurtleModel>> outputTurtleCommands();
 
+    /**
+     * This clears the internal AST stored in the interpreter.
+     */
     void clearCommands();
 }
