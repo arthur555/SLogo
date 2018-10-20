@@ -1,13 +1,9 @@
 package engine.parser;
 
-import engine.SLogoAST;
 import engine.StateMachine;
 import engine.errors.CommandSyntaxException;
 import engine.parser.translator.LanguageTranslator;
 import engine.parser.translator.TypeTranslator;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A version 1 implementation of the Parser interface. It takes user raw input Strings and output ASTs or store variables.
@@ -77,11 +73,9 @@ public class CrudeParser implements Parser {
         }
     }
 
-    @Override
-    public void storeVariable() {
-
-    }
-
+    /**
+     * @return An SLogoAST for the interpreter to process.
+     */
     @Override
     public SLogoAST returnAST() {
         return null;
