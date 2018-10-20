@@ -7,5 +7,11 @@ package engine.commands;
  */
 @FunctionalInterface
 public interface TurtleCommand<T> {
+
+    /**
+     * Update the states of the turtle model
+     *
+     * @param t
+     */
     void update(T t);
 }

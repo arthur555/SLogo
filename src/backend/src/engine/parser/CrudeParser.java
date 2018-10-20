@@ -11,9 +11,7 @@ import engine.parser.translator.TypeTranslator;
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
-    private static final String[] ALL = {"Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish"};
     private static final String PREFIX = "engine/parser/languages/";
-    private static final String ALL_LANGUAGES = "all languages";
     private static final String DEFAULT_LANGUAGE = "English";
     private static final String SYNTAX = "Syntax";
 
