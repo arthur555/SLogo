@@ -14,7 +14,7 @@ import java.util.List;
 public class CrudeInterpreter implements Interpreter{
 
     private StateMachine myVariables;
-    
+
     /**
      * Read in the commands
      *
