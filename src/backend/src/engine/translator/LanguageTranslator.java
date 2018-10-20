@@ -1,4 +1,4 @@
-package engine.parser.translator;
+package engine.translator;
 
 import engine.errors.CommandSyntaxException;
 
@@ -6,34 +6,30 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Simple parser based on regular expressions that matches program strings to
- * kinds of language features.
+ * This class handles the translation of user input in different languages to input that Parser can understand.
  *
- * @author Robert C. Duvall
+ * @author Haotian Wang
  */
-public class TypeTranslator implements Translator {
-    private static final String NO_MATCH = " is not defined in the syntax file.";
+public class LanguageTranslator implements Translator {
+    private static final String NO_MATCH = " is not defined in the language files.";
 
-    // "types" and the regular expression patterns that recognize those types
-    // note, it is a list because order matters (some patterns may be more generic)
-    private List<Map.Entry<String, Pattern>> mySymbols;
-
+    private Map<String, Pattern> mySymbols;
 
     /**
      * Create an empty translator.
      */
-    public TypeTranslator() {
-        mySymbols = new ArrayList<>();
+    public LanguageTranslator() {
+        mySymbols = new HashMap<>();
     }
 
     /**
-     * Create a tranlator with a resource file as its starting recognized types.
+     * Create a translator with a resource file as its starting recognized languages.
      *
-     * @param syntax: A resource file.
+     * @param language: A resource file.
      */
-    public TypeTranslator(String syntax) {
+    public LanguageTranslator(String language) {
         this();
-        addPatterns(syntax);
+        addPatterns(language);
     }
 
     /**
@@ -44,9 +40,9 @@ public class TypeTranslator implements Translator {
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
-            mySymbols.add(new AbstractMap.SimpleEntry<>(key,
+            mySymbols.put(key,
                     // THIS IS THE IMPORTANT LINE
-                    Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
+                    Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
         }
     }
 
@@ -65,7 +61,7 @@ public class TypeTranslator implements Translator {
      */
     @Override
     public String getSymbol (String text) throws CommandSyntaxException {
-        for (var e : mySymbols) {
+        for (var e : mySymbols.entrySet()) {
             if (match(text, e.getValue())) {
                 return e.getKey();
             }
