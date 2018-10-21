@@ -36,7 +36,10 @@ public class LanguageTranslator implements Translator {
      * Adds the given resource file to this language's recognized types
      */
     @Override
-    public void addPatterns (String syntax) throws MissingResourceException{
+    public void addPatterns (String syntax) throws MissingResourceException {
+        if (syntax.isEmpty() || syntax == null) {
+            return;
+        }
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
@@ -47,7 +50,7 @@ public class LanguageTranslator implements Translator {
     }
 
     @Override
-    public void setPatterns(String syntax) throws MissingResourceException{
+    public void setPatterns(String syntax) throws MissingResourceException {
         mySymbols.clear();
         addPatterns(syntax);
     }
