@@ -14,7 +14,7 @@ public class Backward implements Command<TurtleModelImpl>{
      * @param turtleModel
      */
     @Override
-    public void update(TurtleModelImpl turtleModel) {
-        fd.update(turtleModel);
+    public double update(TurtleModelImpl turtleModel) {
+        return fd.update(turtleModel);
     }
 }

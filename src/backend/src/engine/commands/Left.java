@@ -8,9 +8,10 @@ public class Left implements Command<TurtleModelImpl> {
         this.degree = degree;
     }
     @Override
-    public void update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModelImpl turtleModel) {
         turtleModel.move(true);
         turtleModel.setAngle((degree + turtleModel.getAngle())%360);
         turtleModel.move(false);
+        return degree;
     }
 }

@@ -13,7 +13,7 @@ public class Forward implements Command<TurtleModelImpl> {
      * @param turtleModel
      */
     @Override
-    public void update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModelImpl turtleModel) {
         double head = turtleModel.getAngle();
         double stepX = stepLength*Math.cos(head);
         double stepY = stepLength*Math.sin(head);
@@ -21,6 +21,6 @@ public class Forward implements Command<TurtleModelImpl> {
         turtleModel.move(true);
         turtleModel.setY(turtleModel.getY()+stepY);
         turtleModel.move(false);
-
+        return stepLength;
     }
 }

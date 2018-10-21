@@ -10,7 +10,7 @@ public class Right implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public void update(TurtleModelImpl turtleModel) {
-        left.update(turtleModel);
+    public double update(TurtleModelImpl turtleModel) {
+        return left.update(turtleModel);
     }
 }
