@@ -81,7 +81,7 @@ public class CrudeLexer implements Lexer{
 
     private TypeTranslator myType;
     private LanguageTranslator myLanguage;
-    private Queue<Token> myTokens;
+    private List<Token> myTokens;
 
     /**
      * Constructs a CrudeParser with the user-defined language as the starting recognized language.
@@ -91,7 +91,7 @@ public class CrudeLexer implements Lexer{
     public CrudeLexer(String language) {
         myType = new TypeTranslator(PREFIX + SYNTAX);
         myLanguage = new LanguageTranslator(PREFIX + language);
-        myTokens = new LinkedList<>();
+        myTokens = new ArrayList<>();
     }
 
     /**
@@ -175,7 +175,7 @@ public class CrudeLexer implements Lexer{
                     start = end + 1;
                     end++;
                 }
-                myTokens.offer(new Token(chunk, type));
+                myTokens.add(new Token(chunk, type));
             } catch (CommandSyntaxException e) {
                 end++;
             }
@@ -191,7 +191,7 @@ public class CrudeLexer implements Lexer{
      * @return A list of Token from the input String.
      */
     @Override
-    public Queue<Token> getTokens() {
+    public List<Token> getTokens() {
         return myTokens;
     }
 
@@ -202,14 +202,14 @@ public class CrudeLexer implements Lexer{
      */
     public static void main(String[] args) {
         CrudeLexer lexer = new CrudeLexer();
-        String input = "fd(Forward #thisIsAComment :aVariable) - back (([+ 3 3.33 4]))";
+        String input = "fd(Forward #thisIsAComment :aVariable) - back (([+ 3 3.33 4]))\n";
         String input2 = "fd 2";
         try {
             lexer.readString(input);
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
         }
-        Queue<Token> tokens = lexer.getTokens();
+        List<Token> tokens = lexer.getTokens();
         System.out.println("The input String is\n\n" + input + "\n");
         System.out.print("The queue of tokens is:\n\n");
         for (Token token : tokens) {

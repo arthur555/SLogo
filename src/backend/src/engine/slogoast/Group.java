@@ -12,7 +12,7 @@ public class Group {
     private Token groupEnd;
     private Expression myExpr;
 
-    public Group(Token start, Token end,  Expression a) {
+    public Group(Token start, Expression a, Token end) {
         groupStart = start;
         groupEnd = end;
         myExpr = a;

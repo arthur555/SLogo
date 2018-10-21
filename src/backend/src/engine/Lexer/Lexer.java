@@ -24,7 +24,7 @@ public interface Lexer {
      *
      * @return A list of Token from the input String.
      */
-    Queue<Token> getTokens();
+    List<Token> getTokens();
 
     /**
      * Reset the language dictionary to use the default language only, which is English.
