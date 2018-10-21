@@ -1,6 +1,7 @@
 package engine.parser;
 
 import engine.Lexer.Token;
+import engine.errors.CommandSyntaxException;
 import engine.slogoast.Expression;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface Parser {
      *
      * @param tokens: A queue of Tokens read from the Lexer.
      */
-    void readTokens(List<Token> tokens);
+    void readTokens(List<Token> tokens) throws CommandSyntaxException;
 
     /**
      * Clear the stored tokens in the internal parser.
