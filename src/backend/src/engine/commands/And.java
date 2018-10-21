@@ -3,13 +3,15 @@ package engine.commands;
 import model.TurtleModelImpl;
 
 public class And implements Command<TurtleModelImpl> {
-    int ret;
+    private double one;
+    private double two;
     public And(double one, double two){
-        ret = (one != 0 && two != 0) ? 1:0;
+        this.one = one;
+        this.two = two;
     }
 
     @Override
     public double update(TurtleModelImpl turtleModel) {
-        return ret;
+        return (one != 0 && two != 0) ? 1:0;
     }
 }

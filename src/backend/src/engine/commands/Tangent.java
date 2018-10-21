@@ -1,4 +1,15 @@
 package engine.commands;
 
-public class Tangent {
+import model.TurtleModelImpl;
+
+public class Tangent implements Command<TurtleModelImpl> {
+    private double angle;
+
+    public Tangent(double a){
+        angle = a;
+    }
+    @Override
+    public double update(TurtleModelImpl turtleModel) {
+        return Math.tan(angle);
+    }
 }

@@ -1,4 +1,14 @@
 package engine.commands;
 
-public class NaturalLog {
+import model.TurtleModelImpl;
+
+public class NaturalLog implements Command<TurtleModelImpl> {
+    private double num;
+    public NaturalLog(double a){
+        num = a;
+    }
+    @Override
+    public double update(TurtleModelImpl turtleModel) {
+        return Math.log(num);
+    }
 }
