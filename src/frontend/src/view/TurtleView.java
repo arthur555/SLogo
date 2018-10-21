@@ -61,6 +61,13 @@ public class TurtleView {
             }
         });
 
+        turtleModel.getClean().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                clean();
+            }
+        });
+
         turtleModel.getPoints().addListener(new ListChangeListener<Double>() {
             @Override
             public void onChanged(Change<? extends Double> c) {
