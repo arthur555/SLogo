@@ -63,7 +63,7 @@ public class CrudeLexer implements Lexer{
         grammarMap.put("And", "Binary");
         grammarMap.put("Or", "Binary");
 
-        grammarMap.put("MakeVariable", "Assign");
+        grammarMap.put("MakeVariable", "MakeVariable");
 
         grammarMap.put("Repeat", "Condition");
         grammarMap.put("If", "Condition");
@@ -74,14 +74,14 @@ public class CrudeLexer implements Lexer{
 
         grammarMap.put("IfElse", "IfElse");
 
-        grammarMap.put("MakeUserInstruction", "Create");
+        grammarMap.put("MakeUserInstruction", "MakeUserInstruction");
 
         myGrammerMap = Collections.unmodifiableMap(grammarMap);
     }
 
     private TypeTranslator myType;
     private LanguageTranslator myLanguage;
-    private Queue<Token> myTokens;
+    private List<Token> myTokens;
 
     /**
      * Constructs a CrudeParser with the user-defined language as the starting recognized language.
@@ -91,7 +91,7 @@ public class CrudeLexer implements Lexer{
     public CrudeLexer(String language) {
         myType = new TypeTranslator(PREFIX + SYNTAX);
         myLanguage = new LanguageTranslator(PREFIX + language);
-        myTokens = new LinkedList<>();
+        myTokens = new ArrayList<>();
     }
 
     /**
@@ -168,14 +168,14 @@ public class CrudeLexer implements Lexer{
                     continue;
                 } else if (type.equals("Command")) {
                     chunk = myLanguage.getSymbol(chunk);
-                    type = chunk;
+                    type = myGrammerMap.get(chunk);
                     start = end + 1;
                     end++;
                 } else {
                     start = end + 1;
                     end++;
                 }
-                myTokens.offer(new Token(chunk, type));
+                myTokens.add(new Token(chunk, type));
             } catch (CommandSyntaxException e) {
                 end++;
             }
@@ -191,7 +191,7 @@ public class CrudeLexer implements Lexer{
      * @return A list of Token from the input String.
      */
     @Override
-    public Queue<Token> getTokens() {
+    public List<Token> getTokens() {
         return myTokens;
     }
 
@@ -202,14 +202,14 @@ public class CrudeLexer implements Lexer{
      */
     public static void main(String[] args) {
         CrudeLexer lexer = new CrudeLexer();
-        String input = "fd()";
+        String input = "fd(Forward #thisIsAComment :aVariable) - back (([+ 3 3.33 4]))\n";
         String input2 = "fd 2";
         try {
             lexer.readString(input);
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
         }
-        Queue<Token> tokens = lexer.getTokens();
+        List<Token> tokens = lexer.getTokens();
         System.out.println("The input String is\n\n" + input + "\n");
         System.out.print("The queue of tokens is:\n\n");
         for (Token token : tokens) {
