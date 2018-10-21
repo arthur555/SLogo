@@ -47,7 +47,6 @@ public class MainView {
         center.setMaxWidth(SCREEN_WIDTH);
         center.setOrientation(Orientation.VERTICAL);
         center.setDividerPositions(0.7f);
-        turtleView.view().setMinHeight(TurtleView.TURTLE_VIEW_WIDTH*0.75);
 
         center.getItems().addAll(turtleView.view(), commandView.view());
     }

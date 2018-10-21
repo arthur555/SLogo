@@ -13,5 +13,5 @@ public interface Command<T> {
      *
      * @param t
      */
-    void update(T t);
+    double update(T t);
 }
