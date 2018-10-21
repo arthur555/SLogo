@@ -32,8 +32,8 @@ public class TurtleView {
     public TurtleView(TurtleModelImpl turtleModel) {
         turtleImg = ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView(turtleImg);
-        turtle.setX(100);
-        turtle.setY(100);
+        turtle.setX(turtleModel.getX());
+        turtle.setY(turtleModel.getY());
         root = new Pane();
         root.getStyleClass().add("canvas");
         root.setPrefWidth(200);
@@ -73,13 +73,14 @@ public class TurtleView {
             public void onChanged(Change<? extends Double> c) {
                 var newX = c.getList().get(0);
                 var newY = c.getList().get(1);
+                var newAngle = c.getList().get(2);
                 if (move){
-                    var path = makePath(newX, newY);
-                    var animation = makeAnimation(turtle, path);
-//                    animation.currentTimeProperty().addListener((e, o, n) -> {
-//                        if(!o.equals(Duration.ZERO)) root.getChildren().remove(root.getChildren().size()-1);
-//                        root.getChildren().add(makePath(newX, newY));
-//                    });
+                    var path = makePath(newX, newY, (double)DURATION_MILLIS);
+                    var animation = makeAnimation(turtle, path, newAngle);
+                    animation.currentTimeProperty().addListener((e, o, n) -> {
+                        if(!o.equals(Duration.ZERO)) root.getChildren().remove(root.getChildren().size()-1);
+                        root.getChildren().add(makePath(newX, newY, n.toMillis()));
+                    });
                     animation.play();
                 }
             }
@@ -92,23 +93,27 @@ public class TurtleView {
     }
 
 
-    private Path makePath(double newX, double newY) {
+    private Path makePath(double newX, double newY, double o) {
         var path = new Path();
-        path.setFill(penColor);
+        if(o == DURATION_MILLIS)
+            path.setFill(penColor);
         path.getElements().add(new MoveTo(turtle.getX()+TURTLE_SIZE/2,turtle.getY()+TURTLE_SIZE/2));
-        path.getElements().add(new LineTo(newX, newY));
+        path.getElements().add(new LineTo(turtle.getX()+o/(double)DURATION_MILLIS*(newX-turtle.getX()),
+                turtle.getY()+o/(double)DURATION_MILLIS*(newY-turtle.getY())));
+        System.out.println(o);
         path.setStroke(penColor);
+        System.out.println(path);
         return path;
     }
 
-    private Animation makeAnimation(ImageView turtle, Path path){
+    private Animation makeAnimation(ImageView turtle, Path path, Double newAngle){
         if(penDown) { }
         var pt = new PathTransition(Duration.millis(DURATION_MILLIS),path,turtle);
-        var rt = new RotateTransition(Duration.millis(DURATION_MILLIS));
-        rt.setToAngle(90);
-        pt.setDuration(Duration.millis(1000)); //Todo:
-        rt.setDuration(Duration.millis(1000));
-        return new SequentialTransition(turtle,pt,rt);
+//        var rt = new RotateTransition(Duration.millis(DURATION_MILLIS));
+//        rt.setToAngle(newAngle);
+        pt.setDuration(Duration.millis(DURATION_MILLIS)); //Todo:
+//        rt.setDuration(Duration.millis(DURATION_MILLIS));
+        return new SequentialTransition(turtle,pt);
     }
 
     public Pane view() { return root; }

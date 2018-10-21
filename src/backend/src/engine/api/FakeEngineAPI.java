@@ -13,9 +13,9 @@ public class FakeEngineAPI implements EngineAPI {
     public void processString(String str) {
         // lexer -> parser -> interpreter
         System.out.println("proc");
-        turtleModel.setX(10);
+        turtleModel.setX(100);
         turtleModel.move(true);
-        turtleModel.setY(10);
+        turtleModel.setY(100);
         turtleModel.move(false);
     }
 }
