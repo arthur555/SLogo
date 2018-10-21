@@ -63,10 +63,6 @@ public class CrudeParser implements Parser {
             throw new CommandSyntaxException("The input command is illegal in the current grammar.");
         }
         int temp = pointer;
-        Expression direct = parseDirect(tokens);
-        if (direct != null) {
-            return direct;
-        }
         Expression group = parseGroup(tokens);
         if (group != null) {
             return group;
@@ -78,6 +74,10 @@ public class CrudeParser implements Parser {
         Expression binary = parseBinary(tokens);
         if (binary != null) {
             return binary;
+        }
+        Expression direct = parseDirect(tokens);
+        if (direct != null) {
+            return direct;
         }
 
         pointer = temp;
@@ -151,6 +151,8 @@ public class CrudeParser implements Parser {
             return null;
         }
         pointer++;
+        System.out.println(pointer);
+        System.out.print(tokens.get(pointer).toString());
         if (pointer >= tokens.size() || !tokens.get(pointer).getType().equals("GroupEnd")) {
             pointer = tempPointer;
             return null;
@@ -176,7 +178,7 @@ public class CrudeParser implements Parser {
     public static void main(String[] args) {
         List<Token> tokens = new ArrayList<>();
         Lexer lexer = new CrudeLexer();
-        String test = "forward 50 (";
+        String test = "(50)";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {
@@ -197,6 +199,5 @@ public class CrudeParser implements Parser {
             e.printStackTrace();
         }
         Expression result = parser.returnAST();
-        System.out.println(result.getClass());
     }
 }
