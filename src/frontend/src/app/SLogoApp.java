@@ -25,6 +25,7 @@ public class SLogoApp extends Application {
 
         startTick();
         viewModule.show(primaryStage);
+        primaryStage.show();
     }
 
     private void tick(double elapsedTime) { }
