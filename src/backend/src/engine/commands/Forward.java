@@ -1,11 +1,10 @@
 package engine.commands;
+import model.TurtleModelImpl;
+public class Forward implements Command<TurtleModelImpl> {
 
-import model.TurtleModel;
-
-public class Forward implements TurtleCommand<TurtleModel> {
-
+    private int stepLength;
     public Forward(int step) {
-
+        stepLength = step;
     }
 
     /**
@@ -14,7 +13,14 @@ public class Forward implements TurtleCommand<TurtleModel> {
      * @param turtleModel
      */
     @Override
-    public void update(TurtleModel turtleModel) {
-
+    public double update(TurtleModelImpl turtleModel) {
+        double head = turtleModel.getAngle();
+        double stepX = stepLength*Math.cos(head);
+        double stepY = stepLength*Math.sin(head);
+        turtleModel.setX(turtleModel.getX()+stepX);
+        turtleModel.move(true);
+        turtleModel.setY(turtleModel.getY()+stepY);
+        turtleModel.move(false);
+        return stepLength;
     }
 }
