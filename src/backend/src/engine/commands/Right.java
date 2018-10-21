@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Right implements Command<TurtleModelImpl> {
+public class Right implements Command<TurtleModel> {
     private Left left;
 
     public Right (double degree){
@@ -10,7 +10,7 @@ public class Right implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return left.update(turtleModel);
     }
 }

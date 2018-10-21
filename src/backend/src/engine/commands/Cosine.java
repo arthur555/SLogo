@@ -1,15 +1,15 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Cosine implements Command<TurtleModelImpl> {
+public class Cosine implements Command<TurtleModel> {
     private double angle;
 
     public Cosine(double a){
         angle = a;
     }
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return Math.cos(angle);
     }
 }

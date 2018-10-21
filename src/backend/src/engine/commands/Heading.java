@@ -1,12 +1,12 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Heading implements Command<TurtleModelImpl> {
+public class Heading implements Command<TurtleModel> {
     public Heading(){}
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return turtleModel.getAngle();
     }
 }

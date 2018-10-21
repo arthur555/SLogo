@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class SetTowards implements  Command<TurtleModelImpl> {
+public class SetTowards implements  Command<TurtleModel> {
 
     private int x;
     private int y;
@@ -13,7 +13,7 @@ public class SetTowards implements  Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         double currentX = turtleModel.getX();
         double currentY = turtleModel.getY();
         double newAngle = Math.atan2(y - currentY, x - currentX);

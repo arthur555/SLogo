@@ -1,12 +1,12 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class PenUp implements Command<TurtleModelImpl> {
+public class PenUp implements Command<TurtleModel> {
     public PenUp(){}
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         turtleModel.setPenDown(false);
         return 0;
     }

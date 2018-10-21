@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class SetPosition implements Command<TurtleModelImpl> {
+public class SetPosition implements Command<TurtleModel> {
 
     private int x;
     private int y;
@@ -13,7 +13,7 @@ public class SetPosition implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         double myX = turtleModel.getX();
         double myY = turtleModel.getY();
         turtleModel.setX(x);

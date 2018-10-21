@@ -1,26 +1,26 @@
 package controller;
 
 import engine.commands.Command;
-import model.TurtleModelImpl;
+import model.TurtleModel;
 import view.TurtleView;
 
 import java.util.List;
 
 public class TurtleController {
     private TurtleView turtleView;
-    private TurtleModelImpl turtleModel;
+    private TurtleModel turtleModel;
 
-    public TurtleController(TurtleModelImpl turtleModel, TurtleView turtleView) {
+    public TurtleController(TurtleModel turtleModel, TurtleView turtleView) {
         this.turtleModel = turtleModel;
         this.turtleView = turtleView;
 
     }
 
-    void actOnListOfCommands(List<Command<model.TurtleModelImpl>> commands) {
+    void actOnListOfCommands(List<Command<model.TurtleModel>> commands) {
         commands.forEach(a -> a.update(turtleModel));
     }
 
-    void actOnCommand(Command<TurtleModelImpl> command) {
+    void actOnCommand(Command<TurtleModel> command) {
         command.update(turtleModel);
     }
 }

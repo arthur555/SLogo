@@ -18,10 +18,10 @@ public class TurtleModelImpl implements TurtleModel {
     public TurtleModelImpl(){
         x = 0.0;
         y = 0.0;
+        angle = 0.0;
         points = FXCollections.observableArrayList();
         points.add(x);
         points.add(y);
-        angle = 0.0;
         points.add(angle);
         visible = new SimpleBooleanProperty(true);
         penDown = new SimpleBooleanProperty(true);
@@ -42,7 +42,10 @@ public class TurtleModelImpl implements TurtleModel {
         this.y=y;
         points.set(1,y);
     }
-    public void setAngle(double angle){this.angle = angle;}
+    public void setAngle(double angle){
+        this.angle = angle;
+        points.set(2, angle);
+    }
 
     public double getX(){return x;}
     public double getY(){return y;}

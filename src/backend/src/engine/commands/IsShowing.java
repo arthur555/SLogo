@@ -1,12 +1,12 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class IsShowing implements Command<TurtleModelImpl> {
+public class IsShowing implements Command<TurtleModel> {
     public IsShowing(){}
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return turtleModel.isVisible().getValue() ? 1 : 0;
     }
 }

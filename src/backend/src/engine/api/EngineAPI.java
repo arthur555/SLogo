@@ -1,5 +1,5 @@
 package engine.api;
 
 public interface EngineAPI {
-    void processString(String str);
+    void processString(String str) throws ClassNotFoundException;
 }

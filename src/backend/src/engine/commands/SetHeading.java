@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class SetHeading implements  Command<TurtleModelImpl> {
+public class SetHeading implements  Command<TurtleModel> {
     private double head;
 
     public SetHeading(double head){
@@ -10,7 +10,7 @@ public class SetHeading implements  Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         double angleMoved = head - turtleModel.getAngle();
         turtleModel.move(true);
         turtleModel.setAngle(head);
