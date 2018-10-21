@@ -1,5 +1,7 @@
 package engine.Lexer;
 
+import engine.errors.CommandSyntaxException;
+
 import java.util.List;
 import java.util.Queue;
 
@@ -14,7 +16,7 @@ public interface Lexer {
      *
      * @param input: A user input raw String.
      */
-    void readString(String input);
+    void readString(String input) throws CommandSyntaxException;
 
     /**
      * Return a list of Token from the input String, after translation by two translators.

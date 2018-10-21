@@ -1,9 +1,11 @@
 package engine.Lexer;
 
+import engine.errors.CommandSyntaxException;
 import engine.parser.CrudeParser;
 import engine.translator.LanguageTranslator;
 import engine.translator.TypeTranslator;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class CrudeLexer implements Lexer{
@@ -13,6 +15,7 @@ public class CrudeLexer implements Lexer{
 
     private TypeTranslator myType;
     private LanguageTranslator myLanguage;
+    private Queue<Token> myTokens;
 
     /**
      * Constructs a CrudeParser with the user-defined language as the starting recognized language.
@@ -22,6 +25,7 @@ public class CrudeLexer implements Lexer{
     public CrudeLexer(String language) {
         myType = new TypeTranslator(PREFIX + SYNTAX);
         myLanguage = new LanguageTranslator(PREFIX + language);
+        myTokens = new LinkedList<>();
     }
 
     /**
@@ -44,8 +48,37 @@ public class CrudeLexer implements Lexer{
      * @param input : A user input raw String.
      */
     @Override
-    public void readString(String input) {
+    public void readString(String input) throws CommandSyntaxException {
+        if (input == null || input.isEmpty()) {
+            return;
+        }
+        myTokens.clear();
+        int start = 0;
+        int end = 0;
+        while (start < input.length() && end < input.length()) {
+            try {
+                String chunk = input.substring(start, end + 1);
+                String type = myType.getSymbol(chunk);
+                start = end + 1;
+                end++;
+                if (type.equals("Comment") || type.equals("Whitespace")) {
+                    continue;
+                }
+                if (type.equals("Command")) {
+                    type = cateogrize(type);
+                    chunk = myLanguage.getSymbol(chunk);
+                }
+                myTokens.offer(new Token(chunk, type));
+            } catch (CommandSyntaxException e) {
+                end++;
+            }
+        }
+        if (start != input.length() || end != input.length()) {
+            throw new CommandSyntaxException("The input String contains tokens that are not properly defined in the properties files.");
+        }
+    }
 
+    private String cateogrize(String type) {
     }
 
     /**
@@ -55,6 +88,6 @@ public class CrudeLexer implements Lexer{
      */
     @Override
     public Queue<Token> getTokens() {
-        return null;
+        return myTokens;
     }
 }

@@ -6,11 +6,19 @@ package engine.Lexer;
  * @author Haotian Wang
  */
 public class Token {
-    private String myString;
-    private String myType;
+    private final String myString;
+    private final String myType;
 
     public Token(String string, String type) {
         myString = string;
         myType = type;
+    }
+
+    public String getString() {
+        return myString;
+    }
+
+    public String getType() {
+        return myType;
     }
 }
