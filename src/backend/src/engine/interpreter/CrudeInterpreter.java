@@ -1,7 +1,7 @@
 package engine.interpreter;
 
 import engine.commands.Command;
-import engine.parser.SLogoAST;
+import engine.slogoast.SLogoAST;
 
 import java.util.List;
 

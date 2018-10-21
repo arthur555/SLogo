@@ -1,9 +1,7 @@
 package engine.parser;
 
 import engine.Lexer.Token;
-import engine.errors.CommandSyntaxException;
-import engine.translator.LanguageTranslator;
-import engine.translator.TypeTranslator;
+import engine.slogoast.SLogoAST;
 
 import java.util.Queue;
 

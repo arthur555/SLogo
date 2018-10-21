@@ -1,6 +1,7 @@
 package engine.parser;
 
 import engine.Lexer.Token;
+import engine.slogoast.Expression;
 
 import java.util.Queue;
 
@@ -24,5 +25,5 @@ public interface Parser {
     /**
      * @return An SLogoAST for the interpreter to process.
      */
-    SLogoAST returnAST();
+    Expression returnAST();
 }
