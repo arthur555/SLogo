@@ -1,13 +1,13 @@
 package controller;
 
-import javafx.beans.value.ObservableValue;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import view.CommandView;
 import view.HistoryView;
 
 public class EditorController {
-    public static final String COMMAND_PREFIX = ">> ";
+    private static final char NEWLINE = '\n';
+    private static final String BLANK = "";
 
     private CommandView commandView;
     private HistoryView historyView;
@@ -17,52 +17,57 @@ public class EditorController {
         this.lang = lang;
         this.commandView = commandView;
         this.historyView = historyView;
-        setupHandlers();
+        this.commandView.setLang(lang);
     }
 
     public void setLang(String lang) {
         this.lang = lang;
+        this.commandView.setLang(lang);
     }
 
-    private void setupHandlers() {
-        commandView.view().setOnKeyPressed(this::handleKeyPressed);
-        commandView.view().caretPositionProperty().addListener(this::handleCaretPositionChanged);
-        commandView.view().textProperty().addListener(this::handleTextChanged);
-        historyView.view().setOnKeyPressed(e -> {
-            if(!e.isMetaDown()) commandView.view().requestFocus();
-        });
-    }
-
-    private void handleKeyPressed(KeyEvent e) {
-        if(e.getCode() == KeyCode.ESCAPE) commandView.view().clear();
+    public void handleKeyPressed(KeyEvent e) {
+        if(e.getCode() == KeyCode.ESCAPE) commandView.clear();
         else if(e.getCode() == KeyCode.ENTER) {
-            if(e.isShiftDown()) {
-                commandView.view().insertText(commandView.view().getCaretPosition(), "\n");
-            } else submitCommand();
+            if(e.isShiftDown()) commandView.insert(NEWLINE);
+            else submitCommand();
+        } else if(e.getCode() == KeyCode.BACK_SPACE) commandView.delete();
+        else if(e.getCode() == KeyCode.LEFT) commandView.left();
+        else if(e.getCode() == KeyCode.RIGHT) commandView.right();
+        else if(e.getCode() == KeyCode.QUOTE) commandView.insert(e.isShiftDown() ? '\"' : '\'');
+        else if (e.getCode() != KeyCode.COMMAND) {
+            char code = (char) e.getCode().getCode();
+            if(Character.isAlphabetic(code)) code = (char) (e.isShiftDown() ? code : code+'a'-'A');
+            else if(e.isShiftDown()) code = convertShift(code);
+            if(code != KeyCode.SHIFT.getCode()) commandView.insert(code);
         }
     }
 
-    private void handleCaretPositionChanged(ObservableValue<? extends Number> ob, Number ov, Number nv) {
-        if(nv.intValue() < COMMAND_PREFIX.length()) {
-            commandView.view().positionCaret(COMMAND_PREFIX.length());
-        }
-    }
-
-    private void handleTextChanged(ObservableValue<? extends String> ob, String ov, String nv) {
-        if(!nv.startsWith(COMMAND_PREFIX)) {
-            commandView.view().setText(COMMAND_PREFIX + nv.substring(findCorruptPrefix(nv)));
-            commandView.view().positionCaret(COMMAND_PREFIX.length());
-        }
-    }
-
-    private int findCorruptPrefix(String s) {
-        for(int i = 0 ; i < Math.min(COMMAND_PREFIX.length(), s.length()) ; i ++) {
-            if(!COMMAND_PREFIX.contains(s.subSequence(i, i+1))) return i;
-        } return Math.min(COMMAND_PREFIX.length(), s.length());
+    private char convertShift(int code) {
+        if(code == ';') code = ':';
+        if(code == '`') code = '~';
+        if(code == '1') code = '!';
+        if(code == '2') code = '@';
+        if(code == '3') code = '#';
+        if(code == '4') code = '$';
+        if(code == '5') code = '%';
+        if(code == '6') code = '^';
+        if(code == '7') code = '&';
+        if(code == '8') code = '*';
+        if(code == '9') code = '(';
+        if(code == '0') code = ')';
+        if(code == '-') code = '_';
+        if(code == '=') code = '+';
+        if(code == '/') code = '?';
+        if(code == '.') code = '>';
+        if(code == ',') code = '<';
+        if(code == '[') code = '{';
+        if(code == ']') code = '}';
+        if(code == '\\') code = '|';
+        return (char) code;
     }
 
     private void submitCommand() {
-        historyView.view().appendText(commandView.view().getText().trim()+"\n");
-        commandView.view().clear();
+        historyView.view().appendText(commandView.model().replace(CommandView.CARET, BLANK).trim()+NEWLINE);
+        commandView.clear();
     }
 }

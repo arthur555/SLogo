@@ -1,14 +1,8 @@
 package app;
 
-import controller.ControllerModule;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import fake_model.TurtleModel;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-
-import fake_model.TurtleModel;
 import view.TurtleView;
 
 public class fakeApp extends Application {
