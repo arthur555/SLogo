@@ -18,7 +18,9 @@ public class Forward implements Command<TurtleModelImpl> {
         double stepX = stepLength*Math.cos(head);
         double stepY = stepLength*Math.sin(head);
         turtleModel.setX(turtleModel.getX()+stepX);
-        turtleModel.setY(turtleModel.getY()+stepY);
         turtleModel.move(true);
+        turtleModel.setY(turtleModel.getY()+stepY);
+        turtleModel.move(false);
+
     }
 }
