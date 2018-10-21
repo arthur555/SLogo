@@ -74,6 +74,22 @@ public class TypeTranslator implements Translator {
     }
 
     /**
+     * This method checks whether an input command is indeed defined in the properties files.
+     *
+     * @param text : A String representing the input command.
+     * @return whether the properties file contains that command.
+     */
+    @Override
+    public boolean containsString(String text) {
+        try {
+            getSymbol(text);
+            return true;
+        } catch (CommandSyntaxException e) {
+            return false;
+        }
+    }
+
+    /**
      * Returns true if the given text matches the given regular expression pattern
      */
     private boolean match (String text, Pattern regex) {

@@ -43,7 +43,7 @@ public class CrudeLexer implements Lexer{
     }
 
     /**
-     * This processes the user input raw String.
+     * This processes the user input raw String and tokenizes the input String.
      *
      * @param input : A user input raw String.
      */
@@ -59,14 +59,15 @@ public class CrudeLexer implements Lexer{
             try {
                 String chunk = input.substring(start, end + 1);
                 String type = myType.getSymbol(chunk);
+                while (end < input.length() - 1 && myType.getSymbol(input.substring(start, end + 2)))
                 start = end + 1;
                 end++;
                 if (type.equals("Comment") || type.equals("Whitespace")) {
                     continue;
                 }
                 if (type.equals("Command")) {
-                    type = cateogrize(type);
                     chunk = myLanguage.getSymbol(chunk);
+                    type = cateogrize(chunk);
                 }
                 myTokens.offer(new Token(chunk, type));
             } catch (CommandSyntaxException e) {
@@ -78,7 +79,14 @@ public class CrudeLexer implements Lexer{
         }
     }
 
-    private String cateogrize(String type) {
+    /**
+     * This method categorize the input command into its grammar types. Details on grammar types are found in the EBNF reference file.
+     *
+     * @param chunk: An input String type such as Forward or Left.
+     * @return A String indicating the type of the command such as Unary and Binary.
+     */
+    private String cateogrize(String chunk) {
+
     }
 
     /**
