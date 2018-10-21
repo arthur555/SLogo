@@ -2,7 +2,8 @@ package model;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-public class TurtleModelImpl {
+
+public class TurtleModelImpl implements TurtleModel {
     private Double x;
     private Double y;
     private Double angle;
@@ -17,12 +18,11 @@ public class TurtleModelImpl {
         points = FXCollections.observableArrayList();
         points.add(x);
         points.add(y);
-        points.add(angle);
         angle = 0.0;
+        points.add(angle);
         visible = new SimpleBooleanProperty(true);
         penDown = new SimpleBooleanProperty(true);
         move = new SimpleBooleanProperty(false);
-
     }
 
 
@@ -30,10 +30,12 @@ public class TurtleModelImpl {
     public void setPenDown(boolean down){penDown.setValue(down);}
     public void setVisible(boolean visible){this.visible.setValue(visible);}
     public void move(boolean move){this.move.set(move);}
-    public void setX(double x){this.x=x;
+    public void setX(double x){
+        this.x=x;
         points.set(0,x);
     }
-    public void setY(double y){this.y=y;
+    public void setY(double y){
+        this.y=y;
         points.set(1,y);
     }
     public void setAngle(double angle){this.angle = angle;}
