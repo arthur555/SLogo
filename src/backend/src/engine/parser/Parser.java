@@ -1,5 +1,9 @@
 package engine.parser;
 
+import engine.Lexer.Token;
+
+import java.util.Queue;
+
 /**
  * Take in the String input that the user types into the editor window.
  * Output an abstract syntax tree corresponding to the String command.
@@ -11,10 +15,11 @@ package engine.parser;
  */
 public interface Parser {
     /**
-     * Either store the variables if rawCommand is a variable declaration or process the command into an AST.
-     * @param rawCommand: A String that the user types in exactly as it appears in the editor view.
+     * Reads in the queue of Tokens from the Lexer into the internal logic of the parser.
+     *
+     * @param tokens: A queue of Tokens read from the Lexer.
      */
-    void readRawCommand(String rawCommand);
+    void readTokens(Queue<Token> tokens);
 
     /**
      * @return An SLogoAST for the interpreter to process.

@@ -32,4 +32,12 @@ public interface Translator {
      * @throws CommandSyntaxException
      */
     String getSymbol(String text) throws CommandSyntaxException;
+
+    /**
+     * This method checks whether an input command is indeed defined in the properties files.
+     *
+     * @param text: A String representing the input command.
+     * @return whether the properties file contains that command.
+     */
+    boolean containsString(String text);
 }
