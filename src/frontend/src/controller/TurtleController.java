@@ -1,7 +1,6 @@
 package controller;
 
 import engine.commands.Command;
-import fake_model.TurtleModel;
 import model.TurtleModelImpl;
 import view.TurtleView;
 

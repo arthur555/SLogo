@@ -1,10 +1,10 @@
 package model;
 
 public class ModelModule {
-    private TurtleModel turtleModel;
+    private TurtleModelImpl turtleModel;
 
     public ModelModule() { turtleModel = new TurtleModelImpl(); }
 
 
-    public TurtleModel turtleModel() { return turtleModel; }
+    public TurtleModelImpl turtleModel() { return turtleModel; }
 }

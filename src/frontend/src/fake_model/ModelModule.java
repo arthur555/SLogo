@@ -1,9 +1,11 @@
 package fake_model;
 
+import model.TurtleModelImpl;
+
 public class ModelModule {
-    private TurtleModel turtleModel;
+    private TurtleModelImpl turtleModel;
 
-    public ModelModule() { turtleModel = new TurtleModel(); }
+    public ModelModule() { turtleModel = new TurtleModelImpl(); }
 
-    public TurtleModel turtleModel() { return turtleModel; }
+    public TurtleModelImpl turtleModel() { return turtleModel; }
 }

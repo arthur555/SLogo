@@ -1,14 +1,10 @@
 package app;
 
-import controller.ControllerModule;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
-import fake_model.TurtleModel;
+import model.TurtleModelImpl;
 import view.TurtleView;
 
 public class fakeApp extends Application {
@@ -18,7 +14,7 @@ public class fakeApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        TurtleModel turtle = new TurtleModel();
+        TurtleModelImpl turtle = new TurtleModelImpl();
         TurtleView view = new TurtleView(turtle);
         turtle.setX(100);
         turtle.move(true);

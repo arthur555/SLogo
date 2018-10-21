@@ -1,6 +1,5 @@
 package view;
 
-import fake_model.TurtleModel;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
@@ -10,13 +9,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import model.TurtleModelImpl;
 import view.utils.BackgroundUtils;
 import view.utils.ImageUtils;
 
@@ -34,7 +33,7 @@ public class TurtleView {
     private ImageView turtle;
     private Color penColor;
 
-    public TurtleView(TurtleModel turtleModel) {
+    public TurtleView(TurtleModelImpl turtleModel) {
         DEFAULT_TURTLE_IMG = ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView();
         root = new Pane();
@@ -48,7 +47,7 @@ public class TurtleView {
         bindObservable(turtleModel);
     }
 
-    private void bindObservable(TurtleModel turtleModel) {
+    private void bindObservable(TurtleModelImpl turtleModel) {
         turtleModel.isMove().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
