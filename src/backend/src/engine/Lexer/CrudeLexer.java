@@ -191,4 +191,18 @@ public class CrudeLexer implements Lexer{
     public Queue<Token> getTokens() {
         return myTokens;
     }
+
+    public static void main(String[] args) {
+        CrudeLexer lexer = new CrudeLexer();
+        String input = "forward 10 for(#dfd :hello)";
+        try {
+            lexer.readString(input);
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+        Queue<Token> tokens = lexer.getTokens();
+        for (Token token : tokens) {
+            System.out.println(token.toString());
+        }
+    }
 }

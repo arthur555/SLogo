@@ -21,4 +21,6 @@ public class Token {
     public String getType() {
         return myType;
     }
+
+    public String toString() { return "(" + myType + " : " + myString + ")"; }
 }
