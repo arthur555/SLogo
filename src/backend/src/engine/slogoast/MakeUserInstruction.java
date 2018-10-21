@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Haotian Wang
  */
-public class MakeUserInstruction {
+public class MakeUserInstruction extends Expression {
     private Token action;
     private Variable myVar;
     private Token startA;
