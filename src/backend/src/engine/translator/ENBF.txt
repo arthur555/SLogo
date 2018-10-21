@@ -2,3 +2,4 @@ expression -> unary expression | binary expression expression | assign variable 
                                 | dotimes [ variable expression ] [ (expression)* ] | for [ variable expression expression expression ] [ (expression)* ]
                                 | ifelse expression [ (expression)* ] [ (expression)* ] | to variable [ (variables)* ] [ (commands)* ]
 expression -> ( expression )
+expression -> direct
