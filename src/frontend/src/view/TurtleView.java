@@ -18,13 +18,13 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import view.utils.BackgroundUtils;
+import view.utils.ImageUtils;
 
 public class TurtleView {
     public static final int TURTLE_SIZE = 50;
     public static final int TURTLE_VIEW_WIDTH = MainView.SCREEN_HEIGHT;
     public static final int DURATION_MILLIS = 4000;
-    //private static final Image DEFAULT_TURTLE_IMG =
-         //   ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
+    private Image DEFAULT_TURTLE_IMG;
     private double x;
     private double y;
     private boolean penDown;
@@ -35,6 +35,7 @@ public class TurtleView {
     private Color penColor;
 
     public TurtleView(TurtleModel turtleModel) {
+        DEFAULT_TURTLE_IMG = ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView();
         root = new Pane();
         root.getStyleClass().add("canvas");
@@ -75,8 +76,13 @@ public class TurtleView {
         });
     }
 
+    public void clean(){
+        root.getChildren().removeAll();
+        root.getChildren().add(turtle);
+    }
     private Animation makeAnimation(ImageView turtle){
         var path = new Path();
+        path.setFill(penColor);
         path.getElements().add(new MoveTo(x,y));
         if(penDown){
             path.getElements().add(new LineTo(x, y));

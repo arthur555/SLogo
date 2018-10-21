@@ -14,6 +14,7 @@ public class TurtleController {
     public TurtleController(TurtleModelImpl turtleModel, TurtleView turtleView) {
         this.turtleModel = turtleModel;
         this.turtleView = turtleView;
+
     }
 
     void actOnListOfCommands(List<Command<model.TurtleModelImpl>> commands) {
