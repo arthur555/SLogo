@@ -57,9 +57,12 @@ public class CrudeLexer implements Lexer{
         int end = 0;
         while (start < input.length() && end < input.length()) {
             try {
+                while (end < input.length() && myType.containsString(input.substring(start, end + 1))) {
+                    end++;
+                }
+                end--;
                 String chunk = input.substring(start, end + 1);
                 String type = myType.getSymbol(chunk);
-                while (end < input.length() - 1 && myType.getSymbol(input.substring(start, end + 2)))
                 start = end + 1;
                 end++;
                 if (type.equals("Comment") || type.equals("Whitespace")) {
