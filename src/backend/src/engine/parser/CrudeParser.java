@@ -1,5 +1,7 @@
 package engine.parser;
 
+import engine.Lexer.CrudeLexer;
+import engine.Lexer.Lexer;
 import engine.Lexer.Token;
 import engine.commands.Command;
 import engine.errors.CommandSyntaxException;
@@ -159,7 +161,7 @@ public class CrudeParser implements Parser {
 
     private Expression parseDirect(List<Token> tokens) {
         Token token = tokens.get(pointer);
-        if (!token.getType().equals("Direct") || !token.getType().equals("Constant")) {
+        if (!token.getType().equals("Direct") && !token.getType().equals("Constant")) {
             return null;
         }
         pointer++;
@@ -172,6 +174,29 @@ public class CrudeParser implements Parser {
      * @param args
      */
     public static void main(String[] args) {
+        List<Token> tokens = new ArrayList<>();
+        Lexer lexer = new CrudeLexer();
+        String test = "forward 50 (";
+        try {
+            lexer.readString(test);
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+        List<Token> testSet = lexer.getTokens();
+        System.out.println("The input String is\n\n" + test + "\n");
+        System.out.print("The list of tokens is:\n\n");
+        for (Token token : testSet) {
+            System.out.println(token.toString());
+        }
 
+        Parser parser = new CrudeParser();
+        try {
+            parser.readTokens(testSet);
+        } catch (CommandSyntaxException e) {
+            e.getMessage();
+            e.printStackTrace();
+        }
+        Expression result = parser.returnAST();
+        System.out.println(result.getClass());
     }
 }
