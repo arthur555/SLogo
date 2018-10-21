@@ -2,8 +2,6 @@ package app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-
 import model.TurtleModelImpl;
 import view.TurtleView;
 
