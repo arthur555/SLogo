@@ -10,6 +10,7 @@ public class TurtleModelImpl {
     private SimpleBooleanProperty visible;
     private SimpleBooleanProperty penDown;
     private ObservableList<Double> points;
+    private SimpleBooleanProperty clean;
 
     public TurtleModelImpl(){
         x = 0.0;
@@ -22,6 +23,7 @@ public class TurtleModelImpl {
         visible = new SimpleBooleanProperty(true);
         penDown = new SimpleBooleanProperty(true);
         move = new SimpleBooleanProperty(false);
+        clean = new SimpleBooleanProperty(true);
 
     }
 
@@ -30,10 +32,13 @@ public class TurtleModelImpl {
     public void setPenDown(boolean down){penDown.setValue(down);}
     public void setVisible(boolean visible){this.visible.setValue(visible);}
     public void move(boolean move){this.move.set(move);}
-    public void setX(double x){this.x=x;
+    public void clean(){this.clean.set(!this.clean.get());}
+    public void setX(double x){
+        this.x=x;
         points.set(0,x);
     }
-    public void setY(double y){this.y=y;
+    public void setY(double y){
+        this.y=y;
         points.set(1,y);
     }
     public void setAngle(double angle){this.angle = angle;}
@@ -41,6 +46,7 @@ public class TurtleModelImpl {
     public double getX(){return x;}
     public double getY(){return y;}
     public double getAngle(){return angle;}
+    public SimpleBooleanProperty getClean(){return clean;}
     public SimpleBooleanProperty isPenDown(){return penDown;}
     public SimpleBooleanProperty isVisible(){return visible;}
     public SimpleBooleanProperty isMove(){return move;}

@@ -40,7 +40,6 @@ public class TurtleView {
         root.getStyleClass().add("canvas");
         root.setPrefWidth(200);
         root.setPrefHeight(200);
-
         penDown = true;
         turtle.visibleProperty().bind(turtleModel.isVisible());
 
@@ -61,11 +60,19 @@ public class TurtleView {
             }
         });
 
+        turtleModel.getClean().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                clean();
+            }
+        });
+
         turtleModel.getPoints().addListener(new ListChangeListener<Double>() {
             @Override
             public void onChanged(Change<? extends Double> c) {
                 x = c.getList().get(0);
                 y = c.getList().get(1);
+                angle = c.getList().get(2);
                 if (move){
                     var animation = makeAnimation(turtle);
                     animation.play();
