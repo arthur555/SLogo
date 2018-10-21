@@ -6,6 +6,10 @@ package engine.parser;
  * @author Haotian Wang
  */
 public class SLogoAST {
+
+    public SLogoAST() {
+
+    }
     public SLogoAST(String[] typeArray, String[] langArray) {
     }
 }

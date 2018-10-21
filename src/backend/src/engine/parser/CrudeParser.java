@@ -60,11 +60,15 @@ public class CrudeParser implements Parser {
                 // TODO
                 e.printStackTrace();
             }
-            try {
-                langArray[i] = myLanguage.getSymbol(arr[i]);
-            } catch (CommandSyntaxException e) {
-                // TODO
-                e.printStackTrace();
+            if (typeArray[i].equals("Command")) {
+                try {
+                    langArray[i] = myLanguage.getSymbol(arr[i]);
+                } catch (CommandSyntaxException e) {
+                    // TODO
+                    e.printStackTrace();
+                }
+            } else {
+                langArray[i] = arr[i];
             }
         }
         myAST = new SLogoAST(typeArray, langArray);
