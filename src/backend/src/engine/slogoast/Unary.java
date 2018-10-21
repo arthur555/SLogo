@@ -10,11 +10,9 @@ import engine.Lexer.Token;
 public class Unary extends Expression {
     private final Token myToken;
     private final Expression myFirstExpr;
-    private final Expression mySecondExpr;
 
-    public Unary(Token token, Expression a, Expression b) {
+    public Unary(Token token, Expression a) {
         myToken = token;
         myFirstExpr = a;
-        mySecondExpr = b;
     }
 }

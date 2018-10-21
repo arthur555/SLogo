@@ -22,59 +22,59 @@ public class CrudeLexer implements Lexer{
     private static final Map<String, String> myGrammerMap;
     static {
         Map<String, String> grammarMap = new HashMap<>();
-        grammarMap.put("Forward", "unary");
-        grammarMap.put("Backward", "unary");
-        grammarMap.put("Left", "unary");
-        grammarMap.put("Right", "unary");
-        grammarMap.put("SetHeading", "unary");
-        grammarMap.put("SetTowards", "unary");
-        grammarMap.put("SetPosition", "unary");
-        grammarMap.put("Minus", "unary");
-        grammarMap.put("Random", "unary");
-        grammarMap.put("Sine", "unary");
-        grammarMap.put("Cosine", "unary");
-        grammarMap.put("Tangent", "unary");
-        grammarMap.put("ArcTangent", "unary");
-        grammarMap.put("NaturalLog", "unary");
-        grammarMap.put("Not", "unary");
+        grammarMap.put("Forward", "Unary");
+        grammarMap.put("Backward", "Unary");
+        grammarMap.put("Left", "Unary");
+        grammarMap.put("Right", "Unary");
+        grammarMap.put("SetHeading", "Unary");
+        grammarMap.put("SetTowards", "Unary");
+        grammarMap.put("SetPosition", "Unary");
+        grammarMap.put("Minus", "Unary");
+        grammarMap.put("Random", "Unary");
+        grammarMap.put("Sine", "Unary");
+        grammarMap.put("Cosine", "Unary");
+        grammarMap.put("Tangent", "Unary");
+        grammarMap.put("ArcTangent", "Unary");
+        grammarMap.put("NaturalLog", "Unary");
+        grammarMap.put("Not", "Unary");
 
-        grammarMap.put("PenUp", "direct");
-        grammarMap.put("PenDown", "direct");
-        grammarMap.put("ShowTurtle", "direct");
-        grammarMap.put("HideTurtle", "direct");
-        grammarMap.put("Home", "direct");
-        grammarMap.put("ClearScreen", "direct");
-        grammarMap.put("XCoordinate", "direct");
-        grammarMap.put("YCoordinate", "direct");
-        grammarMap.put("Heading", "direct");
-        grammarMap.put("IsPenDown", "direct");
-        grammarMap.put("IsShowing", "direct");
-        grammarMap.put("Pi", "direct");
+        grammarMap.put("PenUp", "Direct");
+        grammarMap.put("PenDown", "Direct");
+        grammarMap.put("ShowTurtle", "Direct");
+        grammarMap.put("HideTurtle", "Direct");
+        grammarMap.put("Home", "Direct");
+        grammarMap.put("ClearScreen", "Direct");
+        grammarMap.put("XCoordinate", "Direct");
+        grammarMap.put("YCoordinate", "Direct");
+        grammarMap.put("Heading", "Direct");
+        grammarMap.put("IsPenDown", "Direct");
+        grammarMap.put("IsShowing", "Direct");
+        grammarMap.put("Pi", "Direct");
 
-        grammarMap.put("Sum", "binary");
-        grammarMap.put("Difference", "binary");
-        grammarMap.put("Quotient", "binary");
-        grammarMap.put("Remainder", "binary");
-        grammarMap.put("Power", "binary");
-        grammarMap.put("LessThan", "binary");
-        grammarMap.put("GreaterThan", "binary");
-        grammarMap.put("Equal", "binary");
-        grammarMap.put("NotEqual", "binary");
-        grammarMap.put("And", "binary");
-        grammarMap.put("Or", "binary");
+        grammarMap.put("Sum", "Binary");
+        grammarMap.put("Difference", "Binary");
+        grammarMap.put("Quotient", "Binary");
+        grammarMap.put("Remainder", "Binary");
+        grammarMap.put("Power", "Binary");
+        grammarMap.put("LessThan", "Binary");
+        grammarMap.put("GreaterThan", "Binary");
+        grammarMap.put("Equal", "Binary");
+        grammarMap.put("NotEqual", "Binary");
+        grammarMap.put("And", "Binary");
+        grammarMap.put("Or", "Binary");
 
-        grammarMap.put("MakeVariable", "assign");
+        grammarMap.put("MakeVariable", "Assign");
 
-        grammarMap.put("Repeat", "condition");
-        grammarMap.put("If", "condition");
+        grammarMap.put("Repeat", "Condition");
+        grammarMap.put("If", "Condition");
 
-        grammarMap.put("DoTimes", "dotimes");
+        grammarMap.put("DoTimes", "DoTimes");
 
-        grammarMap.put("For", "for");
+        grammarMap.put("For", "For");
 
-        grammarMap.put("IfElse", "ifelse");
+        grammarMap.put("IfElse", "IfElse");
 
-        grammarMap.put("MakeUserInstruction", "create");
+        grammarMap.put("MakeUserInstruction", "Create");
 
         myGrammerMap = Collections.unmodifiableMap(grammarMap);
     }
@@ -171,7 +171,6 @@ public class CrudeLexer implements Lexer{
                     chunk = myLanguage.getSymbol(chunk);
                     start = end + 1;
                     end++;
-                    type = myGrammerMap.get(type);
                 }
                 myTokens.offer(new Token(chunk, type));
             } catch (CommandSyntaxException e) {
