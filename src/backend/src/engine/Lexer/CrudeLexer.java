@@ -63,13 +63,15 @@ public class CrudeLexer implements Lexer{
                 end--;
                 String chunk = input.substring(start, end + 1);
                 String type = myType.getSymbol(chunk);
-                start = end + 1;
-                end++;
                 if (type.equals("Comment") || type.equals("Whitespace")) {
+                    start = end + 1;
+                    end++;
                     continue;
                 }
                 if (type.equals("Command")) {
                     chunk = myLanguage.getSymbol(chunk);
+                    start = end + 1;
+                    end++;
                     type = cateogrize(chunk);
                 }
                 myTokens.offer(new Token(chunk, type));
