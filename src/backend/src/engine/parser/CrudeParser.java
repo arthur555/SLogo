@@ -1,7 +1,7 @@
 package engine.parser;
 
 import engine.Lexer.Token;
-import engine.slogoast.SLogoAST;
+import engine.slogoast.Expression;
 
 import java.util.Queue;
 
@@ -26,7 +26,7 @@ public class CrudeParser implements Parser {
      * @return An SLogoAST for the interpreter to process.
      */
     @Override
-    public SLogoAST returnAST() {
+    public Expression returnAST() {
         return null;
     }
 }

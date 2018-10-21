@@ -1,7 +1,8 @@
 package engine.interpreter;
 
 import engine.commands.Command;
-import engine.slogoast.SLogoAST;
+import engine.slogoast.Expression;
+
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CrudeInterpreter implements Interpreter{
      * @param ast : SLogoAST representing the command tree.
      */
     @Override
-    public void readCommands(SLogoAST ast) {
+    public void readCommands(Expression ast) {
 
     }
 
@@ -30,7 +31,7 @@ public class CrudeInterpreter implements Interpreter{
      * @return A list of actionable Command.
      */
     @Override
-    public List<Command<TurtleModel>> outputTurtleCommands() {
+    public List<Command<Command>> outputTurtleCommands() {
         return null;
     }
 
