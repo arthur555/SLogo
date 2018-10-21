@@ -41,6 +41,9 @@ public class TypeTranslator implements Translator {
      */
     @Override
     public void addPatterns (String syntax) throws MissingResourceException{
+        if (syntax.isEmpty() || syntax == null) {
+            return;
+        }
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
@@ -71,6 +74,22 @@ public class TypeTranslator implements Translator {
             }
         }
         throw new CommandSyntaxException("\"" + text + "\"" + NO_MATCH);
+    }
+
+    /**
+     * This method checks whether an input command is indeed defined in the properties files.
+     *
+     * @param text : A String representing the input command.
+     * @return whether the properties file contains that command.
+     */
+    @Override
+    public boolean containsString(String text) {
+        try {
+            getSymbol(text);
+            return true;
+        } catch (CommandSyntaxException e) {
+            return false;
+        }
     }
 
     /**

@@ -1,6 +1,5 @@
 package view;
 
-import fake_model.TurtleModel;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
@@ -10,33 +9,34 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import model.TurtleModelImpl;
 import view.utils.BackgroundUtils;
+import view.utils.ImageUtils;
 
 public class TurtleView {
     public static final int TURTLE_SIZE = 50;
     public static final int TURTLE_VIEW_WIDTH = MainView.SCREEN_HEIGHT;
     public static final int DURATION_MILLIS = 4000;
-    //private static final Image DEFAULT_TURTLE_IMG =
-         //   ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
+    private Image DEFAULT_TURTLE_IMG;
     private double x;
     private double y;
     private boolean penDown;
     private boolean move;
     private double angle;
-    private GridPane root;
+    private Pane root;
     private ImageView turtle;
     private Color penColor;
 
-    public TurtleView(TurtleModel turtleModel) {
+    public TurtleView(TurtleModelImpl turtleModel) {
+        DEFAULT_TURTLE_IMG = ImageUtils.getImageFromUrl("turtle_image_button.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView();
-        root = new GridPane();
+        root = new Pane();
         root.getStyleClass().add("canvas");
         root.setPrefWidth(200);
         root.setPrefHeight(200);
@@ -47,7 +47,7 @@ public class TurtleView {
         bindObservable(turtleModel);
     }
 
-    private void bindObservable(TurtleModel turtleModel) {
+    private void bindObservable(TurtleModelImpl turtleModel) {
         turtleModel.isMove().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -69,13 +69,19 @@ public class TurtleView {
                 if (move){
                     var animation = makeAnimation(turtle);
                     animation.play();
+                    
                 }
             }
         });
     }
 
+    public void clean(){
+        root.getChildren().removeAll();
+        root.getChildren().add(turtle);
+    }
     private Animation makeAnimation(ImageView turtle){
         var path = new Path();
+        path.setFill(penColor);
         path.getElements().add(new MoveTo(x,y));
         if(penDown){
             path.getElements().add(new LineTo(x, y));

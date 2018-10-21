@@ -1,8 +1,8 @@
 package app;
 
-import fake_model.TurtleModel;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.TurtleModelImpl;
 import view.TurtleView;
 
 public class fakeApp extends Application {
@@ -12,7 +12,7 @@ public class fakeApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        TurtleModel turtle = new TurtleModel();
+        TurtleModelImpl turtle = new TurtleModelImpl();
         TurtleView view = new TurtleView(turtle);
         turtle.setX(100);
         turtle.move(true);

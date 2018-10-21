@@ -6,12 +6,12 @@ package engine.commands;
  * @author Haotian Wang
  */
 @FunctionalInterface
-public interface TurtleCommand<T> {
+public interface Command<T> {
 
     /**
      * Update the states of the turtle model
      *
      * @param t
      */
-    void update(T t);
+    double update(T t);
 }

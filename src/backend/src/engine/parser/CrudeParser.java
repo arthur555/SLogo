@@ -1,8 +1,9 @@
 package engine.parser;
 
-import engine.errors.CommandSyntaxException;
-import engine.translator.LanguageTranslator;
-import engine.translator.TypeTranslator;
+import engine.Lexer.Token;
+import engine.slogoast.SLogoAST;
+
+import java.util.Queue;
 
 /**
  * A version 1 implementation of the Parser interface. It takes user raw input Strings and output ASTs or store variables.
@@ -10,64 +11,15 @@ import engine.translator.TypeTranslator;
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
-    private static final String PREFIX = "engine/translator/languages/";
-    private static final String DEFAULT_LANGUAGE = "English";
-    private static final String SYNTAX = "Syntax";
-
-    private TypeTranslator myType;
-    private LanguageTranslator myLanguage;
-    private SLogoAST myAST;
 
     /**
-     * The default constructor will choose English.properties as its starting recognized languages and Syntax.properties as its starting recognized syntax.
-     */
-    public CrudeParser() {
-        this(DEFAULT_LANGUAGE);
-    }
-
-    /**
-     * Constructs a CrudeParser with the user-defined language as the starting recognized language.
+     * Reads in the queue of Tokens from the Lexer into the internal logic of the parser.
      *
-     * @param language: A String such as "English", "Chinese" or "French".
-     */
-    public CrudeParser(String language) {
-        myType = new TypeTranslator(PREFIX + SYNTAX);
-        myLanguage = new LanguageTranslator(PREFIX + language);
-    }
-
-    /**
-     * Reset the language dictionary to use the default language only, which is English.
-     */
-    public void resetLanguage() {
-        myLanguage.setPatterns(PREFIX + DEFAULT_LANGUAGE);
-    }
-
-    /**
-     * This reads in a String representing a complete command.
-     *
-     * @param rawCommand: A String that the user types in exactly as it appears in the editor view.
+     * @param tokens : A queue of Tokens read from the Lexer.
      */
     @Override
-    public void readRawCommand(String rawCommand) {
-        if (rawCommand.isEmpty()) { return; }
-        String[] arr = rawCommand.split("\\s+");
-        String[] typeArray = new String[arr.length];
-        String[] langArray = new String[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            try {
-                typeArray[i] = myType.getSymbol(arr[i]);
-            } catch (CommandSyntaxException e) {
-                // TODO
-                e.printStackTrace();
-            }
-            try {
-                langArray[i] = myLanguage.getSymbol(arr[i]);
-            } catch (CommandSyntaxException e) {
-                // TODO
-                e.printStackTrace();
-            }
-        }
-        myAST = new SLogoAST(typeArray, langArray);
+    public void readTokens(Queue<Token> tokens) {
+
     }
 
     /**
@@ -75,6 +27,6 @@ public class CrudeParser implements Parser {
      */
     @Override
     public SLogoAST returnAST() {
-        return myAST;
+        return null;
     }
 }
