@@ -166,9 +166,12 @@ public class CrudeLexer implements Lexer{
                     start = end + 1;
                     end++;
                     continue;
-                }
-                if (type.equals("Command")) {
+                } else if (type.equals("Command")) {
                     chunk = myLanguage.getSymbol(chunk);
+                    type = chunk;
+                    start = end + 1;
+                    end++;
+                } else {
                     start = end + 1;
                     end++;
                 }
@@ -192,15 +195,23 @@ public class CrudeLexer implements Lexer{
         return myTokens;
     }
 
+    /**
+     * This main function tests the functionality of the Lexer.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         CrudeLexer lexer = new CrudeLexer();
-        String input = "forward 10 for(#dfd :hello)";
+        String input = "fd()";
+        String input2 = "fd 2";
         try {
             lexer.readString(input);
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
         }
         Queue<Token> tokens = lexer.getTokens();
+        System.out.println("The input String is\n\n" + input + "\n");
+        System.out.print("The queue of tokens is:\n\n");
         for (Token token : tokens) {
             System.out.println(token.toString());
         }

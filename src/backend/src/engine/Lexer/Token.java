@@ -22,5 +22,5 @@ public class Token {
         return myType;
     }
 
-    public String toString() { return "(" + myType + " : " + myString + ")"; }
+    public String toString() { return myType + " : " + myString; }
 }
