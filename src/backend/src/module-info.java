@@ -3,4 +3,6 @@ module backend {
     exports model;
     exports engine.commands;
     exports engine.errors;
+    exports engine.api
+            ;
 }
