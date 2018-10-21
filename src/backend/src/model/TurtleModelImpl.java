@@ -1,4 +1,5 @@
 package model;
+import engine.interpreter.StateMachine;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ public class TurtleModelImpl {
     private SimpleBooleanProperty penDown;
     private ObservableList<Double> points;
     private SimpleBooleanProperty clean;
+    private StateMachine memory;
 
     public TurtleModelImpl(){
         x = 0.0;
@@ -24,10 +26,8 @@ public class TurtleModelImpl {
         penDown = new SimpleBooleanProperty(true);
         move = new SimpleBooleanProperty(false);
         clean = new SimpleBooleanProperty(true);
-
+        memory = new StateMachine();
     }
-
-
 
     public void setPenDown(boolean down){penDown.setValue(down);}
     public void setVisible(boolean visible){this.visible.setValue(visible);}
@@ -50,6 +50,7 @@ public class TurtleModelImpl {
     public SimpleBooleanProperty isPenDown(){return penDown;}
     public SimpleBooleanProperty isVisible(){return visible;}
     public SimpleBooleanProperty isMove(){return move;}
+    public StateMachine getMemory(){return memory;}
 
 
 
