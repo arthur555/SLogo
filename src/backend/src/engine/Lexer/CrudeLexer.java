@@ -63,7 +63,7 @@ public class CrudeLexer implements Lexer{
         grammarMap.put("And", "Binary");
         grammarMap.put("Or", "Binary");
 
-        grammarMap.put("MakeVariable", "Assign");
+        grammarMap.put("MakeVariable", "MakeVariable");
 
         grammarMap.put("Repeat", "Condition");
         grammarMap.put("If", "Condition");
@@ -74,7 +74,7 @@ public class CrudeLexer implements Lexer{
 
         grammarMap.put("IfElse", "IfElse");
 
-        grammarMap.put("MakeUserInstruction", "Create");
+        grammarMap.put("MakeUserInstruction", "MakeUserInstruction");
 
         myGrammerMap = Collections.unmodifiableMap(grammarMap);
     }
@@ -168,7 +168,7 @@ public class CrudeLexer implements Lexer{
                     continue;
                 } else if (type.equals("Command")) {
                     chunk = myLanguage.getSymbol(chunk);
-                    type = chunk;
+                    type = myGrammerMap.get(chunk);
                     start = end + 1;
                     end++;
                 } else {

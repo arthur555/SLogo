@@ -1,7 +1,11 @@
 package engine.parser;
 
 import engine.Lexer.Token;
+import engine.errors.CommandSyntaxException;
+import engine.slogoast.Binary;
+import engine.slogoast.Direct;
 import engine.slogoast.Expression;
+import engine.slogoast.Unary;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,6 +17,7 @@ import java.util.Queue;
  */
 public class CrudeParser implements Parser {
     private Queue<Token> myTokens;
+    private Expression myAST;
 
     public CrudeParser() {
         myTokens = new LinkedList<>();
@@ -26,6 +31,7 @@ public class CrudeParser implements Parser {
     @Override
     public void readTokens(Queue<Token> tokens) {
         myTokens = tokens;
+        myAST = parseExpression(tokens);
     }
 
     /**
@@ -41,6 +47,41 @@ public class CrudeParser implements Parser {
      */
     @Override
     public Expression returnAST() {
-        return null;
+        return myAST;
+    }
+
+    public Expression parseExpression(Queue<Token> tokens) {
+        if (parseDirect(tokens) != null) { return parseDirect(tokens); }
+        if (parseUnary(tokens) != null) { return parseUnary(tokens); }
+        if (parseBinary(tokens) != null) { return parseBinary(tokens); }
+    }
+
+    private Expression parseBinary(Queue<Token> tokens) {
+        if (!tokens.peek().getType().equals("Binary")) {
+            return null;
+        }
+        Queue<Token> copy = new LinkedList<>(tokens);
+        Token operator = copy.poll();
+        return new Binary(operator, )
+    }
+
+    private Expression parseUnary(Queue<Token> tokens) {
+        if (!tokens.peek().getType().equals("Unary")) {
+            return null;
+        }
+        Queue<Token> copy = new LinkedList<>(tokens);
+        Token token = copy.poll();
+        return new Unary(token, parseExpression(copy));
+    }
+
+    private Expression parseDirect(Queue<Token> tokens) {
+        if (tokens.size() != 1) {
+            return null;
+        }
+        Token token = tokens.peek();
+        if (!token.getType().equals("Direct")) {
+            return null;
+        }
+        return new Direct(token);
     }
 }
