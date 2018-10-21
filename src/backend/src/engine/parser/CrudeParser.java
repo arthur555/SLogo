@@ -3,6 +3,7 @@ package engine.parser;
 import engine.Lexer.Token;
 import engine.slogoast.Expression;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -11,6 +12,11 @@ import java.util.Queue;
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
+    private Queue<Token> myTokens;
+
+    public CrudeParser() {
+        myTokens = new LinkedList<>();
+    }
 
     /**
      * Reads in the queue of Tokens from the Lexer into the internal logic of the parser.
@@ -19,7 +25,15 @@ public class CrudeParser implements Parser {
      */
     @Override
     public void readTokens(Queue<Token> tokens) {
+        myTokens = tokens;
+    }
 
+    /**
+     * Clear the stored tokens in the internal parser.
+     */
+    @Override
+    public void clearTokens() {
+        myTokens.clear();
     }
 
     /**

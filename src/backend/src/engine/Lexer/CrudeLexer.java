@@ -202,7 +202,7 @@ public class CrudeLexer implements Lexer{
      */
     public static void main(String[] args) {
         CrudeLexer lexer = new CrudeLexer();
-        String input = "fd()";
+        String input = "fd(Forward #thisIsAComment :aVariable) - back (([+ 3 3.33 4]))";
         String input2 = "fd 2";
         try {
             lexer.readString(input);

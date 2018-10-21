@@ -23,6 +23,11 @@ public interface Parser {
     void readTokens(Queue<Token> tokens);
 
     /**
+     * Clear the stored tokens in the internal parser.
+     */
+    void clearTokens();
+
+    /**
      * @return An SLogoAST for the interpreter to process.
      */
     Expression returnAST();
