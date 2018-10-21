@@ -2,6 +2,7 @@ package engine.interpreter;
 
 import engine.commands.Command;
 import engine.parser.SLogoAST;
+import model.TurtleModelImpl;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface Interpreter {
      *
      * @return A list of actionable Command.
      */
-    List<Command<TurtleModel>> outputTurtleCommands();
+    List<Command<TurtleModelImpl>> outputTurtleCommands();
 
     /**
      * This clears the internal AST stored in the interpreter.
