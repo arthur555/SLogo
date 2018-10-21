@@ -6,5 +6,4 @@ package engine.slogoast;
  * @author Haotian Wang
  */
 public abstract class Expression {
-
 }

@@ -7,12 +7,12 @@ import engine.Lexer.Token;
  *
  * @author Haotian Wang
  */
-public class Group {
+public class Group extends Expression {
     private Token groupStart;
     private Token groupEnd;
     private Expression myExpr;
 
-    public Group(Token start, Token end,  Expression a) {
+    public Group(Token start, Expression a, Token end) {
         groupStart = start;
         groupEnd = end;
         myExpr = a;

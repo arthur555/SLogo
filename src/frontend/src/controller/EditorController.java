@@ -1,5 +1,6 @@
 package controller;
 
+import engine.api.EngineAPI;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import view.CommandView;
@@ -9,15 +10,17 @@ public class EditorController {
     private static final char NEWLINE = '\n';
     private static final String BLANK = "";
 
+    private EngineAPI engineApi;
     private CommandView commandView;
     private HistoryView historyView;
     private String lang;
 
-    public EditorController(String lang, CommandView commandView, HistoryView historyView) {
+    public EditorController(String lang, CommandView commandView, HistoryView historyView, EngineAPI engineApi) {
         this.lang = lang;
         this.commandView = commandView;
         this.historyView = historyView;
         this.commandView.setLang(lang);
+        this.engineApi = engineApi;
     }
 
     public void setLang(String lang) {
@@ -67,7 +70,9 @@ public class EditorController {
     }
 
     private void submitCommand() {
-        historyView.view().appendText(commandView.model().replace(CommandView.CARET, BLANK).trim()+NEWLINE);
+        String cmd = commandView.model().replace(CommandView.CARET, BLANK).trim();
+        historyView.view().appendText(cmd+NEWLINE);
         commandView.clear();
+        engineApi.processString(cmd);
     }
 }

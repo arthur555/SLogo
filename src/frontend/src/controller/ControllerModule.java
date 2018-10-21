@@ -1,5 +1,6 @@
 package controller;
 
+import engine.api.EngineAPI;
 import fake_model.ModelModule;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -29,9 +30,9 @@ public class ControllerModule {
     private EditorController editorController;
     private SidebarController sidebarController;
 
-    public ControllerModule(ModelModule modelModule, ViewModule viewModule) {
+    public ControllerModule(ModelModule modelModule, ViewModule viewModule, EngineAPI engineApi) {
         turtleController = new TurtleController(modelModule.turtleModel(), viewModule.turtleView());
-        editorController = new EditorController(DEFAULT_LANG, viewModule.commandView(), viewModule.historyView());
+        editorController = new EditorController(DEFAULT_LANG, viewModule.commandView(), viewModule.historyView(), engineApi);
         sidebarController = new SidebarController(DEFAULT_LANG, viewModule.sidebarView(), viewModule.turtleView());
         assemble();
         setupTopLevelHandler(viewModule.scene());
