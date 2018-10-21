@@ -137,7 +137,7 @@ public class CrudeLexer implements Lexer{
                     chunk = myLanguage.getSymbol(chunk);
                     start = end + 1;
                     end++;
-                    type = grammarMap.get(type);
+                    type = myGrammerMap.get(type);
                 }
                 myTokens.offer(new Token(chunk, type));
             } catch (CommandSyntaxException e) {
