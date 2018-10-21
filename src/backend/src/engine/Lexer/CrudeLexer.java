@@ -49,14 +49,15 @@ public class CrudeLexer implements Lexer{
      */
     @Override
     public void readString(String input) throws CommandSyntaxException {
+        myTokens.clear();
         if (input == null || input.isEmpty()) {
             return;
         }
-        myTokens.clear();
         int start = 0;
         int end = 0;
         while (start < input.length() && end < input.length()) {
             try {
+                myType.getSymbol(input.substring(start, end + 1));
                 while (end < input.length() && myType.containsString(input.substring(start, end + 1))) {
                     end++;
                 }
