@@ -9,8 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Pair;
 import view.utils.ImageUtils;
+import view.utils.Language;
 import view.utils.PrettyUI;
 
 import java.util.*;
@@ -58,27 +58,6 @@ class ReferenceDialogPane extends DialogPane {
     }
 
     private class ReferenceTree extends TreeView<String> {
-        private static final String REF_PATH = "ref/";
-        private static final String BOOLEAN_OPS = "booleanops";
-        private static final String COMMANDS = "commands";
-        private static final String KEYWORDS = "keywords";
-        private static final String MATH_OPS = "mathops";
-        private static final String QUERIES = "queries";
-
-        private static final String NAME = "name";
-        private static final String SUFFIX = "suffix";
-        private static final String SEP = ",";
-
-        private List<String> refs = Collections.unmodifiableList(
-                List.of(
-                        COMMANDS,
-                        QUERIES,
-                        MATH_OPS,
-                        BOOLEAN_OPS,
-                        KEYWORDS
-                )
-        );
-
         ReferenceTree(Pane pane) {
             super();
             setExpanded(true);
@@ -86,7 +65,11 @@ class ReferenceDialogPane extends DialogPane {
             setMinHeight(DIALOG_HEIGHT);
 
             var pack = new LinkedHashMap<String, Map<String, VBox>>();
-            refs.forEach(r -> { var sg = subgroup(r); pack.put(sg.getKey(), sg.getValue()); });
+            Language.REF.forEach(r -> {
+                var repName = Language.repName(r);
+                var sg = extractGroupInfo(r, Language.suffixes(r));
+                pack.put(repName, sg);
+            });
 
             var rootItem = new TreeItem<>("SLogo");
             for(var name : pack.keySet()) {
@@ -104,24 +87,8 @@ class ReferenceDialogPane extends DialogPane {
             });
         }
 
-        private Pair<String, Map<String, VBox>> subgroup(String name) {
-            var bundle = ResourceBundle.getBundle(REF_PATH + name);
-
-            var repName = bundle.getString(NAME);
-            var suffixes = bundle.getString(SUFFIX).split(SEP);
-
-            return new Pair<>(repName, extractGroupInfo(bundle, suffixes));
-        }
-
         private Map<String, VBox> extractGroupInfo(ResourceBundle bundle, String[] suffixes) {
-            var keyIt = bundle.getKeys().asIterator();
-            var keys = new TreeSet<String>();
-            while(keyIt.hasNext()) { // find unique set of name of commands
-                var s = keyIt.next();
-                for(var suffix : suffixes) s = s.replaceAll(suffix, "");
-                if(!s.equals(SUFFIX) && !s.equals(NAME)) keys.add(s);
-            }
-
+            var keys = Language.extractPrefixes(bundle);
             var groupInfo = new HashMap<String, VBox>();
             for(var key : keys) { // organize pack
                 var info = new LinkedHashMap<String, String>();

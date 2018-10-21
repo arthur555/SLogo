@@ -23,13 +23,6 @@
     -fx-background-color: white;
 }
 
-.command-line {
-    -fx-control-inner-background: #f8f7ff;
-    -fx-font-family: Consolas;
-    -fx-highlight-fill: #e6e2ff;
-    -fx-highlight-text-fill: #2e2370;
-}
-
 .sidebar {
     -fx-padding: 5 5 5 10;
     -fx-background-color: #f8f7ff;
@@ -55,6 +48,20 @@
     -fx-padding: 0 10 0 10;
 }
 
+.command-view {
+    -fx-padding: 10 10 10 10
+}
+
+.command-view-bg {
+    -fx-background: #f8f7ff;
+}
+
+.history-view {
+    -fx-control-inner-background: #f8f7ff;
+}
+
+/* dirty hacks to make the color picker work */
+
 .background-button .label {
     -fx-graphic: url("background_button.png");
     -fx-padding: 0;
@@ -74,7 +81,4 @@
     -fx-pref-width: 50px;
     -fx-pref-height: 50px;
     -fx-background-color: transparent;
-    /*-fx-border-style: solid;*/
-    /*-fx-border-color: black;*/
-    /*-fx-border-width: 5pt;*/
 }

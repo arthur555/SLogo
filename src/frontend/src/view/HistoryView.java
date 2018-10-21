@@ -11,7 +11,7 @@ public class HistoryView {
 
     HistoryView() {
         root = new TextArea();
-        root.getStyleClass().add("command-line");
+        root.getStyleClass().add("history-line");
         root.setEditable(false);
         root.setWrapText(true);
     }

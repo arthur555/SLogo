@@ -10,6 +10,7 @@ public class ViewModule {
     private static final ResourceBundle APP_PROPERTIES = ResourceBundle.getBundle("slogo");
     private static final String STYLESHEET = "style.css";
 
+    private Scene scene;
     private MainView mainView;
     private SidebarView sidebarView;
     private TurtleView turtleView;
@@ -29,12 +30,13 @@ public class ViewModule {
 
     public void show(Stage primaryStage) {
         primaryStage.setTitle(APP_PROPERTIES.getString("Title"));
-        var scene = new Scene(mainView.view(), MainView.SCREEN_WIDTH, MainView.SCREEN_HEIGHT);
+        scene = new Scene(mainView.view(), MainView.SCREEN_WIDTH, MainView.SCREEN_HEIGHT);
         scene.getStylesheets().add(STYLESHEET);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    public Scene scene() { return scene; }
     public SidebarView sidebarView() { return sidebarView; }
     public TurtleView turtleView() { return turtleView; }
     public VariableView variableView() { return variableView; }
