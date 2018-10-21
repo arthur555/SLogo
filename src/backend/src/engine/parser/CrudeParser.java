@@ -165,4 +165,13 @@ public class CrudeParser implements Parser {
         pointer++;
         return new Direct(token);
     }
+
+    /**
+     * A main method to test the functionality.
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+
+    }
 }
