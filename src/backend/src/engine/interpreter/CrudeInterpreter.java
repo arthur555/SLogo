@@ -1,8 +1,7 @@
 package engine.interpreter;
 
-import engine.commands.TurtleCommand;
+import engine.commands.Command;
 import engine.parser.SLogoAST;
-import model.TurtleModel;
 
 import java.util.List;
 
@@ -26,12 +25,12 @@ public class CrudeInterpreter implements Interpreter{
     }
 
     /**
-     * This returns a list of actionable TurtleCommand after the interpreter interprets the SLogoAST.
+     * This returns a list of actionable Command after the interpreter interprets the SLogoAST.
      *
-     * @return A list of actionable TurtleCommand.
+     * @return A list of actionable Command.
      */
     @Override
-    public List<TurtleCommand<TurtleModel>> outputTurtleCommands() {
+    public List<Command<TurtleModel>> outputTurtleCommands() {
         return null;
     }
 

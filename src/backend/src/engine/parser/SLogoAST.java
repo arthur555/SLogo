@@ -7,5 +7,6 @@ package engine.parser;
  */
 public class SLogoAST {
     public SLogoAST(String[] typeArray, String[] langArray) {
+
     }
 }

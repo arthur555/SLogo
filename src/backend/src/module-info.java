@@ -1,5 +1,6 @@
 module backend {
+    requires javafx.base;
     exports model;
-    exports engine;
+    exports engine.commands;
     exports engine.errors;
 }

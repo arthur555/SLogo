@@ -30,13 +30,13 @@ public class TurtleView {
     private boolean penDown;
     private boolean move;
     private double angle;
-    private GridPane root;
+    private Pane root;
     private ImageView turtle;
     private Color penColor;
 
     public TurtleView(TurtleModel turtleModel) {
         turtle = new ImageView();
-        root = new GridPane();
+        root = new Pane();
         root.getStyleClass().add("canvas");
         root.setPrefWidth(200);
         root.setPrefHeight(200);
@@ -69,6 +69,7 @@ public class TurtleView {
                 if (move){
                     var animation = makeAnimation(turtle);
                     animation.play();
+                    
                 }
             }
         });
