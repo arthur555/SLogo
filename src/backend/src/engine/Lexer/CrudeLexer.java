@@ -1,11 +1,13 @@
 package engine.Lexer;
 
+import engine.commands.Command;
 import engine.commands.Forward;
 import engine.errors.CommandSyntaxException;
 import engine.parser.CrudeParser;
 import engine.translator.LanguageTranslator;
 import engine.translator.TypeTranslator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -104,6 +106,38 @@ public class CrudeLexer implements Lexer{
      */
     public void resetLanguage() {
         myLanguage.setPatterns(PREFIX + DEFAULT_LANGUAGE);
+    }
+
+    /**
+     * Set the language dictionary to use the designated languages.
+     *
+     * @param languages : A String array of languages
+     * @throws MissingResourceException
+     */
+    @Override
+    public void setLanguage(String... languages) throws MissingResourceException {
+        if (languages.length == 0 || languages == null) {
+            return;
+        }
+        myLanguage.setPatterns(null);
+        for (String language : languages) {
+            myLanguage.addPatterns(PREFIX + language);
+        }
+    }
+
+    /**
+     * Add more languages to the internal dictionary.
+     *
+     * @param languages : A String array of languages.
+     * @throws MissingResourceException
+     */
+    @Override
+    public void addLanguage(String... languages) throws MissingResourceException {
+
+    }
+
+    public void addLanguage(String language) {
+        myLanguage.addPatterns(PREFIX + language);
     }
 
     /**

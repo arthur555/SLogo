@@ -41,6 +41,9 @@ public class TypeTranslator implements Translator {
      */
     @Override
     public void addPatterns (String syntax) throws MissingResourceException{
+        if (syntax.isEmpty() || syntax == null) {
+            return;
+        }
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);

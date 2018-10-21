@@ -3,6 +3,7 @@ package engine.Lexer;
 import engine.errors.CommandSyntaxException;
 
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Queue;
 
 /**
@@ -24,4 +25,25 @@ public interface Lexer {
      * @return A list of Token from the input String.
      */
     Queue<Token> getTokens();
+
+    /**
+     * Reset the language dictionary to use the default language only, which is English.
+     */
+    public void resetLanguage() throws MissingResourceException;
+
+    /**
+     * Set the language dictionary to use the designated languages.
+     *
+     * @param languages: A String array of languages
+     * @throws MissingResourceException
+     */
+    public void setLanguage(String... languages) throws MissingResourceException;
+
+    /**
+     * Add more languages to the internal dictionary.
+     *
+     * @param languages: A String array of languages.
+     * @throws MissingResourceException
+     */
+    public void addLanguage(String... languages) throws MissingResourceException;
 }
