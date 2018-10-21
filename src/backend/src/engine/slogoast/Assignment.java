@@ -7,12 +7,12 @@ import engine.Lexer.Token;
  *
  * @author Haotian Wang
  */
-public class Assign extends Expression {
+public class Assignment extends Expression {
     private Token myToken;
     private Variable myVar;
     private Expression myExpr;
 
-    public Assign(Token token, Variable var, Expression a) {
+    public Assignment(Token token, Variable var, Expression a) {
         myToken = token;
         myVar = var;
         myExpr = a;
