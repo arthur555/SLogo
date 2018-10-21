@@ -1,12 +1,12 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class HideTurtle implements Command<TurtleModelImpl> {
+public class HideTurtle implements Command<TurtleModel> {
     public HideTurtle(){}
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         turtleModel.setVisible(false);
         return 0;
     }

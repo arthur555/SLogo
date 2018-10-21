@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class And implements Command<TurtleModelImpl> {
+public class And implements Command<TurtleModel> {
     private double one;
     private double two;
     public And(double one, double two){
@@ -11,7 +11,7 @@ public class And implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return (one != 0 && two != 0) ? 1:0;
     }
 }

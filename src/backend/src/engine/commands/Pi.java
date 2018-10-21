@@ -1,11 +1,11 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Pi implements Command<TurtleModelImpl> {
+public class Pi implements Command<TurtleModel> {
     public Pi(){}
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return Math.PI;
     }
 }

@@ -10,9 +10,11 @@ public interface TurtleModel {
     void setX(double x);
     void setY(double y);
     void setAngle(double angle);
+    void clean();
     double getX();
     double getY();
     double getAngle();
+    SimpleBooleanProperty getClean();
     SimpleBooleanProperty isPenDown();
     SimpleBooleanProperty isVisible();
     SimpleBooleanProperty isMove();

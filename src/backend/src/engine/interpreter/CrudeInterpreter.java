@@ -4,7 +4,7 @@ import engine.commands.Command;
 
 
 import engine.slogoast.Expression;
-import model.TurtleModelImpl;
+import model.TurtleModel;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ public class CrudeInterpreter implements Interpreter{
      * @return A list of actionable Command.
      */
     @Override
-    public List<Command<TurtleModelImpl>> outputTurtleCommands() {
+    public List<Command<TurtleModel>> outputTurtleCommands() {
         return null;
     }
 

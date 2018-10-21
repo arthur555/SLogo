@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class NotEqual implements Command<TurtleModelImpl> {
+public class NotEqual implements Command<TurtleModel> {
     private double num1;
     private double num2;
     public NotEqual(double a, double b){
@@ -11,7 +11,7 @@ public class NotEqual implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return num1 != num2 ? 1:0;
     }
 }

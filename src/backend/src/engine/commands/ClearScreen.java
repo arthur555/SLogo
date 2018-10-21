@@ -1,11 +1,11 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class ClearScreen implements  Command<TurtleModelImpl>  {
+public class ClearScreen implements  Command<TurtleModel>  {
     public ClearScreen(){}
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         Home hm = new Home();
         turtleModel.clean();
         turtleModel.setVisible(true);

@@ -73,6 +73,8 @@ public class EditorController {
         String cmd = commandView.model().replace(CommandView.CARET, BLANK).trim();
         historyView.view().appendText(cmd+NEWLINE);
         commandView.clear();
-        engineApi.processString(cmd);
+        try {
+            engineApi.processString(cmd);
+        } catch (ClassNotFoundException e) { e.printStackTrace(); }
     }
 }

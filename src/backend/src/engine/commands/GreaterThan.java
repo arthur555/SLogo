@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class GreaterThan implements Command<TurtleModelImpl> {
+public class GreaterThan implements Command<TurtleModel> {
     private double num1;
     private double num2;
 
@@ -11,7 +11,7 @@ public class GreaterThan implements Command<TurtleModelImpl> {
         num2 = b;
     }
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return num1 > num2 ? 1:0;
     }
 }

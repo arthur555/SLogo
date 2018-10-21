@@ -3,7 +3,7 @@ package engine.interpreter;
 import engine.commands.Command;
 
 import engine.slogoast.Expression;
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
 
 import java.util.List;
@@ -28,6 +28,6 @@ public interface Interpreter {
      *
      * @return A list of actionable Command.
      */
-    List<Command<TurtleModelImpl>> outputTurtleCommands();
+    List<Command<TurtleModel>> outputTurtleCommands();
     void clearCommands();
 }

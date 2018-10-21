@@ -1,11 +1,11 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class YCoordinate implements Command<TurtleModelImpl> {
+public class YCoordinate implements Command<TurtleModel> {
     public YCoordinate(){}
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return turtleModel.getY();
     }
 }
