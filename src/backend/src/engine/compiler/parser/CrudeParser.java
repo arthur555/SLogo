@@ -307,14 +307,11 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseVariable(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> variablePair = parseToken(index, "Variable");
+        if (variablePair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("Variable")) {
-            return nullPair;
-        }
-        return new Pair<>(new Variable(token), index + 1);
+        return new Pair<>(new Variable(variablePair.getKey()), variablePair.getValue());
     }
 
     /**
