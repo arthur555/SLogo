@@ -168,7 +168,7 @@ public class CrudeParser implements Parser {
      * @return This method parses single Token and return a pair of Token together with the new index.
      */
     private Pair<Token, Integer> parseToken(int index, String type) {
-        if (index >= myTokens.size() || !myTokens.get(index).equals(type)) {
+        if (index >= myTokens.size() || !myTokens.get(index).getType().equals(type)) {
             return new Pair<>(null, index);
         } else {
             return new Pair<>(myTokens.get(index), index + 1);
@@ -181,19 +181,15 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseDoTimes(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> doTimesPair = parseToken(index, "DoTimes");
+        if (doTimesPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("DoTimes")) {
+        Pair<Token, Integer> listStartPair = parseToken(doTimesPair.getValue(), "ListStart");
+        if (listStartPair.getKey() == null) {
             return nullPair;
         }
-        int temp = index + 1;
-        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListStart")) {
-            return nullPair;
-        }
-        temp++;
-        Pair<Expression, Integer> variablePair = parseVariable(temp);
+        Pair<Expression, Integer> variablePair = parseVariable(listStartPair.getValue());
         if (variablePair.getKey() == null) {
             return nullPair;
         }
@@ -201,16 +197,15 @@ public class CrudeParser implements Parser {
         if (limitPair.getKey() == null) {
             return nullPair;
         }
-        temp = limitPair.getValue();
-        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListEnd")) {
+        Pair<Token, Integer> listEndPair = parseToken(limitPair.getValue(), "ListEnd");
+        if (listEndPair.getKey() == null) {
             return nullPair;
         }
-        temp++;
-        Pair<Expression, Integer> expressionListPair = parseExpressionList(temp);
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(listEndPair.getValue());
         if (expressionListPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new DoTimes(token, listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new DoTimes(doTimesPair.getKey(), listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
