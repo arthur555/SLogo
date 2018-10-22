@@ -86,6 +86,10 @@ public class CrudeParser implements Parser {
         if (binaryPair.getKey() != null) {
             return binaryPair;
         }
+        Pair<Expression, Integer> makeVariablePair = parseMakeVariable(index);
+        if (makeVariablePair.getKey() != null) {
+            return makeVariablePair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -95,6 +99,26 @@ public class CrudeParser implements Parser {
             return variablePair;
         }
         return new Pair<>(null, index);
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for the MakeVariable grammar.
+     */
+    private Pair<Expression, Integer> parseMakeVariable(int index) {
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("MakeVariable")) {
+            return new Pair<>(null, index);
+        }
+        Pair<Expression, Integer> variablePair = parseVariable(index + 1);
+        if (variablePair.getKey() == null) {
+            return new Pair<>(null, index);
+        }
+        Pair<Expression, Integer> expressionPair = parseExpression(variablePair.getValue());
+        if (expressionPair.getKey() == null) {
+            return new Pair<>(null, index);
+        }
+        return new Pair<>(new MakeVariable(token, (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
     }
 
     /**
@@ -173,35 +197,5 @@ public class CrudeParser implements Parser {
             return new Pair<>(null, index);
         }
         return new Pair<>(new Direct(token), index + 1);
-    }
-
-    /**
-     * A main method to test the functionality.
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        Lexer lexer = new CrudeLexer();
-        String test = "sum 4 (sin(forward 50))";
-        try {
-            lexer.readString(test);
-        } catch (CommandSyntaxException e) {
-            e.printStackTrace();
-        }
-        List<Token> testSet = lexer.getTokens();
-        System.out.println("The input String is:\n\n" + test + "\n");
-        System.out.println("Lexer's Part\n======\nThe list of tokens is:\n");
-        for (Token token : testSet) {
-            System.out.println(token.toString());
-        }
-
-        Parser parser = new CrudeParser();
-        try {
-            parser.readTokens(testSet);
-        } catch (CommandSyntaxException e) {
-            e.printStackTrace();
-        }
-        Expression result = parser.returnAST();
-        System.out.println("\nParser's Part\n======\nThe String representation of the syntax tree is:\n\n" + result.toString());
     }
 }
