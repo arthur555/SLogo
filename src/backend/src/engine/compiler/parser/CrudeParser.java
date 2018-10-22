@@ -320,18 +320,15 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseUnary(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> unaryPair = parseToken(index, "Unary");
+        if (unaryPair.getKey() == null) {
             return nullPair;
         }
-        Token operator = myTokens.get(index);
-        if (!operator.getType().equals("Unary")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> secondPair = parseExpression(index + 1);
+        Pair<Expression, Integer> secondPair = parseExpression(unaryPair.getValue());
         if (secondPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Unary(unaryPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
     /**
