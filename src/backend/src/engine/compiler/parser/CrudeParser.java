@@ -214,14 +214,11 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseExpressionList(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> listStartPair = parseToken(index, "ListStart");
+        if (listStartPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("ListStart")) {
-            return nullPair;
-        }
-        int pointer = index + 1;
+        int pointer = listStartPair.getValue();
         List<Expression> expressionList = new LinkedList<>();
         while (true) {
             Pair<Expression, Integer> listPair = parseExpression(pointer);
@@ -234,10 +231,11 @@ public class CrudeParser implements Parser {
         if (expressionList.isEmpty()) {
             return nullPair;
         }
-        if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
+        Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
+        if (listEndPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), pointer + 1);
+        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), listEndPair.getValue());
     }
 
     /**
