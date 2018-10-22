@@ -286,14 +286,11 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseBinary(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> binaryPair = parseToken(index, "Binary");
+        if (binaryPair.getKey() == null) {
             return nullPair;
         }
-        Token operator = myTokens.get(index);
-        if (!operator.getType().equals("Binary")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> firstPair = parseExpression(index + 1);
+        Pair<Expression, Integer> firstPair = parseExpression(binaryPair.getValue());
         if (firstPair.getKey() == null) {
             return nullPair;
         }
@@ -301,7 +298,7 @@ public class CrudeParser implements Parser {
         if (secondPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Binary(binaryPair.getKey(), firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
     /**
