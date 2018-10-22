@@ -86,9 +86,13 @@ public class CrudeParser implements Parser {
         if (binaryPair.getKey() != null) {
             return binaryPair;
         }
-        Expression directPair = parseDirect(index);
+        Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
+        }
+        Pair<Expression, Integer> variablePair = parseVariable(index);
+        if (variablePair.getKey() != null) {
+            return variablePair;
         }
         return new Pair<>(null, index);
     }
@@ -109,13 +113,12 @@ public class CrudeParser implements Parser {
         return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
-    private Expression parseVariable(List<Token> tokens) {
-        Token tok = tokens.get(pointer);
-        if (!tok.getType().equals("Variable")) {
-            return null;
+    private Pair<Expression, Integer> parseVariable(int index) {
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("Variable")) {
+            return new Pair<>(null, index);
         }
-        pointer++;
-        return new Variable(tok);
+        return new Pair<>(new Variable(token), index + 1);
     }
 
     private Pair<Expression, Integer> parseUnary(int index) {
@@ -128,7 +131,7 @@ public class CrudeParser implements Parser {
     }
 
     private Pair<Expression, Integer> parseGroup(int index) {
-        if (!myTokens.get(pointer).getType().equals("GroupStart")) {
+        if (!myTokens.get(index).getType().equals("GroupStart")) {
             return new Pair<>(null, index);
         }
         Pair<Expression, Integer> middlePair = parseExpression(index + 1);
