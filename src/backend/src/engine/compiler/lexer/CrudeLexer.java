@@ -19,7 +19,12 @@ public class CrudeLexer implements Lexer{
     private static final Map<String, String> myGrammerMap;
     static {
         Map<String, String> grammarMap = new HashMap<>();
-        grammarMap.put("Forward", "Unary");
+        ResourceBundle categories = ResourceBundle.getBundle(PREFIX + SYNTACTICAL_CATEGORIES);
+        for (Enumeration<String> e = categories.getKeys(); e.hasMoreElements(); ) {
+            String action = e.nextElement();
+            grammarMap.put(action, categories.getString(action));
+        }
+        /*grammarMap.put("Forward", "Unary");
         grammarMap.put("Backward", "Unary");
         grammarMap.put("Left", "Unary");
         grammarMap.put("Right", "Unary");
@@ -72,7 +77,7 @@ public class CrudeLexer implements Lexer{
 
         grammarMap.put("IfElse", "IfElse");
 
-        grammarMap.put("MakeUserInstruction", "MakeUserInstruction");
+        grammarMap.put("MakeUserInstruction", "MakeUserInstruction");*/
 
         myGrammerMap = Collections.unmodifiableMap(grammarMap);
     }
