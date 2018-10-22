@@ -244,14 +244,11 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseCondition(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> conditionPair = parseToken(index, "Condition");
+        if (conditionPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("Condition")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> expressionPair = parseExpression(index + 1);
+        Pair<Expression, Integer> expressionPair = parseExpression(conditionPair.getValue());
         if (expressionPair.getKey() == null) {
             return nullPair;
         }
@@ -259,7 +256,7 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new Condition(token, expressionPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new Condition(conditionPair.getKey(), expressionPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
