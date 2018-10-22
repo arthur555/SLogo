@@ -1,7 +1,5 @@
 package engine.parser;
 
-import engine.Lexer.CrudeLexer;
-import engine.Lexer.Lexer;
 import engine.Lexer.Token;
 import engine.errors.CommandSyntaxException;
 import engine.slogoast.*;
@@ -90,6 +88,10 @@ public class CrudeParser implements Parser {
         if (makeVariablePair.getKey() != null) {
             return makeVariablePair;
         }
+        Pair<Expression, Integer> conditionPair = parseCondition(index);
+        if (conditionPair.getKey() != null) {
+            return conditionPair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -99,6 +101,41 @@ public class CrudeParser implements Parser {
             return variablePair;
         }
         return new Pair<>(null, index);
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Condition grammar.
+     */
+    private Pair<Expression, Integer> parseCondition(int index) {
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("Condition")) {
+            return new Pair<>(null, index);
+        }
+        Pair<Expression, Integer> expressionPair = parseExpression(index + 1);
+        if (expressionPair.getKey() == null) {
+            return new Pair<>(null, index);
+        }
+        if (expressionPair.getValue() >= myTokens.size() || !myTokens.get(expressionPair.getValue()).getType().equals("ListStart")) {
+            return new Pair<>(null, index);
+        }
+        List<Expression> expressionList = new LinkedList<>();
+        int pointer = expressionPair.getValue() + 1;
+        while (true) {
+            Pair<Expression, Integer> listPair = parseExpression(pointer);
+            if (listPair.getKey() == null) {
+                break;
+            }
+            expressionList.add(listPair.getKey());
+            pointer = listPair.getValue();
+        }
+        if (expressionList.isEmpty()) {
+            return new Pair<>(null, index);
+        }
+        if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
+            return new Pair<>(null, index);
+        }
+        return new Pair<>(new Condition(token, expressionPair.getKey(), new Token("[", "ListStart"), expressionList, new Token("]", "ListEnd")), pointer + 1);
     }
 
     /**

@@ -10,6 +10,11 @@ import engine.slogoast.Expression;
 
 import java.util.List;
 
+/**
+ * This class handles the preliminary testing of Lexer, Parser and Interpreter.
+ *
+ * @author Haotian Wang
+ */
 public class Lexer_Parser_Interpreter_Tester {
     /**
      * A main method to test the functionality.
@@ -18,7 +23,7 @@ public class Lexer_Parser_Interpreter_Tester {
      */
     public static void main(String[] args) {
         Lexer lexer = new CrudeLexer();
-        String test = "make :x sum (sum 5 6) product 7 8";
+        String test = "if greater? 4 3 [ fd 50 sum 4 5 sum 4 sin99]";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {
