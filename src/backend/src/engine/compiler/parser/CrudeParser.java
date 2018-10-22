@@ -56,6 +56,17 @@ public class CrudeParser implements Parser {
     }
 
     /**
+     * This method generates a 3-liner error message. The first line is written by the user. The second line is the index of list of Tokens where the error occurred. The third line is a list of Tokens for reference.
+     *
+     * @param message: The user-defined error message such as "Missing parenthesis".
+     * @param index: The index in the list of Tokens where the error occurred.
+     * @return A CommandSyntaxException.
+     */
+    private CommandSyntaxException generateSyntaxException(String message, int index) {
+        return new CommandSyntaxException(message + "\nIndex in the list of Tokens: " + index + "\nThe list of Tokens is: " + tokenStream);
+    }
+
+    /**
      * This method returns the complete syntax tree if the input command is grammatically correct.
      *
      * @return A root Expression node passed to the Interpreter.
@@ -109,6 +120,10 @@ public class CrudeParser implements Parser {
         if (forPair.getKey() != null) {
             return forPair;
         }
+        Pair<Expression, Integer> ifElsePair = parseIfElse(index);
+        if (ifElsePair.getKey() != null) {
+            return ifElsePair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -138,14 +153,19 @@ public class CrudeParser implements Parser {
     }
 
     /**
-     * This method generates a 3-liner error message. The first line is written by the user. The second line is the index of list of Tokens where the error occurred. The third line is a list of Tokens for reference.
-     *
-     * @param message: The user-defined error message such as "Missing parenthesis".
-     * @param index: The index in the list of Tokens where the error occurred.
-     * @return A CommandSyntaxException.
+     * @param index
+     * @return A pair of Expression and index for IfElse grammar.
      */
-    private CommandSyntaxException generateSyntaxException(String message, int index) {
-        return new CommandSyntaxException(message + "\nIndex in the list of Tokens: " + index + "\nThe list of Tokens is: " + tokenStream);
+    private Pair<Expression, Integer> parseIfElse(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> ifElsePair = parseToken(index, "IfElse");
+        if (ifElsePair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> variablePair = parseVariable(ifElsePair.getValue());
+        if (variablePair.getKey() == null) {
+            throw new CommandSyntaxException()
+        }
     }
 
     /**

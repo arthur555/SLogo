@@ -1,7 +1,7 @@
 package engine.errors;
 
 /**
- * An exception class that is thrown when the user's commands cannot be parsed.
+ * An exception class that is thrown when the user's commands cannot be parsed. This exception is thrown by the Parser.
  */
 public class CommandSyntaxException extends Exception {
 
