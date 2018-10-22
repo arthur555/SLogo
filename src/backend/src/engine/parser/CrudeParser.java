@@ -3,9 +3,9 @@ package engine.parser;
 import engine.Lexer.CrudeLexer;
 import engine.Lexer.Lexer;
 import engine.Lexer.Token;
-import engine.commands.Command;
 import engine.errors.CommandSyntaxException;
 import engine.slogoast.*;
+import javafx.util.Pair;
 
 import java.util.*;
 
@@ -30,9 +30,8 @@ public class CrudeParser implements Parser {
      */
     @Override
     public void readTokens(List<Token> tokens) throws CommandSyntaxException {
-        pointer = 0;
         myTokens = tokens;
-        myAST = parseExpression(myTokens);
+        myAST = parseExpression(myTokens, 0).getKey();
     }
 
     /**
@@ -51,18 +50,20 @@ public class CrudeParser implements Parser {
         return myAST;
     }
 
+
+
     /**
      * The following methods are a family of parsing methods using recursive descent.
      *
      * @param tokens: A List of Tokens input into Parser.
-     * @return An Expression AST node, which is used for Expression grammar.
+     * @param index: The starting index of this parse query.
+     * @return An Expression AST node, which is used for Expression grammar, and paired with it, an index after the parse.
      * @throws CommandSyntaxException
      */
-    public Expression parseExpression(List<Token> tokens) throws CommandSyntaxException {
-        if (pointer >= tokens.size()) {
+    public Pair<Expression, Integer> parseExpression(List<Token> tokens, int index) throws CommandSyntaxException {
+        if (index >= tokens.size()) {
             throw new CommandSyntaxException("The input command is illegal in the current grammar.");
         }
-        int temp = pointer;
         Expression group = parseGroup(tokens);
         if (group != null) {
             return group;
@@ -150,9 +151,6 @@ public class CrudeParser implements Parser {
             pointer = tempPointer;
             return null;
         }
-        pointer++;
-        System.out.println(pointer);
-        System.out.print(tokens.get(pointer).toString());
         if (pointer >= tokens.size() || !tokens.get(pointer).getType().equals("GroupEnd")) {
             pointer = tempPointer;
             return null;
@@ -178,7 +176,7 @@ public class CrudeParser implements Parser {
     public static void main(String[] args) {
         List<Token> tokens = new ArrayList<>();
         Lexer lexer = new CrudeLexer();
-        String test = "(50)";
+        String test = "(50)(";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {
@@ -195,7 +193,6 @@ public class CrudeParser implements Parser {
         try {
             parser.readTokens(testSet);
         } catch (CommandSyntaxException e) {
-            e.getMessage();
             e.printStackTrace();
         }
         Expression result = parser.returnAST();
