@@ -13,4 +13,14 @@ public class Direct extends Expression {
     public Direct(Token token) {
         myToken = token;
     }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%s}", myToken.toString());
+    }
 }

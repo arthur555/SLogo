@@ -2,6 +2,8 @@ package engine.slogoast;
 
 import engine.Lexer.Token;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,5 +24,16 @@ public class Condition extends Expression {
         start = listStart;
         end = listEnd;
         exprList = list;
+    }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        Expression[] arr = exprList.toArray(new Expression[exprList.size()]);
+        return String.format("{%s ; %s ; %s ; %s ; %s}", condition.toString(), expr.toString(), start.toString(), end.toString(), Arrays.toString(arr));
     }
 }

@@ -139,6 +139,9 @@ public class CrudeParser implements Parser {
             return new Pair<>(null, index);
         }
         Pair<Expression, Integer> secondPair = parseExpression(index + 1);
+        if (secondPair.getKey() == null) {
+            return new Pair<>(null, index);
+        }
         return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
     }
 
@@ -178,9 +181,8 @@ public class CrudeParser implements Parser {
      * @param args
      */
     public static void main(String[] args) {
-        List<Token> tokens = new ArrayList<>();
         Lexer lexer = new CrudeLexer();
-        String test = "(50)(";
+        String test = "Forward sin(50)";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {

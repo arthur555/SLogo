@@ -22,5 +22,6 @@ public class Token {
         return myType;
     }
 
+    @Override
     public String toString() { return myType + " : " + myString; }
 }

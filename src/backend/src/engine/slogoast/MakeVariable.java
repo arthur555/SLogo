@@ -17,4 +17,14 @@ public class MakeVariable extends Expression {
         myVar = var;
         myExpr = a;
     }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%s ; %s ; %s}", myToken.toString(), myVar.toString(), myExpr.toString());
+    }
 }
