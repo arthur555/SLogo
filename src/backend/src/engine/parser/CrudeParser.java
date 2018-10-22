@@ -8,11 +8,16 @@ import javafx.util.Pair;
 import java.util.*;
 
 /**
- * A version 1 implementation of the Parser interface. It takes user raw input Strings and output ASTs or store variables.
+ * A version 1 implementation of the Parser interface. It takes a list of Tokens and output ASTs or store variables.
  *
  * @author Haotian Wang
  */
 public class CrudeParser implements Parser {
+    private static final Token listStart = new Token("[", "ListStart");
+    private static final Token listEnd = new Token("]", "ListEnd");
+    private static final Token groupStart = new Token("(", "GroupStart");
+    private static final Token groupEnd = new Token(")", "GroupEnd");
+
     private List<Token> myTokens;
     private Expression myAST;
 
@@ -69,8 +74,9 @@ public class CrudeParser implements Parser {
      * @return An Expression AST node, which is used for Expression grammar, and paired with it, an index after the parse.
      */
     private Pair<Expression, Integer> parseExpression(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
         if (index >= myTokens.size()) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> groupPair = parseGroup(index);
         if (groupPair.getKey() != null) {
@@ -92,6 +98,10 @@ public class CrudeParser implements Parser {
         if (conditionPair.getKey() != null) {
             return conditionPair;
         }
+        Pair<Expression, Integer> doTimesPair = parseDoTimesPair(index);
+        if (doTimesPair.getKey() != null) {
+            return doTimesPair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -100,7 +110,39 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() != null) {
             return variablePair;
         }
-        return new Pair<>(null, index);
+        return nullPair;
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for the DoTimes grammar.
+     */
+    private Pair<Expression, Integer> parseDoTimesPair(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("DoTimes")) {
+            return nullPair;
+        }
+        int temp = index + 1;
+        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListStart")) {
+            return nullPair;
+        }
+        temp++;
+        Pair<Expression, Integer> variablePair = parseVariable(temp);
+        if (variablePair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> limitPair = parseExpression(variablePair.getValue());
+        if (limitPair.getKey() == null) {
+            return nullPair;
+        }
+        temp = limitPair.getValue();
+        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListEnd")) {
+            return nullPair;
+        }
     }
 
     /**
@@ -108,16 +150,20 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the Condition grammar.
      */
     private Pair<Expression, Integer> parseCondition(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         Token token = myTokens.get(index);
         if (!token.getType().equals("Condition")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> expressionPair = parseExpression(index + 1);
         if (expressionPair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         if (expressionPair.getValue() >= myTokens.size() || !myTokens.get(expressionPair.getValue()).getType().equals("ListStart")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         List<Expression> expressionList = new LinkedList<>();
         int pointer = expressionPair.getValue() + 1;
@@ -130,12 +176,12 @@ public class CrudeParser implements Parser {
             pointer = listPair.getValue();
         }
         if (expressionList.isEmpty()) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
-        return new Pair<>(new Condition(token, expressionPair.getKey(), new Token("[", "ListStart"), expressionList, new Token("]", "ListEnd")), pointer + 1);
+        return new Pair<>(new Condition(token, expressionPair.getKey(), listStart, expressionList, listEnd), pointer + 1);
     }
 
     /**
@@ -143,17 +189,21 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the MakeVariable grammar.
      */
     private Pair<Expression, Integer> parseMakeVariable(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         Token token = myTokens.get(index);
         if (!token.getType().equals("MakeVariable")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> variablePair = parseVariable(index + 1);
         if (variablePair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> expressionPair = parseExpression(variablePair.getValue());
         if (expressionPair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         return new Pair<>(new MakeVariable(token, (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
     }
@@ -163,17 +213,21 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the Binary grammar.
      */
     private Pair<Expression, Integer> parseBinary(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         Token operator = myTokens.get(index);
         if (!operator.getType().equals("Binary")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> firstPair = parseExpression(index + 1);
         if (firstPair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> secondPair = parseExpression(firstPair.getValue());
         if (secondPair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
@@ -183,9 +237,13 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the Variable grammar.
      */
     private Pair<Expression, Integer> parseVariable(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         Token token = myTokens.get(index);
         if (!token.getType().equals("Variable")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         return new Pair<>(new Variable(token), index + 1);
     }
@@ -195,13 +253,17 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the Unary grammar.
      */
     private Pair<Expression, Integer> parseUnary(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         Token operator = myTokens.get(index);
         if (!operator.getType().equals("Unary")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> secondPair = parseExpression(index + 1);
         if (secondPair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
     }
@@ -211,17 +273,21 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the Group grammar.
      */
     private Pair<Expression, Integer> parseGroup(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         if (!myTokens.get(index).getType().equals("GroupStart")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         Pair<Expression, Integer> middlePair = parseExpression(index + 1);
         if (middlePair.getKey() == null) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         if (middlePair.getValue() >= myTokens.size() || !myTokens.get(middlePair.getValue()).getType().equals("GroupEnd")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
-        return new Pair<>(new Group(new Token("(", "GroupStart"), middlePair.getKey(), new Token(")", "GroupEnd")), middlePair.getValue() + 1);
+        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), middlePair.getValue() + 1);
     }
 
     /**
@@ -229,9 +295,13 @@ public class CrudeParser implements Parser {
      * @return A pair of Expression and index for the Direct grammar.
      */
     private Pair<Expression, Integer> parseDirect(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
         Token token = myTokens.get(index);
         if (!token.getType().equals("Direct") && !token.getType().equals("Constant")) {
-            return new Pair<>(null, index);
+            return nullPair;
         }
         return new Pair<>(new Direct(token), index + 1);
     }
