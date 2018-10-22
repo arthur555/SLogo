@@ -3,9 +3,9 @@ package engine.parser;
 import engine.Lexer.CrudeLexer;
 import engine.Lexer.Lexer;
 import engine.Lexer.Token;
-import engine.commands.Command;
 import engine.errors.CommandSyntaxException;
 import engine.slogoast.*;
+import javafx.util.Pair;
 
 import java.util.*;
 
@@ -17,7 +17,6 @@ import java.util.*;
 public class CrudeParser implements Parser {
     private List<Token> myTokens;
     private Expression myAST;
-    private int pointer;
 
     public CrudeParser() {
         myTokens = new ArrayList<>();
@@ -30,9 +29,8 @@ public class CrudeParser implements Parser {
      */
     @Override
     public void readTokens(List<Token> tokens) throws CommandSyntaxException {
-        pointer = 0;
         myTokens = tokens;
-        myAST = parseExpression(myTokens);
+        myAST = parseGoal();
     }
 
     /**
@@ -52,122 +50,126 @@ public class CrudeParser implements Parser {
     }
 
     /**
-     * The following methods are a family of parsing methods using recursive descent.
+     * This method returns the complete syntax tree if the input command is grammatically correct.
      *
-     * @param tokens: A List of Tokens input into Parser.
-     * @return An Expression AST node, which is used for Expression grammar.
+     * @return A root Expression node passed to the Interpreter.
      * @throws CommandSyntaxException
      */
-    public Expression parseExpression(List<Token> tokens) throws CommandSyntaxException {
-        if (pointer >= tokens.size()) {
-            throw new CommandSyntaxException("The input command is illegal in the current grammar.");
+    private Expression parseGoal() throws CommandSyntaxException {
+        Pair<Expression, Integer> resultPair = parseExpression(0);
+        if (resultPair.getKey() == null || resultPair.getValue() != myTokens.size()) {
+            throw new CommandSyntaxException("The input command cannot be parsed.");
+        } else {
+            return resultPair.getKey();
         }
-        int temp = pointer;
-        Expression group = parseGroup(tokens);
-        if (group != null) {
-            return group;
-        }
-        Expression unary = parseUnary(tokens);
-        if (unary != null) {
-            return unary;
-        }
-        Expression binary = parseBinary(tokens);
-        if (binary != null) {
-            return binary;
-        }
-        Expression direct = parseDirect(tokens);
-        if (direct != null) {
-            return direct;
-        }
-
-        pointer = temp;
-        throw new CommandSyntaxException("The input command is illegal in the current grammar.");
     }
 
-    private Expression parseBinary(List<Token> tokens) {
-        Token operator = tokens.get(pointer);
+    /**
+     * The following methods are a family of parsing methods using recursive descent.
+     *
+     * @param index: The starting index of this parse query.
+     * @return An Expression AST node, which is used for Expression grammar, and paired with it, an index after the parse.
+     */
+    private Pair<Expression, Integer> parseExpression(int index) {
+        if (index >= myTokens.size()) {
+            return new Pair<>(null, index);
+        }
+        Pair<Expression, Integer> groupPair = parseGroup(index);
+        if (groupPair.getKey() != null) {
+            return groupPair;
+        }
+        Pair<Expression, Integer> unaryPair = parseUnary(index);
+        if (unaryPair.getKey() != null) {
+            return unaryPair;
+        }
+        Pair<Expression, Integer> binaryPair = parseBinary(index);
+        if (binaryPair.getKey() != null) {
+            return binaryPair;
+        }
+        Pair<Expression, Integer> directPair = parseDirect(index);
+        if (directPair.getKey() != null) {
+            return directPair;
+        }
+        Pair<Expression, Integer> variablePair = parseVariable(index);
+        if (variablePair.getKey() != null) {
+            return variablePair;
+        }
+        return new Pair<>(null, index);
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Binary grammar.
+     */
+    private Pair<Expression, Integer> parseBinary(int index) {
+        Token operator = myTokens.get(index);
         if (!operator.getType().equals("Binary")) {
-            return null;
+            return new Pair<>(null, index);
         }
-        int temp = pointer;
-        pointer++;
-        Expression first = null;
-        Expression variable = parseVariable(tokens);
-        if (variable != null) {
-            first = variable;
+        Pair<Expression, Integer> firstPair = parseExpression(index + 1);
+        if (firstPair.getKey() == null) {
+            return new Pair<>(null, index);
         }
-        Expression direct = parseDirect(tokens);
-        if (direct != null) {
-            first = direct;
+        Pair<Expression, Integer> secondPair = parseExpression(firstPair.getValue());
+        if (secondPair.getKey() == null) {
+            return new Pair<>(null, index);
         }
-        if (first == null) {
-            pointer = temp;
-            return null;
-        }
-        Expression second = null;
-        variable = parseVariable(tokens);
-        if (variable != null) {
-            second = variable;
-        }
-        direct = parseDirect(tokens);
-        if (direct != null) {
-            second = direct;
-        }
-        if (second == null) {
-            pointer = temp;
-            return null;
-        }
-        return new Binary(operator, first, second);
+        return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
-    private Expression parseVariable(List<Token> tokens) {
-        Token tok = tokens.get(pointer);
-        if (!tok.getType().equals("Variable")) {
-            return null;
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Variable grammar.
+     */
+    private Pair<Expression, Integer> parseVariable(int index) {
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("Variable")) {
+            return new Pair<>(null, index);
         }
-        pointer++;
-        return new Variable(tok);
+        return new Pair<>(new Variable(token), index + 1);
     }
 
-    private Expression parseUnary(List<Token> tokens) throws CommandSyntaxException {
-        Token operator = tokens.get(pointer);
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Unary grammar.
+     */
+    private Pair<Expression, Integer> parseUnary(int index) {
+        Token operator = myTokens.get(index);
         if (!operator.getType().equals("Unary")) {
-            return null;
+            return new Pair<>(null, index);
         }
-        pointer++;
-        Expression secondPart = parseExpression(tokens);
-        return new Unary(operator, secondPart);
+        Pair<Expression, Integer> secondPair = parseExpression(index + 1);
+        return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
     }
 
-    private Expression parseGroup(List<Token> tokens) throws CommandSyntaxException {
-        if (!tokens.get(pointer).getType().equals("GroupStart")) {
-            return null;
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Group grammar.
+     */
+    private Pair<Expression, Integer> parseGroup(int index) {
+        if (!myTokens.get(index).getType().equals("GroupStart")) {
+            return new Pair<>(null, index);
         }
-        int tempPointer = pointer;
-        pointer++;
-        Expression middle = parseExpression(tokens);
-        if (middle == null) {
-            pointer = tempPointer;
-            return null;
+        Pair<Expression, Integer> middlePair = parseExpression(index + 1);
+        if (middlePair.getKey() == null) {
+            return new Pair<>(null, index);
         }
-        pointer++;
-        System.out.println(pointer);
-        System.out.print(tokens.get(pointer).toString());
-        if (pointer >= tokens.size() || !tokens.get(pointer).getType().equals("GroupEnd")) {
-            pointer = tempPointer;
-            return null;
+        if (middlePair.getValue() >= myTokens.size() || !myTokens.get(middlePair.getValue()).getType().equals("GroupEnd")) {
+            return new Pair<>(null, index);
         }
-        pointer++;
-        return new Group(new Token("(", "GroupStart"), middle, new Token(")", "GroupEnd"));
+        return new Pair<>(new Group(new Token("(", "GroupStart"), middlePair.getKey(), new Token(")", "GroupEnd")), middlePair.getValue() + 1);
     }
 
-    private Expression parseDirect(List<Token> tokens) {
-        Token token = tokens.get(pointer);
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Direct grammar.
+     */
+    private Pair<Expression, Integer> parseDirect(int index) {
+        Token token = myTokens.get(index);
         if (!token.getType().equals("Direct") && !token.getType().equals("Constant")) {
-            return null;
+            return new Pair<>(null, index);
         }
-        pointer++;
-        return new Direct(token);
+        return new Pair<>(new Direct(token), index + 1);
     }
 
     /**
@@ -178,7 +180,7 @@ public class CrudeParser implements Parser {
     public static void main(String[] args) {
         List<Token> tokens = new ArrayList<>();
         Lexer lexer = new CrudeLexer();
-        String test = "(50)";
+        String test = "(50)(";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {
@@ -195,7 +197,6 @@ public class CrudeParser implements Parser {
         try {
             parser.readTokens(testSet);
         } catch (CommandSyntaxException e) {
-            e.getMessage();
             e.printStackTrace();
         }
         Expression result = parser.returnAST();
