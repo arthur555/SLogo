@@ -17,7 +17,6 @@ import java.util.*;
 public class CrudeParser implements Parser {
     private List<Token> myTokens;
     private Expression myAST;
-    private int pointer;
 
     public CrudeParser() {
         myTokens = new ArrayList<>();
@@ -83,9 +82,9 @@ public class CrudeParser implements Parser {
         if (unaryPair.getKey() != null) {
             return unaryPair;
         }
-        Expression binary = parseBinary(myTokens);
-        if (binary != null) {
-            return binary;
+        Pair<Expression, Integer> binaryPair = parseBinary(index);
+        if (binaryPair.getKey() != null) {
+            return binaryPair;
         }
         Expression direct = parseDirect(myTokens);
         if (direct != null) {
@@ -94,40 +93,20 @@ public class CrudeParser implements Parser {
         return new Pair<>(null, index);
     }
 
-    private Expression parseBinary(List<Token> tokens) {
-        Token operator = tokens.get(pointer);
+    private Pair<Expression, Integer> parseBinary(int index) {
+        Token operator = myTokens.get(index);
         if (!operator.getType().equals("Binary")) {
-            return null;
+            return new Pair<>(null, index);
         }
-        int temp = pointer;
-        pointer++;
-        Expression first = null;
-        Expression variable = parseVariable(tokens);
-        if (variable != null) {
-            first = variable;
+        Pair<Expression, Integer> firstPair = parseExpression(index + 1);
+        if (firstPair.getKey() == null) {
+            return new Pair<>(null, index);
         }
-        Expression direct = parseDirect(tokens);
-        if (direct != null) {
-            first = direct;
+        Pair<Expression, Integer> secondPair = parseExpression(firstPair.getValue());
+        if (secondPair.getKey() == null) {
+            return new Pair<>(null, index);
         }
-        if (first == null) {
-            pointer = temp;
-            return null;
-        }
-        Expression second = null;
-        variable = parseVariable(tokens);
-        if (variable != null) {
-            second = variable;
-        }
-        direct = parseDirect(tokens);
-        if (direct != null) {
-            second = direct;
-        }
-        if (second == null) {
-            pointer = temp;
-            return null;
-        }
-        return new Binary(operator, first, second);
+        return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
     private Expression parseVariable(List<Token> tokens) {
