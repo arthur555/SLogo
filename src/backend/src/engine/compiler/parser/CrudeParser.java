@@ -343,14 +343,16 @@ public class CrudeParser implements Parser {
         if (!myTokens.get(index).getType().equals("GroupStart")) {
             return nullPair;
         }
-        Pair<Expression, Integer> middlePair = parseExpression(index + 1);
+        Pair<Token, Integer> groupStartPair = parseToken(index, "GroupStart");
+        if (groupStartPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> middlePair = parseExpression(groupStartPair.getValue());
         if (middlePair.getKey() == null) {
             return nullPair;
         }
-        if (middlePair.getValue() >= myTokens.size() || !myTokens.get(middlePair.getValue()).getType().equals("GroupEnd")) {
-            return nullPair;
-        }
-        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), middlePair.getValue() + 1);
+        Pair<Token, Integer> groupEndPair = parseToken(index, "GroupEnd");
+        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), groupEndPair.getValue());
     }
 
     /**
