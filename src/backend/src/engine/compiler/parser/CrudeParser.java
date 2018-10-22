@@ -20,6 +20,7 @@ public class CrudeParser implements Parser {
 
     private List<Token> myTokens;
     private Expression myAST;
+    private String tokenStream;
 
     public CrudeParser() {
         myTokens = new ArrayList<>();
@@ -33,6 +34,7 @@ public class CrudeParser implements Parser {
     @Override
     public void readTokens(List<Token> tokens) throws CommandSyntaxException {
         myTokens = tokens;
+        tokenStream = Arrays.toString(tokens.toArray(new Token[tokens.size()]));
         myAST = parseGoal();
     }
 
@@ -42,6 +44,7 @@ public class CrudeParser implements Parser {
     @Override
     public void clearTokens() {
         myTokens.clear();
+        tokenStream = null;
     }
 
     /**
@@ -73,7 +76,7 @@ public class CrudeParser implements Parser {
      * @param index: The starting index of this parse query.
      * @return An Expression AST node, which is used for Expression grammar, and paired with it, an index after the parse.
      */
-    private Pair<Expression, Integer> parseExpression(int index) {
+    private Pair<Expression, Integer> parseExpression(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
         if (index >= myTokens.size()) {
             return nullPair;
@@ -102,7 +105,7 @@ public class CrudeParser implements Parser {
         if (doTimesPair.getKey() != null) {
             return doTimesPair;
         }
-        Pair<Expression, Integer> forPair = parseForPair(index);
+        Pair<Expression, Integer> forPair = parseFor(index);
         if (forPair.getKey() != null) {
             return forPair;
         }
@@ -123,82 +126,113 @@ public class CrudeParser implements Parser {
 
     /**
      * @param index
+     * @param type
+     * @return This method parses single Token and return a pair of Token together with the new index.
+     */
+    private Pair<Token, Integer> parseToken(int index, String type) {
+        if (index >= myTokens.size() || !myTokens.get(index).getType().equals(type)) {
+            return new Pair<>(null, index);
+        } else {
+            return new Pair<>(myTokens.get(index), index + 1);
+        }
+    }
+
+    /**
+     * This method generates a 3-liner error message. The first line is written by the user. The second line is the index of list of Tokens where the error occurred. The third line is a list of Tokens for reference.
+     *
+     * @param message: The user-defined error message such as "Missing parenthesis".
+     * @param index: The index in the list of Tokens where the error occurred.
+     * @return A CommandSyntaxException.
+     */
+    private CommandSyntaxException generateSyntaxException(String message, int index) {
+        return new CommandSyntaxException(message + "\nIndex in the list of Tokens: " + index + "\nThe list of Tokens is: " + tokenStream);
+    }
+
+    /**
+     * @param index
      * @return A pair of Expression and index for the For loop grammar.
      */
-    private Pair<Expression, Integer> parseForPair(int index) {
+    private Pair<Expression, Integer> parseFor(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> forPair = parseToken(index, "For");
+        if (forPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("For")) {
-            return nullPair;
+        Pair<Token, Integer> listStartPair = parseToken(forPair.getValue(), "ListStart");
+        if (listStartPair.getKey() == null) {
+            throw generateSyntaxException("Missing \"[\" after the \"for\" keyword", listStartPair.getValue());
         }
-        index++;
-        if (index >= myTokens.size() || !myTokens.get(index).getType().equals("ListStart")) {
-            return nullPair;
-        }
-        index++;
-        Pair<Expression, Integer> variablePair = parseVariable(index);
+        Pair<Expression, Integer> variablePair = parseVariable(listStartPair.getValue());
         if (variablePair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal variable format after \"[\" in a for loop", variablePair.getValue());
         }
-        // TODO: THe rest.
-        return nullPair;
+        Pair<Expression, Integer> startPair = parseExpression(variablePair.getValue());
+        if (startPair.getKey() == null) {
+            throw generateSyntaxException("Illegal expression for the starting value of the variable in a for loop", startPair.getValue());
+        }
+        Pair<Expression, Integer> endPair = parseExpression(startPair.getValue());
+        if (endPair.getKey() == null) {
+            throw generateSyntaxException("Illegal expression for the ending value of the variable in a for loop", endPair.getValue());
+        }
+        Pair<Expression, Integer> stepPair = parseExpression(endPair.getValue());
+        if (endPair.getKey() == null) {
+            throw generateSyntaxException("Illegal expression for the increment value of the variable in a for loop", stepPair.getValue());
+        }
+        Pair<Token, Integer> listEndPair = parseToken(stepPair.getValue(), "ListEnd");
+        if (listEndPair.getKey() == null) {
+            throw generateSyntaxException("Missing \"]\" after the increment expression in a for loop", listEndPair.getValue());
+        }
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(listEndPair.getValue());
+        if (expressionListPair.getKey() == null) {
+            throw generateSyntaxException("Illegal list of commands in a for loop", expressionListPair.getValue());
+        }
+        return new Pair<>(new For(forPair.getKey(), listStart, (Variable) variablePair.getKey(), startPair.getKey(), endPair.getKey(), stepPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the DoTimes grammar.
      */
-    private Pair<Expression, Integer> parseDoTimes(int index) {
+    private Pair<Expression, Integer> parseDoTimes(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> doTimesPair = parseToken(index, "DoTimes");
+        if (doTimesPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("DoTimes")) {
-            return nullPair;
+        Pair<Token, Integer> listStartPair = parseToken(doTimesPair.getValue(), "ListStart");
+        if (listStartPair.getKey() == null) {
+            throw generateSyntaxException("Missing \"[\" symbol after dotimes keyword in a dotimes loop", listStartPair.getValue());
         }
-        int temp = index + 1;
-        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListStart")) {
-            return nullPair;
-        }
-        temp++;
-        Pair<Expression, Integer> variablePair = parseVariable(temp);
+        Pair<Expression, Integer> variablePair = parseVariable(listStartPair.getValue());
         if (variablePair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal variable format after \"[\" in a dotimes loop", variablePair.getValue());
         }
         Pair<Expression, Integer> limitPair = parseExpression(variablePair.getValue());
         if (limitPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal expression for the upper limit value of the variable in a dotimes loop", limitPair.getValue());
         }
-        temp = limitPair.getValue();
-        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListEnd")) {
-            return nullPair;
+        Pair<Token, Integer> listEndPair = parseToken(limitPair.getValue(), "ListEnd");
+        if (listEndPair.getKey() == null) {
+            throw generateSyntaxException("Missing \"]\" symbol after the limit value in a dotimes loop", limitPair.getValue());
         }
-        temp++;
-        Pair<Expression, Integer> expressionListPair = parseExpressionList(temp);
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(listEndPair.getValue());
         if (expressionListPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format of a list of commands in a dotimes loop", expressionListPair.getValue());
         }
-        return new Pair<>(new DoTimes(token, listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new DoTimes(doTimesPair.getKey(), listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the ExpressionList grammar.
      */
-    private Pair<Expression, Integer> parseExpressionList(int index) {
+    private Pair<Expression, Integer> parseExpressionList(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> listStartPair = parseToken(index, "ListStart");
+        if (listStartPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("ListStart")) {
-            return nullPair;
-        }
-        int pointer = index + 1;
+        int pointer = listStartPair.getValue();
         List<Expression> expressionList = new LinkedList<>();
         while (true) {
             Pair<Expression, Integer> listPair = parseExpression(pointer);
@@ -211,82 +245,74 @@ public class CrudeParser implements Parser {
         if (expressionList.isEmpty()) {
             return nullPair;
         }
-        if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
+        Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
+        if (listEndPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), pointer + 1);
+        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), listEndPair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the Condition grammar.
      */
-    private Pair<Expression, Integer> parseCondition(int index) {
+    private Pair<Expression, Integer> parseCondition(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> conditionPair = parseToken(index, "Condition");
+        if (conditionPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("Condition")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> expressionPair = parseExpression(index + 1);
+        Pair<Expression, Integer> expressionPair = parseExpression(conditionPair.getValue());
         if (expressionPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format for expression value after a keyword in the repeat or if loop", expressionPair.getValue());
         }
         Pair<Expression, Integer> expressionListPair = parseExpressionList(expressionPair.getValue());
         if (expressionListPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format for a list of expressions in a repeat or if loop", expressionListPair.getValue());
         }
-        return new Pair<>(new Condition(token, expressionPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new Condition(conditionPair.getKey(), expressionPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the MakeVariable grammar.
      */
-    private Pair<Expression, Integer> parseMakeVariable(int index) {
+    private Pair<Expression, Integer> parseMakeVariable(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> makeVariablePair = parseToken(index, "MakeVariable");
+        if (makeVariablePair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("MakeVariable")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> variablePair = parseVariable(index + 1);
+        Pair<Expression, Integer> variablePair = parseVariable(makeVariablePair.getValue());
         if (variablePair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal variable format after \"make\" command in a MakeVariable command", variablePair.getValue());
         }
         Pair<Expression, Integer> expressionPair = parseExpression(variablePair.getValue());
         if (expressionPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format for an expression that is assigned to the variable in a MakeVariable command", expressionPair.getValue());
         }
-        return new Pair<>(new MakeVariable(token, (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
+        return new Pair<>(new MakeVariable(makeVariablePair.getKey(), (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the Binary grammar.
      */
-    private Pair<Expression, Integer> parseBinary(int index) {
+    private Pair<Expression, Integer> parseBinary(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> binaryPair = parseToken(index, "Binary");
+        if (binaryPair.getKey() == null) {
             return nullPair;
         }
-        Token operator = myTokens.get(index);
-        if (!operator.getType().equals("Binary")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> firstPair = parseExpression(index + 1);
+        Pair<Expression, Integer> firstPair = parseExpression(binaryPair.getValue());
         if (firstPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format for the the first part of expression in binary grammar", firstPair.getValue());
         }
         Pair<Expression, Integer> secondPair = parseExpression(firstPair.getValue());
         if (secondPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format for the second part of a binary expression", secondPair.getValue());
         }
-        return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Binary(binaryPair.getKey(), firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
     /**
@@ -295,56 +321,49 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseVariable(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> variablePair = parseToken(index, "Variable");
+        if (variablePair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("Variable")) {
-            return nullPair;
-        }
-        return new Pair<>(new Variable(token), index + 1);
+        return new Pair<>(new Variable(variablePair.getKey()), variablePair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the Unary grammar.
      */
-    private Pair<Expression, Integer> parseUnary(int index) {
+    private Pair<Expression, Integer> parseUnary(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> unaryPair = parseToken(index, "Unary");
+        if (unaryPair.getKey() == null) {
             return nullPair;
         }
-        Token operator = myTokens.get(index);
-        if (!operator.getType().equals("Unary")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> secondPair = parseExpression(index + 1);
+        Pair<Expression, Integer> secondPair = parseExpression(unaryPair.getValue());
         if (secondPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal format for the expression after a unary operator", secondPair.getValue());
         }
-        return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Unary(unaryPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
     /**
      * @param index
      * @return A pair of Expression and index for the Group grammar.
      */
-    private Pair<Expression, Integer> parseGroup(int index) {
+    private Pair<Expression, Integer> parseGroup(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> groupStartPair = parseToken(index, "GroupStart");
+        if (groupStartPair.getKey() == null) {
             return nullPair;
         }
-        if (!myTokens.get(index).getType().equals("GroupStart")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> middlePair = parseExpression(index + 1);
+        Pair<Expression, Integer> middlePair = parseExpression(groupStartPair.getValue());
         if (middlePair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Illegal expression for a Group after the \"(\" symbol", middlePair.getValue());
         }
-        if (middlePair.getValue() >= myTokens.size() || !myTokens.get(middlePair.getValue()).getType().equals("GroupEnd")) {
-            return nullPair;
+        Pair<Token, Integer> groupEndPair = parseToken(index, "GroupEnd");
+        if (groupEndPair.getKey() == null) {
+            throw generateSyntaxException("Missing \")\" symbol for a Group after a valid expression", groupEndPair.getValue());
         }
-        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), middlePair.getValue() + 1);
+        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), groupEndPair.getValue());
     }
 
     /**
@@ -353,13 +372,13 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseDirect(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
-            return nullPair;
+        Pair<Token, Integer> directPair = parseToken(index, "Direct");
+        if (directPair.getKey() == null) {
+            directPair = parseToken(index, "Constant");
+            if (directPair.getKey() == null) {
+                return nullPair;
+            }
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("Direct") && !token.getType().equals("Constant")) {
-            return nullPair;
-        }
-        return new Pair<>(new Direct(token), index + 1);
+        return new Pair<>(new Direct(directPair.getKey()), directPair.getValue());
     }
 }
