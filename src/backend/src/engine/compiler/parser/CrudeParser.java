@@ -265,14 +265,11 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseMakeVariable(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> makeVariablePair = parseToken(index, "MakeVariable");
+        if (makeVariablePair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("MakeVariable")) {
-            return nullPair;
-        }
-        Pair<Expression, Integer> variablePair = parseVariable(index + 1);
+        Pair<Expression, Integer> variablePair = parseVariable(makeVariablePair.getValue());
         if (variablePair.getKey() == null) {
             return nullPair;
         }
@@ -280,7 +277,7 @@ public class CrudeParser implements Parser {
         if (expressionPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new MakeVariable(token, (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
+        return new Pair<>(new MakeVariable(makeVariablePair.getKey(), (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
     }
 
     /**
