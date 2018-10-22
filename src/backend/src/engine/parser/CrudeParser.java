@@ -143,7 +143,8 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() == null) {
             return nullPair;
         }
-        Pair 
+        // TODO: THe rest.
+        return nullPair;
     }
 
     /**
