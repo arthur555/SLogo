@@ -15,6 +15,7 @@ public class CrudeLexer implements Lexer{
     private static final String PREFIX = "engine/compiler/languages/";
     private static final String DEFAULT_LANGUAGE = "English";
     private static final String SYNTAX = "Syntax";
+    private static final String SYNTACTICAL_CATEGORIES = "SyntacticCategories";
     private static final Map<String, String> myGrammerMap;
     static {
         Map<String, String> grammarMap = new HashMap<>();
