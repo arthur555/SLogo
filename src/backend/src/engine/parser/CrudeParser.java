@@ -98,9 +98,13 @@ public class CrudeParser implements Parser {
         if (conditionPair.getKey() != null) {
             return conditionPair;
         }
-        Pair<Expression, Integer> doTimesPair = parseDoTimesPair(index);
+        Pair<Expression, Integer> doTimesPair = parseDoTimes(index);
         if (doTimesPair.getKey() != null) {
             return doTimesPair;
+        }
+        Pair<Expression, Integer> forPair = parseForPair(index);
+        if (forPair.getKey() != null) {
+            return forPair;
         }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
@@ -110,6 +114,36 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() != null) {
             return variablePair;
         }
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
+        if (expressionListPair.getKey() != null) {
+            return expressionListPair;
+        }
+        return nullPair;
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for the For loop grammar.
+     */
+    private Pair<Expression, Integer> parseForPair(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("For")) {
+            return nullPair;
+        }
+        index++;
+        if (index >= myTokens.size() || !myTokens.get(index).getType().equals("ListStart")) {
+            return nullPair;
+        }
+        index++;
+        Pair<Expression, Integer> variablePair = parseVariable(index);
+        if (variablePair.getKey() == null) {
+            return nullPair;
+        }
+        // TODO: THe rest.
         return nullPair;
     }
 
@@ -117,7 +151,7 @@ public class CrudeParser implements Parser {
      * @param index
      * @return A pair of Expression and index for the DoTimes grammar.
      */
-    private Pair<Expression, Integer> parseDoTimesPair(int index) {
+    private Pair<Expression, Integer> parseDoTimes(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
         if (index >= myTokens.size()) {
             return nullPair;
