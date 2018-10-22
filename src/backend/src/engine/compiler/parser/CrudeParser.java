@@ -243,11 +243,11 @@ public class CrudeParser implements Parser {
             pointer = listPair.getValue();
         }
         if (expressionList.isEmpty()) {
-            return nullPair;
+            throw generateSyntaxException("Missing a valid expression after the \"[\" symbol to constitute a valid list of expressions", pointer);
         }
         Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
         if (listEndPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
         return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), listEndPair.getValue());
     }
