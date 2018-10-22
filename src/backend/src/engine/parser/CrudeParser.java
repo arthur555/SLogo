@@ -97,6 +97,10 @@ public class CrudeParser implements Parser {
         return new Pair<>(null, index);
     }
 
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Binary grammar.
+     */
     private Pair<Expression, Integer> parseBinary(int index) {
         Token operator = myTokens.get(index);
         if (!operator.getType().equals("Binary")) {
@@ -113,6 +117,10 @@ public class CrudeParser implements Parser {
         return new Pair<>(new Binary(operator, firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
     }
 
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Variable grammar.
+     */
     private Pair<Expression, Integer> parseVariable(int index) {
         Token token = myTokens.get(index);
         if (!token.getType().equals("Variable")) {
@@ -121,6 +129,10 @@ public class CrudeParser implements Parser {
         return new Pair<>(new Variable(token), index + 1);
     }
 
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Unary grammar.
+     */
     private Pair<Expression, Integer> parseUnary(int index) {
         Token operator = myTokens.get(index);
         if (!operator.getType().equals("Unary")) {
@@ -130,6 +142,10 @@ public class CrudeParser implements Parser {
         return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
     }
 
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Group grammar.
+     */
     private Pair<Expression, Integer> parseGroup(int index) {
         if (!myTokens.get(index).getType().equals("GroupStart")) {
             return new Pair<>(null, index);
@@ -144,6 +160,10 @@ public class CrudeParser implements Parser {
         return new Pair<>(new Group(new Token("(", "GroupStart"), middlePair.getKey(), new Token(")", "GroupEnd")), middlePair.getValue() + 1);
     }
 
+    /**
+     * @param index
+     * @return A pair of Expression and index for the Direct grammar.
+     */
     private Pair<Expression, Integer> parseDirect(int index) {
         Token token = myTokens.get(index);
         if (!token.getType().equals("Direct") && !token.getType().equals("Constant")) {
