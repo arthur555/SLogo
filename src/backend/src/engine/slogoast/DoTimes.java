@@ -1,9 +1,6 @@
 package engine.slogoast;
 
-import engine.Lexer.Token;
-
-import java.util.Arrays;
-import java.util.List;
+import engine.lexer.Token;
 
 /**
  * This class handles the concept of DoTimes.

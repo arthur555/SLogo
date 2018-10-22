@@ -1,4 +1,4 @@
-package engine.Lexer;
+package engine.lexer;
 
 /**
  * This class represents a Token object used by the

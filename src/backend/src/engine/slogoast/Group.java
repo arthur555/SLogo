@@ -1,6 +1,6 @@
 package engine.slogoast;
 
-import engine.Lexer.Token;
+import engine.lexer.Token;
 
 /**
  * This class provides the Grouping concept in AST. for example (5 * 8) = 5 * 8.

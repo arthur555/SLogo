@@ -1,11 +1,10 @@
 package engine.parser;
 
-import engine.Lexer.Token;
+import engine.lexer.Token;
 import engine.errors.CommandSyntaxException;
 import engine.slogoast.Expression;
 
 import java.util.List;
-import java.util.Queue;
 
 /**
  * Take in the String input that the user types into the editor window.

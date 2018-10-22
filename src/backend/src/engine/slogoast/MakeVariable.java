@@ -1,6 +1,6 @@
 package engine.slogoast;
 
-import engine.Lexer.Token;
+import engine.lexer.Token;
 
 /**
  * This class handles the assignment grammar in the AST.

@@ -1,10 +1,9 @@
-package engine.Lexer;
+package engine.lexer;
 
 import engine.errors.CommandSyntaxException;
 
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.Queue;
 
 /**
  * This interface handles the tokenization of input strings into a set of tokens.

@@ -1,6 +1,6 @@
 package engine.slogoast;
 
-import engine.Lexer.Token;
+import engine.lexer.Token;
 
 import java.util.Arrays;
 import java.util.List;
