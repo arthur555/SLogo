@@ -86,9 +86,9 @@ public class CrudeParser implements Parser {
         if (binaryPair.getKey() != null) {
             return binaryPair;
         }
-        Expression direct = parseDirect(myTokens);
-        if (direct != null) {
-            return direct;
+        Expression directPair = parseDirect(index);
+        if (directPair.getKey() != null) {
+            return directPair;
         }
         return new Pair<>(null, index);
     }
@@ -141,13 +141,12 @@ public class CrudeParser implements Parser {
         return new Pair<>(new Group(new Token("(", "GroupStart"), middlePair.getKey(), new Token(")", "GroupEnd")), middlePair.getValue() + 1);
     }
 
-    private Expression parseDirect(List<Token> tokens) {
-        Token token = tokens.get(pointer);
+    private Pair<Expression, Integer> parseDirect(int index) {
+        Token token = myTokens.get(index);
         if (!token.getType().equals("Direct") && !token.getType().equals("Constant")) {
-            return null;
+            return new Pair<>(null, index);
         }
-        pointer++;
-        return new Direct(token);
+        return new Pair<>(new Direct(token), index + 1);
     }
 
     /**
