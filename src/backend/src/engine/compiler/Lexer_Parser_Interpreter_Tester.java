@@ -1,12 +1,12 @@
-package engine;
+package engine.compiler;
 
-import engine.lexer.CrudeLexer;
-import engine.lexer.Lexer;
-import engine.lexer.Token;
+import engine.compiler.lexer.CrudeLexer;
+import engine.compiler.lexer.Lexer;
+import engine.compiler.lexer.Token;
 import engine.errors.CommandSyntaxException;
-import engine.parser.CrudeParser;
-import engine.parser.Parser;
-import engine.slogoast.Expression;
+import engine.compiler.parser.CrudeParser;
+import engine.compiler.parser.Parser;
+import engine.compiler.slogoast.Expression;
 
 import java.util.List;
 

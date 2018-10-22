@@ -1,5 +1,5 @@
 package model;
-import engine.interpreter.StateMachine;
+import engine.compiler.interpreter.StateMachine;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

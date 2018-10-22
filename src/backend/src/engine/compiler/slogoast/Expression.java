@@ -1,4 +1,4 @@
-package engine.slogoast;
+package engine.compiler.slogoast;
 
 /**
  * This is an abstract class that all AST nodes shall extend from.

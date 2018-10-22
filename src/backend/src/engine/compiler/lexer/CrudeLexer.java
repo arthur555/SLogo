@@ -1,8 +1,8 @@
-package engine.lexer;
+package engine.compiler.lexer;
 
 import engine.errors.CommandSyntaxException;
-import engine.translator.LanguageTranslator;
-import engine.translator.TypeTranslator;
+import engine.compiler.translator.LanguageTranslator;
+import engine.compiler.translator.TypeTranslator;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ import java.util.*;
  * @author Haotian Wang
  */
 public class CrudeLexer implements Lexer{
-    private static final String PREFIX = "engine/translator/languages/";
+    private static final String PREFIX = "engine/compiler/languages/";
     private static final String DEFAULT_LANGUAGE = "English";
     private static final String SYNTAX = "Syntax";
     private static final Map<String, String> myGrammerMap;

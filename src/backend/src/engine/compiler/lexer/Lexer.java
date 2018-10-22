@@ -1,4 +1,4 @@
-package engine.lexer;
+package engine.compiler.lexer;
 
 import engine.errors.CommandSyntaxException;
 

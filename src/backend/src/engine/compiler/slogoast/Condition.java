@@ -1,6 +1,6 @@
-package engine.slogoast;
+package engine.compiler.slogoast;
 
-import engine.lexer.Token;
+import engine.compiler.lexer.Token;
 
 /**
  * This class handles the Repeat and If logic. They are in the form of Condition Expression [ (Expression)* ].

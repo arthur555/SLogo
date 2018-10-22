@@ -1,8 +1,8 @@
-package engine.parser;
+package engine.compiler.parser;
 
-import engine.lexer.Token;
+import engine.compiler.lexer.Token;
 import engine.errors.CommandSyntaxException;
-import engine.slogoast.*;
+import engine.compiler.slogoast.*;
 import javafx.util.Pair;
 
 import java.util.*;

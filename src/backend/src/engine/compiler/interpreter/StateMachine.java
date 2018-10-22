@@ -1,4 +1,4 @@
-package engine.interpreter;
+package engine.compiler.interpreter;
 
 import java.util.HashMap;
 import java.util.Map;

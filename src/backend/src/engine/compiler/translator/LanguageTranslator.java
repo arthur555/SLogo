@@ -1,4 +1,4 @@
-package engine.translator;
+package engine.compiler.translator;
 
 import engine.errors.CommandSyntaxException;
 
