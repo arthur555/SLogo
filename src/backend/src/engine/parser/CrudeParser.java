@@ -1,6 +1,6 @@
 package engine.parser;
 
-import engine.Lexer.Token;
+import engine.lexer.Token;
 import engine.errors.CommandSyntaxException;
 import engine.slogoast.*;
 import javafx.util.Pair;

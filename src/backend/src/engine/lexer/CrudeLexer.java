@@ -1,13 +1,9 @@
-package engine.Lexer;
+package engine.lexer;
 
-import engine.commands.Command;
-import engine.commands.Forward;
 import engine.errors.CommandSyntaxException;
-import engine.parser.CrudeParser;
 import engine.translator.LanguageTranslator;
 import engine.translator.TypeTranslator;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**

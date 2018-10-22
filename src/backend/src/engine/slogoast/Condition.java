@@ -1,10 +1,6 @@
 package engine.slogoast;
 
-import engine.Lexer.Token;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import engine.lexer.Token;
 
 /**
  * This class handles the Repeat and If logic. They are in the form of Condition Expression [ (Expression)* ].

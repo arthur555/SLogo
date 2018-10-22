@@ -1,8 +1,8 @@
 package engine;
 
-import engine.Lexer.CrudeLexer;
-import engine.Lexer.Lexer;
-import engine.Lexer.Token;
+import engine.lexer.CrudeLexer;
+import engine.lexer.Lexer;
+import engine.lexer.Token;
 import engine.errors.CommandSyntaxException;
 import engine.parser.CrudeParser;
 import engine.parser.Parser;
