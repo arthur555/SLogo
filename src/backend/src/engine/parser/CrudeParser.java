@@ -139,6 +139,9 @@ public class CrudeParser implements Parser {
             return new Pair<>(null, index);
         }
         Pair<Expression, Integer> secondPair = parseExpression(index + 1);
+        if (secondPair.getKey() == null) {
+            return new Pair<>(null, index);
+        }
         return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
     }
 
@@ -178,17 +181,16 @@ public class CrudeParser implements Parser {
      * @param args
      */
     public static void main(String[] args) {
-        List<Token> tokens = new ArrayList<>();
         Lexer lexer = new CrudeLexer();
-        String test = "(50)(";
+        String test = "sum 4 (sin(forward 50))";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
         }
         List<Token> testSet = lexer.getTokens();
-        System.out.println("The input String is\n\n" + test + "\n");
-        System.out.print("The list of tokens is:\n\n");
+        System.out.println("The input String is:\n\n" + test + "\n");
+        System.out.println("Lexer's Part\n======\nThe list of tokens is:\n");
         for (Token token : testSet) {
             System.out.println(token.toString());
         }
@@ -200,5 +202,6 @@ public class CrudeParser implements Parser {
             e.printStackTrace();
         }
         Expression result = parser.returnAST();
+        System.out.println("\nParser's Part\n======\nThe String representation of the syntax tree is:\n\n" + result.toString());
     }
 }

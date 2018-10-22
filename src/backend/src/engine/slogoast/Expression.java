@@ -6,4 +6,10 @@ package engine.slogoast;
  * @author Haotian Wang
  */
 public abstract class Expression {
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    public abstract String toString();
 }

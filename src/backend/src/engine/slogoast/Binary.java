@@ -17,4 +17,14 @@ public class Binary extends Expression {
         myFirstExpr = a;
         mySecondExpr = b;
     }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%s ; %s ; %s}", myToken.toString(), myFirstExpr.toString(), mySecondExpr.toString());
+    }
 }

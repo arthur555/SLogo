@@ -2,6 +2,7 @@ package engine.slogoast;
 
 import engine.Lexer.Token;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,5 +29,15 @@ public class MakeUserInstruction extends Expression {
         endB = list2End;
         variableList = listA;
         exprList = listB;
+    }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s}", action.toString(), myVar.toString(), startA.toString(), Arrays.toString(variableList.toArray(new Variable[variableList.size()])), endA.toString(), startB.toString(), Arrays.toString(exprList.toArray(new Expression[exprList.size()])), endB.toString());
     }
 }
