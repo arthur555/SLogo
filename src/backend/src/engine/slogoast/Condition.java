@@ -18,7 +18,7 @@ public class Condition extends Expression {
     private Token end;
     private List<Expression> exprList;
 
-    public Condition(Token a, Expression val, Token listStart, Token listEnd, List<Expression> list) {
+    public Condition(Token a, Expression val, Token listStart, List<Expression> list, Token listEnd) {
         condition = a;
         expr = val;
         start = listStart;
@@ -34,6 +34,6 @@ public class Condition extends Expression {
     @Override
     public String toString() {
         Expression[] arr = exprList.toArray(new Expression[exprList.size()]);
-        return String.format("{%s ; %s ; %s ; %s ; %s}", condition.toString(), expr.toString(), start.toString(), end.toString(), Arrays.toString(arr));
+        return String.format("{%s ; %s ; %s ; %s ; %s}", condition.toString(), expr.toString(), start.toString(), Arrays.toString(arr), end.toString());
     }
 }

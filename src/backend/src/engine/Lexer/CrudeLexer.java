@@ -54,6 +54,7 @@ public class CrudeLexer implements Lexer{
         grammarMap.put("Sum", "Binary");
         grammarMap.put("Difference", "Binary");
         grammarMap.put("Quotient", "Binary");
+        grammarMap.put("Product", "Binary");
         grammarMap.put("Remainder", "Binary");
         grammarMap.put("Power", "Binary");
         grammarMap.put("LessThan", "Binary");
@@ -193,27 +194,5 @@ public class CrudeLexer implements Lexer{
     @Override
     public List<Token> getTokens() {
         return myTokens;
-    }
-
-    /**
-     * This main function tests the functionality of the Lexer.
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        CrudeLexer lexer = new CrudeLexer();
-        String input = "fd(Forward #thisIsAComment :aVariable) - back (([+ 3 3.33 4]))\n";
-        String input2 = "fd 2";
-        try {
-            lexer.readString(input);
-        } catch (CommandSyntaxException e) {
-            e.printStackTrace();
-        }
-        List<Token> tokens = lexer.getTokens();
-        System.out.println("The input String is\n\n" + input + "\n");
-        System.out.print("The queue of tokens is:\n\n");
-        for (Token token : tokens) {
-            System.out.println(token.toString());
-        }
     }
 }
