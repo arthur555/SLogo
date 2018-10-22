@@ -23,7 +23,8 @@ public class Lexer_Parser_Interpreter_Tester {
      */
     public static void main(String[] args) {
         Lexer lexer = new CrudeLexer();
-        String test = "dotimes [:d 4] [fd sin 50 back 5 6]";
+//        String test = "dotimes [:d 4] [fd sin 50 back 5 6]";
+        String test = "for [ :x 4 4 -1] [fd 50]";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {
@@ -36,13 +37,14 @@ public class Lexer_Parser_Interpreter_Tester {
             System.out.println(token.toString());
         }
 
+        System.out.println("\nParser's Part\n======");
         Parser parser = new CrudeParser();
         try {
             parser.readTokens(testSet);
         } catch (CommandSyntaxException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         Expression result = parser.returnAST();
-        System.out.println("\nParser's Part\n======\nThe String representation of the syntax tree is:\n\n" + result.toString());
+        System.out.println("The String representation of the syntax tree is:\n\n" + result.toString());
     }
 }
