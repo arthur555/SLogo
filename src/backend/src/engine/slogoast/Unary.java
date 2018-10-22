@@ -23,6 +23,6 @@ public class Unary extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s}", myToken.toString(), myExpr.toString());
+        return String.format("{%s %s}", myToken.getString(), myExpr.toString());
     }
 }

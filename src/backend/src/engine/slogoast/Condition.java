@@ -14,16 +14,12 @@ import java.util.List;
 public class Condition extends Expression {
     private Token condition;
     private Expression expr;
-    private Token start;
-    private Token end;
-    private List<Expression> exprList;
+    private ExpressionList expressionList;
 
-    public Condition(Token a, Expression val, Token listStart, List<Expression> list, Token listEnd) {
+    public Condition(Token a, Expression val, ExpressionList list) {
         condition = a;
         expr = val;
-        start = listStart;
-        end = listEnd;
-        exprList = list;
+        expressionList = list;
     }
 
     /**
@@ -33,7 +29,6 @@ public class Condition extends Expression {
      */
     @Override
     public String toString() {
-        Expression[] arr = exprList.toArray(new Expression[exprList.size()]);
-        return String.format("{%s ; %s ; %s ; %s ; %s}", condition.toString(), expr.toString(), start.toString(), Arrays.toString(arr), end.toString());
+        return String.format("{%s %s %s}", condition.getString(), expr.toString(), expressionList.toString());
     }
 }

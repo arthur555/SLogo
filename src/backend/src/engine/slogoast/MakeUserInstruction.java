@@ -13,22 +13,19 @@ import java.util.List;
 public class MakeUserInstruction extends Expression {
     private Token action;
     private Variable myVar;
-    private Token startA;
+    private Token start;
     private List<Variable> variableList;
-    private Token endA;
-    private Token startB;
-    private List<Expression> exprList;
-    private Token endB;
+    private Token end;
+    private ExpressionList expressionList;
 
-    public MakeUserInstruction(Token a, Variable variable, Token listStart, List<Variable> listA,  Token listEnd, Token list2Start, List<Expression> listB, Token list2End) {
+
+    public MakeUserInstruction(Token a, Variable variable, Token listStart, List<Variable> varList,  Token listEnd, ExpressionList exprList) {
         action = a;
         myVar = variable;
-        startA = listStart;
-        endA = listEnd;
-        startB = list2Start;
-        endB = list2End;
-        variableList = listA;
-        exprList = listB;
+        start = listStart;
+        end = listEnd;
+        variableList = varList;
+        expressionList = exprList;
     }
 
     /**
@@ -38,6 +35,6 @@ public class MakeUserInstruction extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s}", action.toString(), myVar.toString(), startA.toString(), Arrays.toString(variableList.toArray(new Variable[variableList.size()])), endA.toString(), startB.toString(), Arrays.toString(exprList.toArray(new Expression[exprList.size()])), endB.toString());
+        return String.format("{%s %s %s %s}", action.getString(), myVar.toString(), Arrays.toString(variableList.toArray(new Variable[variableList.size()])), expressionList.toString());
     }
 }

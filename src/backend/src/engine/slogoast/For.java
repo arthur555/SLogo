@@ -12,27 +12,23 @@ import java.util.List;
  */
 public class For extends Expression {
     private Token myToken;
-    private Token startA;
+    private Token start;
     private Variable var;
     private Expression min;
     private Expression max;
     private Expression step;
-    private Token endA;
-    private Token startB;
-    private List<Expression> expressions;
-    private Token endB;
+    private Token end;
+    private ExpressionList expressionList;
 
-    public For(Token token, Token firstStart, Variable variable, Expression lower, Expression higher, Expression increment, Token firstEnd, Token secondStart, List<Expression> exprList, Token secondEnd) {
+    public For(Token token, Token firstStart, Variable variable, Expression lower, Expression higher, Expression increment, Token firstEnd, ExpressionList list) {
         myToken = token;
-        startA = firstStart;
+        start = firstStart;
         var = variable;
         min = lower;
         max = higher;
         step = increment;
-        endA = firstEnd;
-        startB = secondStart;
-        expressions = exprList;
-        endB = secondEnd;
+        end = firstEnd;
+        expressionList = list;
     }
 
     /**
@@ -42,6 +38,6 @@ public class For extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ; %s}", myToken.toString(), startA.toString(), var.toString(), min.toString(), max.toString(), step.toString(), endA.toString(), startB.toString(), Arrays.toString(expressions.toArray(new Expression[expressions.size()])), endB.toString());
+        return String.format("{%s %s %s %s %s %s %s %s}", myToken.getString(), start.getString(), var.toString(), min.toString(), max.toString(), step.toString(), end.getString(), expressionList.toString());
     }
 }

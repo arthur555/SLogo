@@ -13,22 +13,14 @@ import java.util.List;
 public class IfElse extends Expression {
     private Token myToken;
     private Expression expr;
-    private Token startA;
-    private List<Expression> exprListA;
-    private Token endA;
-    private Token startB;
-    private List<Expression> exprListB;
-    private Token endB;
+    private ExpressionList expressionListA;
+    private ExpressionList expressionListB;
 
-    public IfElse(Token a, Expression val, Token listStart, List<Expression> listA,  Token listEnd, Token list2Start, List<Expression> listB, Token list2End) {
+    public IfElse(Token a, Expression val, ExpressionList listA, ExpressionList listB) {
         myToken = a;
         expr = val;
-        startA = listStart;
-        endA = listEnd;
-        startB = list2Start;
-        endB = list2End;
-        exprListA = listA;
-        exprListB = listB;
+        expressionListA = listA;
+        expressionListB = listB;
     }
 
     /**
@@ -38,6 +30,6 @@ public class IfElse extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s}", myToken.toString(), expr.toString(), startA.toString(), Arrays.toString(exprListA.toArray(new Expression[exprListA.size()])), endA.toString(), startB.toString(), Arrays.toString(exprListB.toArray(new Expression[exprListB.size()])), endB.toString());
+        return String.format("{%s %s %s %s}", myToken.getString(), expr.toString(), expressionListA.toString(), expressionListB.toString());
     }
 }

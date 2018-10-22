@@ -25,6 +25,6 @@ public class Binary extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s}", myToken.toString(), myFirstExpr.toString(), mySecondExpr.toString());
+        return String.format("{%s %s %s}", myToken.getString(), myFirstExpr.toString(), mySecondExpr.toString());
     }
 }
