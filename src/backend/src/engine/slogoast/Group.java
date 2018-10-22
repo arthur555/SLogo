@@ -25,6 +25,6 @@ public class Group extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s}", groupStart.toString(), myExpr.toString(), groupEnd.toString());
+        return String.format("{(%s)}", myExpr.toString());
     }
 }

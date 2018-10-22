@@ -12,23 +12,19 @@ import java.util.List;
  */
 public class DoTimes extends Expression {
     private Token myToken;
-    private Token startA;
+    private Token start;
     private Variable var;
     private Expression limit;
-    private Token endA;
-    private Token startB;
-    private List<Expression> expressions;
-    private Token endB;
+    private Token end;
+    private ExpressionList expressionList;
 
-    public DoTimes(Token token, Token firstStart, Variable variable, Expression varLit, Token firstEnd, Token secondStart, List<Expression> exprList, Token secondEnd) {
+    public DoTimes(Token token, Token firstStart, Variable variable, Expression varLit, Token firstEnd, ExpressionList list) {
         myToken = token;
-        startA = firstStart;
+        start = firstStart;
         var = variable;
         limit = varLit;
-        endA = firstEnd;
-        startB = secondStart;
-        expressions = exprList;
-        endB = secondEnd;
+        end = firstEnd;
+        expressionList = list;
     }
 
     /**
@@ -38,7 +34,6 @@ public class DoTimes extends Expression {
      */
     @Override
     public String toString() {
-        Expression[] arr = expressions.toArray(new Expression[expressions.size()]);
-        return String.format("{%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s}", myToken.toString(), startA.toString(), var.toString(), limit.toString(), endA.toString(), startB.toString(), Arrays.toString(arr), endB.toString());
+        return String.format("{%s ; %s ; %s ; %s ; %s ; %s}", myToken.toString(), start.toString(), var.toString(), limit.toString(), end.toString(), expressionList.toString());
     }
 }

@@ -23,7 +23,7 @@ public class Lexer_Parser_Interpreter_Tester {
      */
     public static void main(String[] args) {
         Lexer lexer = new CrudeLexer();
-        String test = "if greater? 4 3 [ fd 50 sum 4 5 sum 4 sin99]";
+        String test = "dotimes [:d 4] [fd sin 50]";
         try {
             lexer.readString(test);
         } catch (CommandSyntaxException e) {

@@ -168,6 +168,31 @@ public class CrudeParser implements Parser {
 
     /**
      * @param index
+     * @return A pair of Expression and index for the ExpressionList grammar.
+     */
+    private Pair<Expression, Integer> parseExpressionList(int index) {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        if (index >= myTokens.size()) {
+            return nullPair;
+        }
+        Token token = myTokens.get(index);
+        if (!token.getType().equals("ListStart")) {
+            return nullPair;
+        }
+        int pointer = index + 1;
+        List<Expression> expressionList = new LinkedList<>();
+        while (true) {
+            Pair<Expression, Integer> listPair = parseExpression(pointer);
+            if (listPair.getKey() == null) {
+                break;
+            }
+            expressionList.add(listPair.getKey());
+            pointer = listPair.getValue();
+        }
+    }
+
+    /**
+     * @param index
      * @return A pair of Expression and index for the Condition grammar.
      */
     private Pair<Expression, Integer> parseCondition(int index) {
