@@ -2,6 +2,7 @@ package engine.compiler.lexer;
 
 import engine.compiler.Token;
 import engine.errors.CommandSyntaxException;
+import engine.errors.UndefinedKeywordException;
 
 import java.util.List;
 import java.util.MissingResourceException;
@@ -17,7 +18,7 @@ public interface Lexer {
      *
      * @param input: A user input raw String.
      */
-    void readString(String input) throws CommandSyntaxException;
+    void readString(String input) throws UndefinedKeywordException;
 
     /**
      * Return a list of Token from the input String, after translation by two translators.
