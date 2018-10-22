@@ -24,61 +24,6 @@ public class CrudeLexer implements Lexer{
             String action = e.nextElement();
             grammarMap.put(action, categories.getString(action));
         }
-        /*grammarMap.put("Forward", "Unary");
-        grammarMap.put("Backward", "Unary");
-        grammarMap.put("Left", "Unary");
-        grammarMap.put("Right", "Unary");
-        grammarMap.put("SetHeading", "Unary");
-        grammarMap.put("SetTowards", "Unary");
-        grammarMap.put("SetPosition", "Unary");
-        grammarMap.put("Minus", "Unary");
-        grammarMap.put("Random", "Unary");
-        grammarMap.put("Sine", "Unary");
-        grammarMap.put("Cosine", "Unary");
-        grammarMap.put("Tangent", "Unary");
-        grammarMap.put("ArcTangent", "Unary");
-        grammarMap.put("NaturalLog", "Unary");
-        grammarMap.put("Not", "Unary");
-
-        grammarMap.put("PenUp", "Direct");
-        grammarMap.put("PenDown", "Direct");
-        grammarMap.put("ShowTurtle", "Direct");
-        grammarMap.put("HideTurtle", "Direct");
-        grammarMap.put("Home", "Direct");
-        grammarMap.put("ClearScreen", "Direct");
-        grammarMap.put("XCoordinate", "Direct");
-        grammarMap.put("YCoordinate", "Direct");
-        grammarMap.put("Heading", "Direct");
-        grammarMap.put("IsPenDown", "Direct");
-        grammarMap.put("IsShowing", "Direct");
-        grammarMap.put("Pi", "Direct");
-
-        grammarMap.put("Sum", "Binary");
-        grammarMap.put("Difference", "Binary");
-        grammarMap.put("Quotient", "Binary");
-        grammarMap.put("Product", "Binary");
-        grammarMap.put("Remainder", "Binary");
-        grammarMap.put("Power", "Binary");
-        grammarMap.put("LessThan", "Binary");
-        grammarMap.put("GreaterThan", "Binary");
-        grammarMap.put("Equal", "Binary");
-        grammarMap.put("NotEqual", "Binary");
-        grammarMap.put("And", "Binary");
-        grammarMap.put("Or", "Binary");
-
-        grammarMap.put("MakeVariable", "MakeVariable");
-
-        grammarMap.put("Repeat", "Condition");
-        grammarMap.put("If", "Condition");
-
-        grammarMap.put("DoTimes", "DoTimes");
-
-        grammarMap.put("For", "For");
-
-        grammarMap.put("IfElse", "IfElse");
-
-        grammarMap.put("MakeUserInstruction", "MakeUserInstruction");*/
-
         myGrammerMap = Collections.unmodifiableMap(grammarMap);
     }
 
@@ -123,9 +68,7 @@ public class CrudeLexer implements Lexer{
             return;
         }
         myLanguage.setPatterns(null);
-        for (String language : languages) {
-            myLanguage.addPatterns(PREFIX + language);
-        }
+        addLanguage(languages);
     }
 
     /**
@@ -136,7 +79,12 @@ public class CrudeLexer implements Lexer{
      */
     @Override
     public void addLanguage(String... languages) throws MissingResourceException {
-
+        if (languages.length == 0 || languages == null) {
+            return;
+        }
+        for (String language : languages) {
+            myLanguage.addPatterns(PREFIX + language);
+        }
     }
 
     public void addLanguage(String language) {
