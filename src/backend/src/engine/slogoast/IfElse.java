@@ -30,6 +30,6 @@ public class IfElse extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s}", myToken.toString(), expr.toString(), expressionListA.toString(), expressionListB.toString());
+        return String.format("{%s %s %s %s}", myToken.getString(), expr.toString(), expressionListA.toString(), expressionListB.toString());
     }
 }

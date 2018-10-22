@@ -25,6 +25,6 @@ public class MakeVariable extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s}", myToken.toString(), myVar.toString(), myExpr.toString());
+        return String.format("{%s %s %s}", myToken.getString(), myVar.toString(), myExpr.toString());
     }
 }

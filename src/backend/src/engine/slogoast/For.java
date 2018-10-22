@@ -38,6 +38,6 @@ public class For extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s}", myToken.toString(), start.toString(), var.toString(), min.toString(), max.toString(), step.toString(), end.toString(), expressionList.toString());
+        return String.format("{%s %s %s %s %s %s %s %s}", myToken.getString(), start.getString(), var.toString(), min.toString(), max.toString(), step.toString(), end.getString(), expressionList.toString());
     }
 }

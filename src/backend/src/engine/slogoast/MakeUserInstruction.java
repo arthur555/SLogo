@@ -35,6 +35,6 @@ public class MakeUserInstruction extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s}", action.toString(), myVar.toString(), Arrays.toString(variableList.toArray(new Variable[variableList.size()])), expressionList.toString());
+        return String.format("{%s %s %s %s}", action.getString(), myVar.toString(), Arrays.toString(variableList.toArray(new Variable[variableList.size()])), expressionList.toString());
     }
 }

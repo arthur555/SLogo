@@ -21,6 +21,6 @@ public class Variable extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s}", myToken.toString());
+        return String.format("{%s}", myToken.getString());
     }
 }

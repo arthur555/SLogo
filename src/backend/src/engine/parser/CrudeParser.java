@@ -144,26 +144,11 @@ public class CrudeParser implements Parser {
             return nullPair;
         }
         temp++;
-        if (temp >= myTokens.size() || !myTokens.get(temp).getType().equals("ListStart")) {
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(temp);
+        if (expressionListPair.getKey() == null) {
             return nullPair;
         }
-        int pointer = temp + 1;
-        List<Expression> expressionList = new LinkedList<>();
-        while (true) {
-            Pair<Expression, Integer> listPair = parseExpression(pointer);
-            if (listPair.getKey() == null) {
-                break;
-            }
-            expressionList.add(listPair.getKey());
-            pointer = listPair.getValue();
-        }
-        if (expressionList.isEmpty()) {
-            return nullPair;
-        }
-        if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
-            return nullPair;
-        }
-        return new Pair<>(new DoTimes(token, listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, listStart, expressionList, listEnd),pointer + 1);
+        return new Pair<>(new DoTimes(token, listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
@@ -189,6 +174,13 @@ public class CrudeParser implements Parser {
             expressionList.add(listPair.getKey());
             pointer = listPair.getValue();
         }
+        if (expressionList.isEmpty()) {
+            return nullPair;
+        }
+        if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
+            return nullPair;
+        }
+        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), pointer + 1);
     }
 
     /**
@@ -208,26 +200,11 @@ public class CrudeParser implements Parser {
         if (expressionPair.getKey() == null) {
             return nullPair;
         }
-        if (expressionPair.getValue() >= myTokens.size() || !myTokens.get(expressionPair.getValue()).getType().equals("ListStart")) {
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(expressionPair.getValue());
+        if (expressionListPair.getKey() == null) {
             return nullPair;
         }
-        List<Expression> expressionList = new LinkedList<>();
-        int pointer = expressionPair.getValue() + 1;
-        while (true) {
-            Pair<Expression, Integer> listPair = parseExpression(pointer);
-            if (listPair.getKey() == null) {
-                break;
-            }
-            expressionList.add(listPair.getKey());
-            pointer = listPair.getValue();
-        }
-        if (expressionList.isEmpty()) {
-            return nullPair;
-        }
-        if (pointer >= myTokens.size() || !myTokens.get(pointer).getType().equals("ListEnd")) {
-            return nullPair;
-        }
-        return new Pair<>(new Condition(token, expressionPair.getKey(), listStart, expressionList, listEnd), pointer + 1);
+        return new Pair<>(new Condition(token, expressionPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**

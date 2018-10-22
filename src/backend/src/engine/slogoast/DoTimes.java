@@ -34,6 +34,6 @@ public class DoTimes extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s ; %s ; %s ; %s}", myToken.toString(), start.toString(), var.toString(), limit.toString(), end.toString(), expressionList.toString());
+        return String.format("{%s %s %s %s %s %s}", myToken.getString(), start.getString(), var.toString(), limit.toString(), end.getString(), expressionList.toString());
     }
 }

@@ -29,6 +29,6 @@ public class Condition extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s ; %s ; %s}", condition.toString(), expr.toString(), expressionList.toString());
+        return String.format("{%s %s %s}", condition.getString(), expr.toString(), expressionList.toString());
     }
 }
