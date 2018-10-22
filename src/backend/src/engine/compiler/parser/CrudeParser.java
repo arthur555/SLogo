@@ -156,16 +156,25 @@ public class CrudeParser implements Parser {
      * @param index
      * @return A pair of Expression and index for IfElse grammar.
      */
-    private Pair<Expression, Integer> parseIfElse(int index) {
+    private Pair<Expression, Integer> parseIfElse(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
         Pair<Token, Integer> ifElsePair = parseToken(index, "IfElse");
         if (ifElsePair.getKey() == null) {
             return nullPair;
         }
-        Pair<Expression, Integer> variablePair = parseVariable(ifElsePair.getValue());
-        if (variablePair.getKey() == null) {
-            throw new CommandSyntaxException()
+        Pair<Expression, Integer> expressionPair = parseExpression(ifElsePair.getValue());
+        if (expressionPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for an expression after the \"ifelse\" keyword", expressionPair.getValue());
         }
+        Pair<Expression, Integer> listAPair = parseExpressionList(expressionPair.getValue());
+        if (listAPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for a list of expressions that is run when the ifelse expression is evaluated true", listAPair.getValue());
+        }
+        Pair<Expression, Integer> listBPair = parseExpressionList(listAPair.getValue());
+        if (listBPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for a list of expressions that is run when the ifelse expression is evaluated false", listBPair.getValue());
+        }
+        return new Pair<>(new IfElse(ifElsePair.getKey(), expressionPair.getKey(), (ExpressionList) listAPair.getKey(), (ExpressionList) listBPair.getKey()), listBPair.getValue());
     }
 
     /**
