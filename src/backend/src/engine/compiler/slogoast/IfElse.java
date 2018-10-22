@@ -1,6 +1,6 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 
 /**
  * Implements the IfElse grammar in the AST.

@@ -1,6 +1,6 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 
 /**
  * This class is an AST node representing binary operation that takes two expressions as commands.

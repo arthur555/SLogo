@@ -1,5 +1,6 @@
 package engine.compiler.lexer;
 
+import engine.compiler.Token;
 import engine.errors.CommandSyntaxException;
 
 import java.util.List;

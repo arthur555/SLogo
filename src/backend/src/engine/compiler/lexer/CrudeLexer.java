@@ -1,5 +1,6 @@
 package engine.compiler.lexer;
 
+import engine.compiler.Token;
 import engine.errors.CommandSyntaxException;
 import engine.compiler.translator.LanguageTranslator;
 import engine.compiler.translator.TypeTranslator;
@@ -52,6 +53,7 @@ public class CrudeLexer implements Lexer{
     /**
      * Reset the language dictionary to use the default language only, which is English.
      */
+    @Override
     public void resetLanguage() {
         myLanguage.setPatterns(PREFIX + DEFAULT_LANGUAGE);
     }
@@ -85,10 +87,6 @@ public class CrudeLexer implements Lexer{
         for (String language : languages) {
             myLanguage.addPatterns(PREFIX + language);
         }
-    }
-
-    public void addLanguage(String language) {
-        myLanguage.addPatterns(PREFIX + language);
     }
 
     /**
