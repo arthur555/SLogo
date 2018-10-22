@@ -75,13 +75,13 @@ public class CrudeParser implements Parser {
         if (index >= myTokens.size()) {
             return new Pair<>(null, index);
         }
-        Pair<Expression, Integer> groupPair = parseGroup(myTokens, index);
+        Pair<Expression, Integer> groupPair = parseGroup(index);
         if (groupPair.getKey() != null) {
             return groupPair;
         }
-        Expression unary = parseUnary(myTokens);
-        if (unary != null) {
-            return unary;
+        Pair<Expression, Integer> unaryPair = parseUnary(index);
+        if (unaryPair.getKey() != null) {
+            return unaryPair;
         }
         Expression binary = parseBinary(myTokens);
         if (binary != null) {
@@ -91,7 +91,7 @@ public class CrudeParser implements Parser {
         if (direct != null) {
             return direct;
         }
-        throw new CommandSyntaxException("The input command is illegal in the current grammar.");
+        return new Pair<>(null, index);
     }
 
     private Expression parseBinary(List<Token> tokens) {
@@ -139,25 +139,24 @@ public class CrudeParser implements Parser {
         return new Variable(tok);
     }
 
-    private Expression parseUnary(List<Token> tokens) throws CommandSyntaxException {
-        Token operator = tokens.get(pointer);
+    private Pair<Expression, Integer> parseUnary(int index) {
+        Token operator = myTokens.get(index);
         if (!operator.getType().equals("Unary")) {
-            return null;
-        }
-        pointer++;
-        Expression secondPart = parseExpression(tokens);
-        return new Unary(operator, secondPart);
-    }
-
-    private Pair<Expression, Integer> parseGroup(List<Token> tokens, int index) throws CommandSyntaxException {
-        if (!tokens.get(pointer).getType().equals("GroupStart")) {
             return new Pair<>(null, index);
         }
-        Pair<Expression, Integer> middlePair = parseExpression(tokens, index + 1);
+        Pair<Expression, Integer> secondPair = parseExpression(index + 1);
+        return new Pair<>(new Unary(operator, secondPair.getKey()), secondPair.getValue());
+    }
+
+    private Pair<Expression, Integer> parseGroup(int index) {
+        if (!myTokens.get(pointer).getType().equals("GroupStart")) {
+            return new Pair<>(null, index);
+        }
+        Pair<Expression, Integer> middlePair = parseExpression(index + 1);
         if (middlePair.getKey() == null) {
             return new Pair<>(null, index);
         }
-        if (middlePair.getValue() >= tokens.size() || !tokens.get(middlePair.getValue()).getType().equals("GroupEnd")) {
+        if (middlePair.getValue() >= myTokens.size() || !myTokens.get(middlePair.getValue()).getType().equals("GroupEnd")) {
             return new Pair<>(null, index);
         }
         return new Pair<>(new Group(new Token("(", "GroupStart"), middlePair.getKey(), new Token(")", "GroupEnd")), middlePair.getValue() + 1);
