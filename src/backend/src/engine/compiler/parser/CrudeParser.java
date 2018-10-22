@@ -102,7 +102,7 @@ public class CrudeParser implements Parser {
         if (doTimesPair.getKey() != null) {
             return doTimesPair;
         }
-        Pair<Expression, Integer> forPair = parseForPair(index);
+        Pair<Expression, Integer> forPair = parseFor(index);
         if (forPair.getKey() != null) {
             return forPair;
         }
@@ -125,26 +125,54 @@ public class CrudeParser implements Parser {
      * @param index
      * @return A pair of Expression and index for the For loop grammar.
      */
-    private Pair<Expression, Integer> parseForPair(int index) {
+    private Pair<Expression, Integer> parseFor(int index) {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        if (index >= myTokens.size()) {
+        Pair<Token, Integer> forPair = parseToken(index, "For");
+        if (forPair.getKey() == null) {
             return nullPair;
         }
-        Token token = myTokens.get(index);
-        if (!token.getType().equals("For")) {
+        Pair<Token, Integer> listStartPair = parseToken(forPair.getValue(), "ListStart");
+        if (listStartPair.getKey() == null) {
             return nullPair;
         }
-        index++;
-        if (index >= myTokens.size() || !myTokens.get(index).getType().equals("ListStart")) {
-            return nullPair;
-        }
-        index++;
-        Pair<Expression, Integer> variablePair = parseVariable(index);
+        Pair<Expression, Integer> variablePair = parseVariable(listStartPair.getValue());
         if (variablePair.getKey() == null) {
             return nullPair;
         }
-        // TODO: THe rest.
-        return nullPair;
+        Pair<Expression, Integer> startPair = parseExpression(variablePair.getValue());
+        if (startPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> endPair = parseExpression(startPair.getValue());
+        if (endPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> stepPair = parseExpression(endPair.getValue());
+        if (endPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Token, Integer> listEndPair = parseToken(stepPair.getValue(), "ListEnd");
+        if (listEndPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(listEndPair.getValue());
+        if (expressionListPair.getKey() == null) {
+            return nullPair;
+        }
+        return new Pair<>(new For(forPair.getKey(), listStart, (Variable) variablePair.getKey(), startPair.getKey(), endPair.getKey(), stepPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @param type
+     * @return This method parses single Token and return a pair of Token together with the new index.
+     */
+    private Pair<Token, Integer> parseToken(int index, String type) {
+        if (index >= myTokens.size() || !myTokens.get(index).equals(type)) {
+            return new Pair<>(null, index);
+        } else {
+            return new Pair<>(myTokens.get(index), index + 1);
+        }
     }
 
     /**
