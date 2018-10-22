@@ -31,7 +31,7 @@ public class CrudeParser implements Parser {
     @Override
     public void readTokens(List<Token> tokens) throws CommandSyntaxException {
         myTokens = tokens;
-        myAST = parseExpression(myTokens, 0).getKey();
+        myAST = parseGoal();
     }
 
     /**
@@ -50,33 +50,44 @@ public class CrudeParser implements Parser {
         return myAST;
     }
 
-
+    /**
+     * This method returns the complete syntax tree if the input command is grammatically correct.
+     *
+     * @return A root Expression node passed to the Interpreter.
+     * @throws CommandSyntaxException
+     */
+    private Expression parseGoal() throws CommandSyntaxException {
+        Pair<Expression, Integer> resultPair = parseExpression(0);
+        if (resultPair.getKey() == null || resultPair.getValue() != myTokens.size()) {
+            throw new CommandSyntaxException("The input command cannot be parsed.");
+        } else {
+            return resultPair.getKey();
+        }
+    }
 
     /**
      * The following methods are a family of parsing methods using recursive descent.
      *
-     * @param tokens: A List of Tokens input into Parser.
      * @param index: The starting index of this parse query.
      * @return An Expression AST node, which is used for Expression grammar, and paired with it, an index after the parse.
-     * @throws CommandSyntaxException
      */
-    public Pair<Expression, Integer> parseExpression(List<Token> tokens, int index) throws CommandSyntaxException {
-        if (index >= tokens.size()) {
-            throw new CommandSyntaxException("The input command is illegal in the current grammar.");
+    private Pair<Expression, Integer> parseExpression(int index) {
+        if (index >= myTokens.size()) {
+            return new Pair<>(null, index);
         }
-        Pair<Expression, Integer> groupPair = parseGroup(tokens, index);
-        if (groupPair.getKey() != null && groupPair.getValue() == tokens.size()) {
+        Pair<Expression, Integer> groupPair = parseGroup(myTokens, index);
+        if (groupPair.getKey() != null) {
             return groupPair;
         }
-        Expression unary = parseUnary(tokens);
+        Expression unary = parseUnary(myTokens);
         if (unary != null) {
             return unary;
         }
-        Expression binary = parseBinary(tokens);
+        Expression binary = parseBinary(myTokens);
         if (binary != null) {
             return binary;
         }
-        Expression direct = parseDirect(tokens);
+        Expression direct = parseDirect(myTokens);
         if (direct != null) {
             return direct;
         }
