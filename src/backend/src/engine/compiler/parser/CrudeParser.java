@@ -128,6 +128,10 @@ public class CrudeParser implements Parser {
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
         }
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
+        if (expressionListPair.getKey() != null) {
+            return expressionListPair;
+        }
         Pair<Expression, Integer> variableListPair = parseVariableList(index);
         if (variableListPair.getKey() != null) {
             return variableListPair;
@@ -139,10 +143,6 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> variablePair = parseVariable(index);
         if (variablePair.getKey() != null) {
             return variablePair;
-        }
-        Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
-        if (expressionListPair.getKey() != null) {
-            return expressionListPair;
         }
         return nullPair;
     }
