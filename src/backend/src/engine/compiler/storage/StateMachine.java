@@ -1,4 +1,4 @@
-package engine.storage;
+package engine.compiler.storage;
 
 import engine.errors.InterpretationException;
 

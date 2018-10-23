@@ -1,6 +1,6 @@
 package model;
-import engine.storage.CrudeStateMachine;
-import engine.storage.StateMachine;
+import engine.compiler.storage.CrudeStateMachine;
+import engine.compiler.storage.StateMachine;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

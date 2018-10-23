@@ -1,11 +1,10 @@
-package engine.storage;
+package engine.compiler.storage;
 
 import engine.compiler.slogoast.Expression;
 import engine.errors.InterpretationException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * This StateMachine records variables that the parser can use. For example, it records "x = 3".
