@@ -13,17 +13,13 @@ import java.util.List;
 public class MakeUserInstruction extends Expression {
     private Token action;
     private Variable myVar;
-    private Token start;
-    private List<Variable> variableList;
-    private Token end;
+    private VariableList variableList;
     private ExpressionList expressionList;
 
 
-    public MakeUserInstruction(Token a, Variable variable, Token listStart, List<Variable> varList,  Token listEnd, ExpressionList exprList) {
+    public MakeUserInstruction(Token a, Variable variable, VariableList varList, ExpressionList exprList) {
         action = a;
         myVar = variable;
-        start = listStart;
-        end = listEnd;
         variableList = varList;
         expressionList = exprList;
     }
@@ -35,6 +31,6 @@ public class MakeUserInstruction extends Expression {
      */
     @Override
     public String toString() {
-        return String.format("{%s %s %s %s}", action.getString(), myVar.toString(), Arrays.toString(variableList.toArray(new Variable[variableList.size()])), expressionList.toString());
+        return String.format("{%s %s %s %s}", action.getString(), myVar.toString(), variableList.toString(), expressionList.toString());
     }
 }
