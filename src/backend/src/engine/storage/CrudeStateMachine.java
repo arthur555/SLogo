@@ -1,4 +1,4 @@
-package engine.compiler.interpreter;
+package engine.storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,10 +8,10 @@ import java.util.Map;
  *
  * @author Haotian Wang
  */
-public class StateMachine {
+public class CrudeStateMachine {
     private Map<String, Object> myMap;
 
-    public StateMachine() {
+    public CrudeStateMachine() {
         myMap = new HashMap<>();
     }
 
