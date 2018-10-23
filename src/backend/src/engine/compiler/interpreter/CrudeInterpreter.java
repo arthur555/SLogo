@@ -5,39 +5,26 @@ import engine.commands.Command;
 
 import engine.compiler.slogoast.*;
 import engine.errors.InterpretationException;
+import engine.storage.CrudeStateMachine;
+import engine.storage.StateMachine;
 import model.TurtleModel;
 import java.util.List;
 
 /**
  * This is a crude interpreter implementation.
+ * Read in the abstract syntax tree and evaluate the return value of the expression.
+ * Note this is a family of methods because it uses the Visitor pattern to employ different interpret methods for different kinds (subclasses) of Expressions.
+ *
+ * Execute the command.
+ * Note this is a family of methods because it uses the Visitor pattern to employ different execution methods for different kinds (subclasses) of Expressions.
  *
  * @author Haotian Wang
  */
 public class CrudeInterpreter implements Interpreter{
+    private StateMachine myStateMachine;
 
-    /**
-     * Read in the abstract syntax tree and evaluate the return value of the expression.
-     * Note this is a family of methods because it uses the Visitor pattern to employ different interpret methods for different kinds (subclasses) of Expressions.
-     *
-     * @param astNode : SLogoAST representing the command tree.
-     * @throws InterpretationException
-     */
-    @Override
-    public void interpret(Expression astNode) throws InterpretationException {
-
-    }
-
-    /**
-     * This method evaluates the return value of the abstract syntax tree, not executing any of the commands.
-     * Note this is a family of methods because it uses the Visitor pattern to employ different evaluate methods for different kinds (subclasses) of Expressions.
-     *
-     * @param astNode : SLogoAST representing the parsed command.
-     * @return A double value returned by evaluating this command, however not executing any of these commands on the turtle.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaulate(Expression astNode) throws InterpretationException {
-        return 0;
+    public CrudeInterpreter() {
+        myStateMachine = new CrudeStateMachine();
     }
 
     /**
@@ -181,6 +168,29 @@ public class CrudeInterpreter implements Interpreter{
     @Override
     public void interpret(VariableList variableListNode) throws InterpretationException {
 
+    }
+
+    /**
+     * Interpret a UserFunction AST node.
+     *
+     * @param userFunctionNode
+     * @throws InterpretationException
+     */
+    @Override
+    public void interpret(UserFunction userFunctionNode) throws InterpretationException {
+
+    }
+
+    /**
+     * Evaluate a UserFunction AST node.
+     *
+     * @param userFunctionNode
+     * @return A double value returned by evaluating this command.
+     * @throws InterpretationException
+     */
+    @Override
+    public double evaluate(UserFunction userFunctionNode) throws InterpretationException {
+        return 0;
     }
 
     /**

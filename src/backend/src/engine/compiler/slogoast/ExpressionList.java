@@ -1,6 +1,8 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.interpreter.Interpreter;
+import engine.errors.InterpretationException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
  *
  * @author Haotian Wang
  */
-public class ExpressionList extends Expression {
+public class ExpressionList implements Expression {
     private Token listStart;
     private List<Expression> expressionList;
     private Token listEnd;
@@ -28,5 +30,15 @@ public class ExpressionList extends Expression {
     @Override
     public String toString() {
         return Arrays.toString(expressionList.toArray(new Expression[expressionList.size()]));
+    }
+
+    /**
+     * This method uses the Visitor pattern to let the Interpreter acts on the concrete types of the AST node.
+     *
+     * @param interpreter
+     */
+    @Override
+    public void execute(Interpreter interpreter) throws InterpretationException {
+        interpreter.interpret(this);
     }
 }

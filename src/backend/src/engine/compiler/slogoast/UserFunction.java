@@ -1,11 +1,14 @@
 package engine.compiler.slogoast;
 
+import engine.compiler.interpreter.Interpreter;
+import engine.errors.InterpretationException;
+
 /**
  * The class handles the UserFunction AST node. For example, :drawSquare [4 5] is such a UserFunction.
  *
  * @author Haotian Wang
  */
-public class UserFunction extends Expression {
+public class UserFunction implements Expression {
     private Variable myVariable;
     private ExpressionList parameters;
 
@@ -22,5 +25,15 @@ public class UserFunction extends Expression {
     @Override
     public String toString() {
         return String.format("{%s %s}", myVariable.toString(), parameters.toString());
+    }
+
+    /**
+     * This method uses the Visitor pattern to let the Interpreter acts on the concrete types of the AST node.
+     *
+     * @param interpreter
+     */
+    @Override
+    public void execute(Interpreter interpreter) throws InterpretationException {
+        interpreter.interpret(this);
     }
 }

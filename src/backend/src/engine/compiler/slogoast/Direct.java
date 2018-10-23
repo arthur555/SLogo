@@ -1,13 +1,15 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.interpreter.Interpreter;
+import engine.errors.InterpretationException;
 
 /**
  * This class is a terminal node in the AST.
  *
  * @author Haotian Wang
  */
-public class Direct extends Expression {
+public class Direct implements Expression {
     private Token myToken;
 
     public Direct(Token token) {
@@ -22,5 +24,15 @@ public class Direct extends Expression {
     @Override
     public String toString() {
         return String.format("{%s}", myToken.getString());
+    }
+
+    /**
+     * This method uses the Visitor pattern to let the Interpreter acts on the concrete types of the AST node.
+     *
+     * @param interpreter
+     */
+    @Override
+    public void execute(Interpreter interpreter) throws InterpretationException {
+        interpreter.interpret(this);
     }
 }

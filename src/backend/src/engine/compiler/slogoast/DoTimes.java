@@ -1,13 +1,15 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.interpreter.Interpreter;
+import engine.errors.InterpretationException;
 
 /**
  * This class handles the concept of DoTimes.
  *
  * @author Haotian Wang
  */
-public class DoTimes extends Expression {
+public class DoTimes implements Expression {
     private Token myToken;
     private Token start;
     private Variable var;
@@ -32,5 +34,15 @@ public class DoTimes extends Expression {
     @Override
     public String toString() {
         return String.format("{%s %s %s %s %s %s}", myToken.getString(), start.getString(), var.toString(), limit.toString(), end.getString(), expressionList.toString());
+    }
+
+    /**
+     * This method uses the Visitor pattern to let the Interpreter acts on the concrete types of the AST node.
+     *
+     * @param interpreter
+     */
+    @Override
+    public void execute(Interpreter interpreter) throws InterpretationException {
+        interpreter.interpret(this);
     }
 }
