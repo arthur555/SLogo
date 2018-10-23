@@ -1,5 +1,6 @@
 package model;
-import engine.compiler.interpreter.StateMachine;
+import engine.storage.CrudeStateMachine;
+import engine.storage.StateMachine;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +28,7 @@ public class TurtleModelImpl implements TurtleModel {
         penDown = new SimpleBooleanProperty(true);
         move = new SimpleBooleanProperty(false);
         clean = new SimpleBooleanProperty(true);
-        memory = new StateMachine();
+        memory = new CrudeStateMachine();
     }
 
     public void setPenDown(boolean down){penDown.setValue(down);}

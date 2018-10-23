@@ -6,6 +6,7 @@ import engine.errors.CommandSyntaxException;
 import engine.compiler.parser.CrudeParser;
 import engine.compiler.parser.Parser;
 import engine.compiler.slogoast.Expression;
+import engine.errors.UndefinedKeywordException;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Lexer_Parser_Interpreter_Tester {
         String test = "for [ :x 4 4 -1] [fd 50]";
         try {
             lexer.readString(test);
-        } catch (CommandSyntaxException e) {
+        } catch (UndefinedKeywordException e) {
             e.printStackTrace();
         }
         List<Token> testSet = lexer.getTokens();

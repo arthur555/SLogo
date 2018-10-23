@@ -128,9 +128,9 @@ public class CrudeParser implements Parser {
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
         }
-        Pair<Expression, Integer> variableListPair = parseVariableList(index);
-        if (variableListPair.getKey() != null) {
-            return variableListPair;
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
+        if (expressionListPair.getKey() != null) {
+            return expressionListPair;
         }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
@@ -139,10 +139,6 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> variablePair = parseVariable(index);
         if (variablePair.getKey() != null) {
             return variablePair;
-        }
-        Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
-        if (expressionListPair.getKey() != null) {
-            return expressionListPair;
         }
         return nullPair;
     }
@@ -218,7 +214,7 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
         Pair<Token, Integer> listStartPair = parseToken(index, "ListStart");
         if (listStartPair.getKey() == null) {
-            return null;
+            return nullPair;
         }
         int pointer = listStartPair.getValue();
         List<Variable> variableList = new LinkedList<>();
