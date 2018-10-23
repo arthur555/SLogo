@@ -218,7 +218,7 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
         Pair<Token, Integer> listStartPair = parseToken(index, "ListStart");
         if (listStartPair.getKey() == null) {
-            return null;
+            return nullPair;
         }
         int pointer = listStartPair.getValue();
         List<Variable> variableList = new LinkedList<>();
