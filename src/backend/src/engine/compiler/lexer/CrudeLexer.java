@@ -1,8 +1,10 @@
 package engine.compiler.lexer;
 
+import engine.compiler.Token;
 import engine.errors.CommandSyntaxException;
 import engine.compiler.translator.LanguageTranslator;
 import engine.compiler.translator.TypeTranslator;
+import engine.errors.UndefinedKeywordException;
 
 import java.util.*;
 
@@ -52,6 +54,7 @@ public class CrudeLexer implements Lexer{
     /**
      * Reset the language dictionary to use the default language only, which is English.
      */
+    @Override
     public void resetLanguage() {
         myLanguage.setPatterns(PREFIX + DEFAULT_LANGUAGE);
     }
@@ -87,17 +90,13 @@ public class CrudeLexer implements Lexer{
         }
     }
 
-    public void addLanguage(String language) {
-        myLanguage.addPatterns(PREFIX + language);
-    }
-
     /**
      * This processes the user input raw String and tokenizes the input String.
      *
      * @param input : A user input raw String.
      */
     @Override
-    public void readString(String input) throws CommandSyntaxException {
+    public void readString(String input) throws UndefinedKeywordException {
         myTokens.clear();
         if (input == null || input.isEmpty()) {
             return;
@@ -132,7 +131,7 @@ public class CrudeLexer implements Lexer{
             }
         }
         if (start != input.length() || end != input.length()) {
-            throw new CommandSyntaxException("The input String contains tokens that are not properly defined in the properties files.");
+            throw new UndefinedKeywordException("The input String contains tokens that are not properly defined in the properties files.");
         }
     }
 

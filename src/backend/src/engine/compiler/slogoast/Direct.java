@@ -1,6 +1,6 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 
 /**
  * This class is a terminal node in the AST.

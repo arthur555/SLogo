@@ -1,6 +1,6 @@
 package engine.compiler.parser;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 import engine.errors.CommandSyntaxException;
 import engine.compiler.slogoast.*;
 import javafx.util.Pair;
@@ -53,6 +53,17 @@ public class CrudeParser implements Parser {
     @Override
     public Expression returnAST() {
         return myAST;
+    }
+
+    /**
+     * This method generates a 3-liner error message. The first line is written by the user. The second line is the index of list of Tokens where the error occurred. The third line is a list of Tokens for reference.
+     *
+     * @param message: The user-defined error message such as "Missing parenthesis".
+     * @param index: The index in the list of Tokens where the error occurred.
+     * @return A CommandSyntaxException.
+     */
+    private CommandSyntaxException generateSyntaxException(String message, int index) {
+        return new CommandSyntaxException(message + "\nIndex in the list of Tokens: " + index + "\nThe list of Tokens is: " + tokenStream);
     }
 
     /**
@@ -109,6 +120,18 @@ public class CrudeParser implements Parser {
         if (forPair.getKey() != null) {
             return forPair;
         }
+        Pair<Expression, Integer> ifElsePair = parseIfElse(index);
+        if (ifElsePair.getKey() != null) {
+            return ifElsePair;
+        }
+        Pair<Expression, Integer> makeUserInstructionPair = parseMakeUserInstruction(index);
+        if (makeUserInstructionPair.getKey() != null) {
+            return makeUserInstructionPair;
+        }
+        Pair<Expression, Integer> variableListPair = parseVariableList(index);
+        if (variableListPair.getKey() != null) {
+            return variableListPair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -138,14 +161,83 @@ public class CrudeParser implements Parser {
     }
 
     /**
-     * This method generates a 3-liner error message. The first line is written by the user. The second line is the index of list of Tokens where the error occurred. The third line is a list of Tokens for reference.
-     *
-     * @param message: The user-defined error message such as "Missing parenthesis".
-     * @param index: The index in the list of Tokens where the error occurred.
-     * @return A CommandSyntaxException.
+     * @param index
+     * @return A pair of Expression and index for IfElse grammar.
      */
-    private CommandSyntaxException generateSyntaxException(String message, int index) {
-        return new CommandSyntaxException(message + "\nIndex in the list of Tokens: " + index + "\nThe list of Tokens is: " + tokenStream);
+    private Pair<Expression, Integer> parseIfElse(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> ifElsePair = parseToken(index, "IfElse");
+        if (ifElsePair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> expressionPair = parseExpression(ifElsePair.getValue());
+        if (expressionPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for an expression after the \"ifelse\" keyword", expressionPair.getValue());
+        }
+        Pair<Expression, Integer> listAPair = parseExpressionList(expressionPair.getValue());
+        if (listAPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for a list of expressions that is run when the ifelse expression is evaluated true", listAPair.getValue());
+        }
+        Pair<Expression, Integer> listBPair = parseExpressionList(listAPair.getValue());
+        if (listBPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for a list of expressions that is run when the ifelse expression is evaluated false", listBPair.getValue());
+        }
+        return new Pair<>(new IfElse(ifElsePair.getKey(), expressionPair.getKey(), (ExpressionList) listAPair.getKey(), (ExpressionList) listBPair.getKey()), listBPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for MakeUserInstruction grammar.
+     */
+    private Pair<Expression, Integer> parseMakeUserInstruction(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> makeUserInstructionPair = parseToken(index, "MakeUserInstruction");
+        if (makeUserInstructionPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> commandPair = parseVariable(index);
+        if (commandPair.getKey() == null) {
+            throw generateSyntaxException("Missing a valid variable name to store the user-made function after the \"to\" keyword", commandPair.getValue());
+        }
+        Pair<Expression, Integer> variableListPair = parseVariableList(commandPair.getValue());
+        if (variableListPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for defining a list of variables for use with the user-defined function", variableListPair.getValue());
+        }
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(variableListPair.getValue());
+        if (expressionListPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for defining a list of expressions for use with the user-defined function", expressionListPair.getValue());
+        }
+        return new Pair<>(new MakeUserInstruction(makeUserInstructionPair.getKey(), (Variable) commandPair.getKey(), (VariableList) variableListPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @return A pair of VariableList and index for the VariableList grammar.
+     */
+    private Pair<Expression, Integer> parseVariableList(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> listStartPair = parseToken(index, "ListStart");
+        if (listStartPair.getKey() == null) {
+            return null;
+        }
+        int pointer = listStartPair.getValue();
+        List<Variable> variableList = new LinkedList<>();
+        while (true) {
+            Pair<Expression, Integer> listPair = parseVariable(pointer);
+            if (listPair.getKey() == null) {
+                break;
+            }
+            variableList.add((Variable) listPair.getKey());
+            pointer = listPair.getValue();
+        }
+        if (variableList.isEmpty()) {
+            throw generateSyntaxException("Missing a valid variable to constitute a valid list of variables", pointer);
+        }
+        Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
+        if (listEndPair.getKey() == null) {
+            throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
+        }
+        return new Pair<>(new VariableList(listStart, variableList, listEnd), listEndPair.getValue());
     }
 
     /**
@@ -243,11 +335,11 @@ public class CrudeParser implements Parser {
             pointer = listPair.getValue();
         }
         if (expressionList.isEmpty()) {
-            return nullPair;
+            throw generateSyntaxException("Missing a valid expression to constitute a valid list of expressions", pointer);
         }
         Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
         if (listEndPair.getKey() == null) {
-            return nullPair;
+            throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
         return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), listEndPair.getValue());
     }

@@ -1,6 +1,6 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 
 /**
  * This class emulates the For loop logic in the AST.

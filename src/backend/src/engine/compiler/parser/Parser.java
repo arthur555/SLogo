@@ -1,6 +1,6 @@
 package engine.compiler.parser;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 import engine.errors.CommandSyntaxException;
 import engine.compiler.slogoast.Expression;
 

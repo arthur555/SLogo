@@ -1,6 +1,6 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.lexer.Token;
+import engine.compiler.Token;
 
 /**
  * This class handles the expression that takes in only one expression as parameter.
