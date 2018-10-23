@@ -124,6 +124,10 @@ public class CrudeParser implements Parser {
         if (ifElsePair.getKey() != null) {
             return ifElsePair;
         }
+        Pair<Expression, Integer> makeUserInstructionPair = parseMakeUserInstruction(index);
+        if (makeUserInstructionPair.getKey() != null) {
+            return makeUserInstructionPair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -175,6 +179,27 @@ public class CrudeParser implements Parser {
             throw generateSyntaxException("Illegal format for a list of expressions that is run when the ifelse expression is evaluated false", listBPair.getValue());
         }
         return new Pair<>(new IfElse(ifElsePair.getKey(), expressionPair.getKey(), (ExpressionList) listAPair.getKey(), (ExpressionList) listBPair.getKey()), listBPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for MakeUserInstruction grammar.
+     */
+    private Pair<Expression, Integer> parseMakeUserInstruction(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> makeUserInstructionPair = parseToken(index, "MakeUserInstruction");
+        if (makeUserInstructionPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> commandPair = parseVariable(index);
+        if (commandPair.getKey() == null) {
+            throw generateSyntaxException("Missing a valid variable name to store the user-made function after the \"to\" keyword", commandPair.getValue());
+        }
+        Pair<Token, Integer> listStartPair = parseToken(commandPair.getValue(), "ListStart");
+        if (listStartPair.getKey() == null) {
+            throw generateSyntaxException("Missing a \"[\" symbol that indicates the start of the list of variables in a user-defined function", listStartPair.getValue());
+        }
+        Pair<>
     }
 
     /**
