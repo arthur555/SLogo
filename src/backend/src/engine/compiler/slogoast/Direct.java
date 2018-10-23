@@ -1,5 +1,6 @@
 package engine.compiler.slogoast;
 
+import engine.commands.Home;
 import engine.compiler.Token;
 import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
@@ -8,7 +9,7 @@ import model.TurtleModel;
 /**
  * This class is a terminal node in the AST.
  *
- * @author Haotian Wang
+ * @author Haotian Wang, Rahul Ramesh
  */
 public class Direct implements Expression {
     private Token myToken;
@@ -34,9 +35,39 @@ public class Direct implements Expression {
      * @param state  : The StateMachine that records the variables.
      * @return A double value returned by evaluating the expression.
      * @throws InterpretationException
+     * @author Rahul Ramesh
      */
     @Override
     public double interpret(TurtleModel turtle, StateMachine state) throws InterpretationException {
+        if (myToken.getString().equals("PenUp")) {
+            turtle.setPenDown(false);
+            return 0;
+        } else if (myToken.getString().equals("PenDown")) {
+            turtle.setPenDown(true);
+            return 1;
+        } else if (myToken.getString().equals("ShowTurtle")) {
+            turtle.setVisible(true);
+            return 1;
+        } else if (myToken.getString().equals("HideTurtle")) {
+            turtle.setVisible(false);
+            return 0;
+        } else if (myToken.getString().equals("Home")) {
+            var prevPen = turtle.isPenDown().getValue();
+            turtle.setPenDown(false);
+            double myX = turtle.getX();
+            double myY = turtle.getY();
+            turtle.setX(0);
+            turtle.move(true);
+            turtle.setY(0);
+            turtle.move(false);
+            turtle.setPenDown(prevPen);
+            return Math.sqrt(myX*myX + myY*myY);
+        } else if (myToken.getString().equals("ClearScreen")) {
+            Home hm = new Home();
+            turtle.clean();
+            turtle.setVisible(true);
+            return hm.update(turtle);
+        } 
         return 0;
     }
 
