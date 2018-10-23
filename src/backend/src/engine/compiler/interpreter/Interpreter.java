@@ -3,6 +3,7 @@ package engine.compiler.interpreter;
 import engine.commands.Command;
 
 import engine.compiler.slogoast.Expression;
+import engine.errors.InterpretationException;
 import model.TurtleModel;
 
 
@@ -17,17 +18,21 @@ import java.util.List;
  */
 public interface Interpreter {
     /**
-     * Read in the commands
+     * Read in the abstract syntax tree and evaluate the return value of the expression.
+     * Note this is a family of methods because it uses the Visitor pattern to employ different interpret methods for different kinds (subclasses) of Expressions.
      *
-     * @param ast: SLogoAST representing the command tree.
+     * @param astNode: SLogoAST representing the command tree.
+     * @throws InterpretationException
      */
-    void readCommands(Expression ast);
+    void interpret(Expression astNode) throws InterpretationException;
 
     /**
-     * This returns a list of actionable Command after the interpreter interprets the SLogoAST.
+     * This method evaluates the return value of the abstract syntax tree, not executing any of the commands.
+     * Note this is a family of methods because it uses the Visitor pattern to employ different evaluate methods for different kinds (subclasses) of Expressions.
      *
-     * @return A list of actionable Command.
+     * @param astNode: SLogoAST representing the parsed command.
+     * @return A double value returned by evaluating this command, however not executing any of these commands on the turtle.
+     * @throws InterpretationException
      */
-    List<Command<TurtleModel>> outputTurtleCommands();
-    void clearCommands();
+    double evaulate(Expression astNode) throws InterpretationException;
 }
