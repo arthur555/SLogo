@@ -1,5 +1,6 @@
 package engine.storage;
 
+import engine.compiler.slogoast.Expression;
 import engine.errors.InterpretationException;
 
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class CrudeStateMachine implements StateMachine {
     private Map<String, Double> doubleMap;
     private Map<String, Integer> integerMap;
     private Map<String, String> stringMap;
-    private Map<String, Function> functionMap;
+    private Map<String, Expression> functionMap;
 
     public CrudeStateMachine() {
         typeMap = new HashMap<>();

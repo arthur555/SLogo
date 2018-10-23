@@ -124,6 +124,10 @@ public class CrudeParser implements Parser {
         if (ifElsePair.getKey() != null) {
             return ifElsePair;
         }
+        Pair<Expression, Integer> userFunctionPair = parseUserFunction(index);
+        if (userFunctionPair.getKey() != null) {
+            return userFunctionPair;
+        }
         Pair<Expression, Integer> makeUserInstructionPair = parseMakeUserInstruction(index);
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
@@ -234,6 +238,23 @@ public class CrudeParser implements Parser {
             throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
         return new Pair<>(new VariableList(listStart, variableList, listEnd), listEndPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @return A pair of UserFunction and index for the UserFunction grammar.
+     */
+    private Pair<Expression, Integer> parseUserFunction(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Expression, Integer> variablePair = parseVariable(index);
+        if (variablePair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> expressionListPair = parseVariableList(variablePair.getValue());
+        if (expressionListPair.getKey() == null) {
+            return nullPair;
+        }
+        return new Pair<>(new UserFunction((Variable) variablePair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
     /**
