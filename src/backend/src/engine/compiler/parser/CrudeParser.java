@@ -132,10 +132,6 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() != null) {
             return expressionListPair;
         }
-        Pair<Expression, Integer> variableListPair = parseVariableList(index);
-        if (variableListPair.getKey() != null) {
-            return variableListPair;
-        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
