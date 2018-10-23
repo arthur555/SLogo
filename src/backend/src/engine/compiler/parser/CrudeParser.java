@@ -128,6 +128,10 @@ public class CrudeParser implements Parser {
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
         }
+        Pair<Expression, Integer> variableListPair = parseVariableList(index);
+        if (variableListPair.getKey() != null) {
+            return variableListPair;
+        }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
             return directPair;
@@ -195,11 +199,18 @@ public class CrudeParser implements Parser {
         if (commandPair.getKey() == null) {
             throw generateSyntaxException("Missing a valid variable name to store the user-made function after the \"to\" keyword", commandPair.getValue());
         }
-        Pair<Token, Integer> listStartPair = parseToken(commandPair.getValue(), "ListStart");
-        if (listStartPair.getKey() == null) {
-            throw generateSyntaxException("Missing a \"[\" symbol that indicates the start of the list of variables in a user-defined function", listStartPair.getValue());
+        Pair<Expression, Integer> variableListPair = parseVariableList(commandPair.getValue());
+        if (variableListPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for defining a list of variables for use with the user-defined function", variableListPair.getValue());
         }
-        Pair<>
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(variableListPair.getValue());
+        if (expressionListPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for defining a list of expressions for use with the user-defined function", expressionListPair.getValue());
+        }
+        return new Pair<>(new MakeUserInstruction(makeUserInstructionPair.getKey(), (Variable) commandPair.getKey(), (VariableList) variableListPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+    }
+
+    private Pair<Expression, Integer> parseVariableList(int index) {
     }
 
     /**
