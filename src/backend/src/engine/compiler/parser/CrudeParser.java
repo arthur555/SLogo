@@ -210,7 +210,34 @@ public class CrudeParser implements Parser {
         return new Pair<>(new MakeUserInstruction(makeUserInstructionPair.getKey(), (Variable) commandPair.getKey(), (VariableList) variableListPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
     }
 
-    private Pair<Expression, Integer> parseVariableList(int index) {
+    /**
+     * @param index
+     * @return A pair of VariableList and index for the VariableList grammar.
+     */
+    private Pair<Expression, Integer> parseVariableList(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> listStartPair = parseToken(index, "ListStart");
+        if (listStartPair.getKey() == null) {
+            return null;
+        }
+        int pointer = listStartPair.getValue();
+        List<Variable> variableList = new LinkedList<>();
+        while (true) {
+            Pair<Expression, Integer> listPair = parseVariable(pointer);
+            if (listPair.getKey() == null) {
+                break;
+            }
+            variableList.add((Variable) listPair.getKey());
+            pointer = listPair.getValue();
+        }
+        if (variableList.isEmpty()) {
+            throw generateSyntaxException("Missing a valid variable to constitute a valid list of variables", pointer);
+        }
+        Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
+        if (listEndPair.getKey() == null) {
+            throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
+        }
+        return new Pair<>(new VariableList(listStart, variableList, listEnd), listEndPair.getValue());
     }
 
     /**
@@ -308,7 +335,7 @@ public class CrudeParser implements Parser {
             pointer = listPair.getValue();
         }
         if (expressionList.isEmpty()) {
-            throw generateSyntaxException("Missing a valid expression after the \"[\" symbol to constitute a valid list of expressions", pointer);
+            throw generateSyntaxException("Missing a valid expression to constitute a valid list of expressions", pointer);
         }
         Pair<Token, Integer> listEndPair = parseToken(pointer, "ListEnd");
         if (listEndPair.getKey() == null) {
