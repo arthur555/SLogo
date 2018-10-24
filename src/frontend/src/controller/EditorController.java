@@ -1,9 +1,6 @@
 package controller;
 
 import engine.api.EngineAPI;
-import engine.errors.CommandSyntaxException;
-import engine.errors.InterpretationException;
-import engine.errors.UndefinedKeywordException;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import view.CommandView;
@@ -74,16 +71,10 @@ public class EditorController {
 
     private void submitCommand() {
         String cmd = commandView.model().replace(CommandView.CARET, BLANK).trim();
-        historyView.view().appendText(cmd+NEWLINE);
         commandView.clear();
         try {
             engineApi.processString(cmd);
-        } catch (ClassNotFoundException e) { e.printStackTrace(); } catch (UndefinedKeywordException e) {
-            e.printStackTrace();
-        } catch (InterpretationException e) {
-            e.printStackTrace();
-        } catch (CommandSyntaxException e) {
-            e.printStackTrace();
-        }
+            historyView.addText(cmd);
+        }  catch (Exception e) { historyView.displayError(e); }
     }
 }

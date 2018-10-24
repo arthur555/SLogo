@@ -4,11 +4,21 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import view.CommandView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class PrettyUI {
     private static final String DEFAULT_FONT = "consolas";
-    private static final int COMMAND_SIZE = 16;
+
+    private static final String CARET = CommandView.CARET;
     private static final String SPACE = " ";
+    private static final String EMPTY = "";
+
+    private static final String CONSTANT = "-?[0-9]+\\.?[0-9]*";
+    private static final String VARIABLE = ":[a-zA-Z_]+";
 
     private static final String PURPLE_BG = "purple-bg";
     private static final String LIGHT_PURPLE_BG = "light-purple-bg";
@@ -21,6 +31,11 @@ public class PrettyUI {
     private static final Color SYNTAX_NUMBER = Color.valueOf("#800020");
     private static final Color SYNTAX_COMMAND = Color.valueOf("#661bad");
     private static final Color SYNTAX_COMMENT = Color.valueOf("#afafaf");
+    private static final Color SYNTAX_ERROR = Color.valueOf("#d81c22");
+
+    private static final Set<String> keywords = Language.keywords();
+    private static final Set<String> commands = Language.nonKeywords();
+;
 
     private static Text textWithStyle(String text, String styleClass) {
         var ret = new Text(text);
@@ -28,19 +43,67 @@ public class PrettyUI {
         return ret;
     }
 
-    private static Text textWithColor(String text, Color color, int size) {
+    private static List<Text> textWithColor(String text, Color color, int size) {
         var ret = new Text(text);
         ret.setFill(color);
         ret.setFont(new Font(DEFAULT_FONT, size));
-        return ret;
+        return List.of(ret);
     }
 
-    public static Text plain(String text) { return textWithColor(text+SPACE, SYNTAX_PLAIN, COMMAND_SIZE); }
-    public static Text keyword(String text) { return textWithColor(text+SPACE, SYNTAX_KEYWORD, COMMAND_SIZE); }
-    public static Text variable(String text) { return textWithColor(text+SPACE, SYNTAX_VARIABLE, COMMAND_SIZE); }
-    public static Text number(String text) { return textWithColor(text+SPACE, SYNTAX_NUMBER, COMMAND_SIZE); }
-    public static Text command(String text) { return textWithColor(text+SPACE, SYNTAX_COMMAND, COMMAND_SIZE); }
-    public static Text comment(String text) { return textWithColor(text+SPACE, SYNTAX_COMMENT, COMMAND_SIZE); }
+    private static List<Text> textWithColorSplit(String text, String split, Color color, int size) {
+        var idx = text.indexOf(split);
+        if(idx < 0) return textWithColor(text+SPACE, color, size);
+        else {
+            var ret = new ArrayList<Text>();
+            var prefix = text.substring(0, idx);
+            var suffix = text.substring(idx+split.length(), text.length());
+            if(prefix.length() > 0) ret.addAll(textWithColor(prefix, color, size));
+            ret.addAll(textWithColor(split, SYNTAX_PLAIN, size));
+            ret.addAll(textWithColor(suffix+SPACE, color, size));
+            return ret;
+        }
+    }
+
+    public static List<Text> plain(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_PLAIN, size);
+    }
+    public static List<Text> keyword(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_KEYWORD, size);
+    }
+    public static List<Text> variable(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_VARIABLE, size);
+    }
+    public static List<Text> number(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_NUMBER, size);
+    }
+    public static List<Text> command(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_COMMAND, size);
+    }
+    public static List<Text> comment(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_COMMENT, size);
+    }
+    public static List<Text> error(String text, String split, int size) {
+        return textWithColorSplit(text, split, SYNTAX_ERROR, size);
+    }
+
+    public static List<Node> highlight(String text, int size) {
+        var elms = new ArrayList<Node>();
+        for(var line : text.split("\\n+")) {
+            if(line.startsWith("#")) {
+                elms.addAll(PrettyUI.comment(line, CARET, size));
+            } else {
+                for(var token : line.split("\\s+")) {
+                    var test = token.replace(CARET, EMPTY);
+                    if(keywords.contains(test)) elms.addAll(PrettyUI.keyword(token, CARET, size));
+                    else if(commands.contains(test)) elms.addAll(PrettyUI.command(token, CARET, size));
+                    else if(test.matches(CONSTANT)) elms.addAll(PrettyUI.number(token, CARET, size));
+                    else if(test.matches(VARIABLE)) elms.addAll(PrettyUI.variable(token, CARET, size));
+                    else elms.addAll(PrettyUI.plain(token, CARET, size));
+                } elms.add(new Text("\n"));
+            }
+        } elms.remove(elms.size()-1);
+        return elms;
+    }
 
     public static Text h1(String text) { return textWithStyle(text, H1); }
     public static Text p(String text) { return textWithStyle(text, P); }
