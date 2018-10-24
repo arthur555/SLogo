@@ -3,8 +3,7 @@ package engine.compiler.storage;
 import engine.compiler.slogoast.Expression;
 import engine.errors.InterpretationException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This StateMachine records variables that the parser can use. For example, it records "x = 3".
@@ -18,13 +17,23 @@ public class CrudeStateMachine implements StateMachine {
     private Map<String, String> stringMap;
     private Map<String, Expression> functionMap;
 
+    private Map<String, Object> aggregateMap;
+
+    private List<StateMachineObserver> observers;
+
     public CrudeStateMachine() {
         typeMap = new HashMap<>();
         doubleMap = new HashMap<>();
         integerMap = new HashMap<>();
         stringMap = new HashMap<>();
         functionMap = new HashMap<>();
+        aggregateMap = new HashMap<>();
+
+        observers = new ArrayList<>();
     }
+
+    public void register(StateMachineObserver observer) { observers.add(observer); }
+    public void pushAlarm() { observers.forEach(StateMachineObserver::notifyListener);}
 
     /**
      * Set a double value for a variable.
@@ -44,7 +53,9 @@ public class CrudeStateMachine implements StateMachine {
             }
         }
         doubleMap.put(key, value);
+        aggregateMap.put(key, value);
         typeMap.put(key, "Double");
+        pushAlarm();
     }
 
     /**
@@ -65,7 +76,9 @@ public class CrudeStateMachine implements StateMachine {
             }
         }
         integerMap.put(key, value);
+        aggregateMap.put(key, value);
         typeMap.put(key, "Integer");
+        pushAlarm();
     }
 
     /**
@@ -86,7 +99,9 @@ public class CrudeStateMachine implements StateMachine {
             }
         }
         stringMap.put(key, value);
+        aggregateMap.put(key, value);
         typeMap.put(key, "Integer");
+        pushAlarm();
     }
 
     /**
@@ -118,7 +133,8 @@ public class CrudeStateMachine implements StateMachine {
             functionMap.remove(key);
         } else if (type.equals("String")) {
             stringMap.remove(key);
-        }
+        } aggregateMap.remove(key);
+        pushAlarm();
     }
 
     /**
@@ -130,7 +146,12 @@ public class CrudeStateMachine implements StateMachine {
         doubleMap.clear();
         functionMap.clear();
         stringMap.clear();
+        aggregateMap.clear();
+        pushAlarm();
     }
+
+    @Override
+    public Map<String, Object> listOfVariables() { return Collections.unmodifiableMap(aggregateMap); }
 
     /**
      * Present the internal storage of the StateMachine in a list format, separated by newline.
@@ -138,7 +159,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return A String representation of the StateMachine.
      */
     @Override
-    public String listOfVariables() {
+    public String toString() {
         String ans = "";
         for (Map.Entry entry : integerMap.entrySet()) {
             ans += entry.getKey() + " = " + entry.getValue() + "\n";

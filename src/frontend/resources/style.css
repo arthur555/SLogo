@@ -1,10 +1,15 @@
-.purple-bg {
-    -fx-background-color: #e8e7ef;
+.bg-theme {
+    -fx-background-color: #fcfbe8;
     -fx-padding: 5 5 5 5;
 }
 
-.light-purple-bg {
-    -fx-background-color: #f8f7ff;
+.light-bg-theme {
+    -fx-background-color: #f5ffff;
+    -fx-padding: 5 5 5 5;
+}
+
+.lit-bg-theme {
+    -fx-background-color: #f5ffff;
     -fx-padding: 5 5 5 5;
 }
 
@@ -25,12 +30,12 @@
 
 .sidebar {
     -fx-padding: 5 5 5 10;
-    -fx-background-color: #f8f7ff;
+    -fx-background-color: #e6eff7;
     /*-fx-background-color: white;*/
 }
 
 .sidebar-box {
-    -fx-border-color: #f8f7ff;
+    -fx-border-color: #e6eff7;
     -fx-border-type: outside;
     -fx-border-width: 3pt;
     -fx-border-radius: 12px;
@@ -44,8 +49,19 @@
 }
 
 .variable-view {
-    -fx-background-color: #f8f7ff;
-    -fx-padding: 0 10 0 10;
+    -fx-padding: 10 10 10 10;
+}
+
+.variable-view-bg {
+    -fx-background: #e8eefc;
+}
+
+.history-view {
+    -fx-padding: 10 10 10 10;
+}
+
+.history-view-bg {
+    -fx-background: #e8eefc;
 }
 
 .command-view {
@@ -53,11 +69,7 @@
 }
 
 .command-view-bg {
-    -fx-background: #f8f7ff;
-}
-
-.history-view {
-    -fx-control-inner-background: #f8f7ff;
+    -fx-background: #eff3fc;
 }
 
 /* dirty hacks to make the color picker work */

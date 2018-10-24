@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.value.ObservableValue;
 import view.reference.ReferenceDialog;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -53,10 +54,15 @@ public class SidebarController {
         sidebar.turtleImageButton().setOnMouseClicked(this::turtleImageOnClick);
         sidebar.languageButton().setOnMouseClicked(this::languageOnClick);
         sidebar.helpButton().setOnMouseClicked(this::helpOnClick);
+        sidebar.speedSlider().valueProperty().addListener(this::speedOnChange);
     }
 
     private void backgroundColorOnChange(ActionEvent e) {
         turtleView.setBackgroundColor(sidebar.backgroundColor().getValue());
+    }
+
+    private void speedOnChange(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        turtleView.setDuration(newValue.doubleValue());
     }
 
     private void penColorOnChange(ActionEvent e) {

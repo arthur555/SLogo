@@ -29,7 +29,7 @@ class ReferenceDialogPane extends DialogPane {
     ReferenceDialogPane() {
         setMinWidth(DIALOG_WIDTH);
         setMinHeight(DIALOG_HEIGHT);
-        PrettyUI.lightPurplify(this);
+        PrettyUI.lightBgTheme(this);
 
         var root = new GridPane();
         root.setMinWidth(DIALOG_WIDTH);
@@ -103,7 +103,7 @@ class ReferenceDialogPane extends DialogPane {
                 var item = new VBox(ITEM_PADDING);
                 item.getChildren().add(PrettyUI.h1(prop));
                 item.getChildren().add(PrettyUI.p(info.get(prop), DIALOG_WIDTH - TREE_VIEW_WIDTH));
-                PrettyUI.purplify(item);
+                PrettyUI.bgTheme(item);
                 box.getChildren().add(item);
             } return box;
         }
