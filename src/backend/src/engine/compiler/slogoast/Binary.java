@@ -1,13 +1,16 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
+import engine.errors.InterpretationException;
+import model.TurtleModel;
 
 /**
  * This class is an AST node representing binary operation that takes two expressions as commands.
  *
  * @author Haotian Wang
  */
-public class Binary extends Expression {
+public class Binary implements Expression {
     private Token myToken;
     private Expression myFirstExpr;
     private Expression mySecondExpr;
@@ -26,5 +29,29 @@ public class Binary extends Expression {
     @Override
     public String toString() {
         return String.format("{%s %s %s}", myToken.getString(), myFirstExpr.toString(), mySecondExpr.toString());
+    }
+
+    /**
+     * This method lets the AST act on a Turtle model.
+     *
+     * @param turtle : The TurtleModel that is affected by applying the abstract syntax tree.
+     * @param state  : The StateMachine that records the variables.
+     * @throws InterpretationException
+     */
+    @Override
+    public double interpret(TurtleModel turtle, StateMachine state) throws InterpretationException {
+        return evaluate(state);
+    }
+
+    /**
+     * This method evaluates the return value of the expression.
+     *
+     * @param state : The StateMachine that records the variables.
+     * @return A double value returned by evaluating the expression.
+     * @throws InterpretationException
+     */
+    @Override
+    public double evaluate(StateMachine state) throws InterpretationException {
+        return myFirstExpr.evaluate(state) + mySecondExpr.evaluate(state);
     }
 }
