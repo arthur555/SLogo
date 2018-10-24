@@ -41,4 +41,7 @@ public class ASTEngineAPI implements EngineAPI {
         Expression command = parser.returnAST();
         command.interpret(turtle, stateMachine);
     }
+
+    @Override
+    public StateMachine stateMachine() { return stateMachine; }
 }

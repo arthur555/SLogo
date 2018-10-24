@@ -1,29 +1,29 @@
 package view;
 
-import javafx.collections.MapChangeListener;
+import engine.compiler.storage.StateMachine;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import view.utils.PrettyUI;
+import engine.compiler.storage.StateMachineObserver;
 
-public class VariableView implements MapChangeListener<String, Object> {
+public class VariableView implements StateMachineObserver {
     private static final int VARIABLE_VIEW_WIDTH = HistoryView.HISTORY_VIEW_WIDTH - 20;
     private static final int KEY_VALUE_MARGIN = 150;
     private static final int VALUE_WIDTH = 150;
 
     private ScrollPane root;
     private VBox variableView;
+    private StateMachine stateMachine;
 
-    VariableView() {
+    VariableView(StateMachine stateMachine) {
         variableView = new VBox();
         variableView.setPrefWidth(VARIABLE_VIEW_WIDTH);
         variableView.getStyleClass().add("variable-view");
 
-        for(int i = 0 ; i < 100 ; i ++) {
-            variableView.getChildren().add(keyValueText(variableView.getChildren().size(), "test"+i, i));
-        }
+        this.stateMachine = stateMachine;
+        this.stateMachine.register(this);
 
         root = new ScrollPane();
         root.setContent(variableView);
@@ -32,9 +32,9 @@ public class VariableView implements MapChangeListener<String, Object> {
     public ScrollPane view() { return root; }
 
     @Override
-    public void onChanged(Change<? extends String, ? extends Object> change) {
+    public void notifyListener() {
         variableView.getChildren().clear(); // we can optimize this if we need to
-        for(var e : change.getMap().entrySet()) {
+        for(var e : stateMachine.listOfVariables().entrySet()) {
             variableView.getChildren().add(
                     keyValueText(variableView.getChildren().size(), e.getKey(), e.getValue())
             );
@@ -57,4 +57,5 @@ public class VariableView implements MapChangeListener<String, Object> {
         grid.add(valuePane, 1, 0);
         return grid;
     }
+
 }

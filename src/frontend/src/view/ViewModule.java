@@ -1,5 +1,6 @@
 package view;
 
+import engine.api.EngineAPI;
 import fake_model.ModelModule;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -18,10 +19,10 @@ public class ViewModule {
     private HistoryView historyView;
     private CommandView commandView;
 
-    public ViewModule(ModelModule modelModule) {
+    public ViewModule(ModelModule modelModule, EngineAPI engineAPI) {
         sidebarView = new SidebarView();
         turtleView = new TurtleView(modelModule.turtleModel());
-        variableView = new VariableView();
+        variableView = new VariableView(engineAPI.stateMachine());
         historyView = new HistoryView();
         commandView = new CommandView();
 
