@@ -3,8 +3,6 @@ package engine.api;
 import engine.commands.Command;
 import model.TurtleModel;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class FakeEngineAPI implements EngineAPI {
     TurtleModel turtleModel;
 

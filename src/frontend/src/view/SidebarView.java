@@ -1,7 +1,10 @@
 package view;
 
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -48,6 +51,8 @@ public class SidebarView {
     private List<StackPane> buttons;
     private List<Tooltip> tooltips;
     private ColorPicker backgroundColor, penColor;
+    private StackPane speedWrapper;
+    private Slider speed;
 
     SidebarView() {
         root = new Pane();
@@ -62,7 +67,17 @@ public class SidebarView {
         penColor.getStyleClass().add("pen-color-button");
         setupButtons();
 
+        speedWrapper = new StackPane();
+        speed = new Slider(0.1, 10, 0.1); // TODO: remove magic values
+        speed.setOrientation(Orientation.VERTICAL);
+        speed.setShowTickMarks(true);
+        speed.setShowTickLabels(true);
+        setTooltip(speed, "Adjust the duration of single movement");
+        speedWrapper.getChildren().add(speed);
+        speedWrapper.setAlignment(Pos.CENTER);
+
         icons.getChildren().addAll(buttons);
+        icons.getChildren().add(speedWrapper);
         root.getChildren().add(icons);
     }
 
@@ -104,4 +119,5 @@ public class SidebarView {
     public ColorPicker penColor() { return penColor; }
     public StackPane languageButton() { return buttons.get(LANGUAGE_BUTTON); }
     public StackPane helpButton() { return buttons.get(HELP_BUTTON); }
+    public Slider speedSlider() { return speed; }
 }
