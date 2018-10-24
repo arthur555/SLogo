@@ -20,8 +20,9 @@ public class PrettyUI {
     private static final String CONSTANT = "-?[0-9]+\\.?[0-9]*";
     private static final String VARIABLE = ":[a-zA-Z_]+";
 
-    private static final String PURPLE_BG = "purple-bg";
-    private static final String LIGHT_PURPLE_BG = "light-purple-bg";
+    private static final String BG_THEME = "bg-theme";
+    private static final String LIGHT_BG_THEME = "light-bg-theme";
+    private static final String LIT_BG_THEME = "lit-bg-theme";
     private static final String H1 = "text-header";
     private static final String P = "text-body";
 
@@ -82,8 +83,8 @@ public class PrettyUI {
     public static List<Text> comment(String text, String split, int size) {
         return textWithColorSplit(text, split, SYNTAX_COMMENT, size);
     }
-    public static List<Text> error(String text, String split, int size) {
-        return textWithColorSplit(text, split, SYNTAX_ERROR, size);
+    public static List<Text> error(String text, int size) {
+        return textWithColor(text, SYNTAX_ERROR, size);
     }
 
     public static List<Node> highlight(String text, int size) {
@@ -113,9 +114,10 @@ public class PrettyUI {
         return ret;
     }
 
-    public static void purplify(Node ugly) { ugly.getStyleClass().add(PURPLE_BG); }
-    public static void lightPurplify(Node ugly) { ugly.getStyleClass().add(LIGHT_PURPLE_BG); }
-    public static void alternatePurple(int idx, Node ugly) {
-        ugly.getStyleClass().add(idx % 2 == 0 ? LIGHT_PURPLE_BG : PURPLE_BG);
+    public static void bgTheme(Node ugly) { ugly.getStyleClass().add(BG_THEME); }
+    public static void lightBgTheme(Node ugly) { ugly.getStyleClass().add(LIGHT_BG_THEME); }
+    public static void litBgTheme(Node ugly) { ugly.getStyleClass().add(LIT_BG_THEME); }
+    public static void alternateBgTheme(int idx, Node ugly) {
+        ugly.getStyleClass().add(idx % 2 == 0 ? LIGHT_BG_THEME : BG_THEME);
     }
 }

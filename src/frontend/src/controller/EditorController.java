@@ -73,8 +73,10 @@ public class EditorController {
         String cmd = commandView.model().replace(CommandView.CARET, BLANK).trim();
         commandView.clear();
         try {
-            engineApi.processString(cmd);
-            historyView.addText(cmd);
-        }  catch (Exception e) { historyView.displayError(e); }
+            double ret = engineApi.processString(cmd);
+            historyView.addText(cmd, ret);
+        }  catch (Exception e) {
+            historyView.displayError(cmd, e);
+        }
     }
 }

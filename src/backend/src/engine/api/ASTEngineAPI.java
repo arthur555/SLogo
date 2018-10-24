@@ -34,12 +34,12 @@ public class ASTEngineAPI implements EngineAPI {
     }
 
     @Override
-    public void processString(String str) throws ClassNotFoundException, UndefinedKeywordException, CommandSyntaxException, InterpretationException {
+    public double processString(String str) throws ClassNotFoundException, UndefinedKeywordException, CommandSyntaxException, InterpretationException {
         lexer.readString(str);
         List<Token> listOfTokens = lexer.getTokens();
         parser.readTokens(listOfTokens);
         Expression command = parser.returnAST();
-        command.interpret(turtle, stateMachine);
+        return command.interpret(turtle, stateMachine);
     }
 
     @Override

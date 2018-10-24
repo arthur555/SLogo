@@ -1,10 +1,15 @@
-.purple-bg {
-    -fx-background-color: #e8e7ef;
+.bg-theme {
+    -fx-background-color: #fcfbe8;
     -fx-padding: 5 5 5 5;
 }
 
-.light-purple-bg {
-    -fx-background-color: #f8f7ff;
+.light-bg-theme {
+    -fx-background-color: #f5ffff;
+    -fx-padding: 5 5 5 5;
+}
+
+.lit-bg-theme {
+    -fx-background-color: #f5ffff;
     -fx-padding: 5 5 5 5;
 }
 
@@ -44,17 +49,19 @@
 }
 
 .variable-view {
-    -fx-background-color: #f8f7ff;
-    -fx-padding: 0 10 0 10;
+    -fx-padding: 10 10 10 10;
+}
+
+.variable-view-bg {
+    -fx-background: #e8eefc;
 }
 
 .history-view {
     -fx-padding: 10 10 10 10;
-    -fx-control-inner-background: #f8f7ff;
 }
 
 .history-view-bg {
-    -fx-background: #f8f7ff;
+    -fx-background: #e8eefc;
 }
 
 .command-view {

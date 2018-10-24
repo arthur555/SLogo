@@ -2,6 +2,7 @@ package view;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import view.utils.PrettyUI;
 
@@ -30,17 +31,21 @@ public class HistoryView {
 
     public ScrollPane view() { return root; }
 
-    public void addText(String text) {
+    public void addText(String text, double retVal) {
         var flo = new TextFlow();
-        PrettyUI.purplify(flo);
+        PrettyUI.litBgTheme(flo);
         flo.getChildren().addAll(PrettyUI.highlight(text.trim(), FONT_SIZE));
+        flo.getChildren().add(new Text("\n>> "));
+        flo.getChildren().addAll(PrettyUI.number(String.valueOf(retVal), " ", FONT_SIZE));
         display.getChildren().add(flo);
     }
 
-    public void displayError(Exception e) {
+    public void displayError(String text, Exception e) {
         var flo = new TextFlow();
-        PrettyUI.purplify(flo);
-        flo.getChildren().addAll(PrettyUI.error(e.getMessage().trim(), "", FONT_SIZE));
+        PrettyUI.litBgTheme(flo);
+        flo.getChildren().addAll(PrettyUI.highlight(text.trim(), FONT_SIZE));
+        flo.getChildren().add(new Text("\n"));
+        flo.getChildren().addAll(PrettyUI.error(e.getMessage().trim(), FONT_SIZE));
         display.getChildren().add(flo);
     }
 
