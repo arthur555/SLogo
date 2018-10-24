@@ -37,11 +37,9 @@ public class VariableView implements StateMachineObserver {
     @Override
     public void notifyListener() {
         variableView.getChildren().clear(); // we can optimize this if we need to
-        for(var e : stateMachine.listOfVariables().entrySet()) {
-            variableView.getChildren().add(
-                    keyValueText(variableView.getChildren().size(), e.getKey(), e.getValue())
-            );
-        }
+        stateMachine.listOfVariables().forEach( (k, v) ->
+                variableView.getChildren().add(keyValueText(variableView.getChildren().size(), k, v))
+        );
     }
 
     private GridPane keyValueText(int idx, String key, Object value) {
