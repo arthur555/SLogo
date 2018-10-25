@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.impl.TurtleModelImpl;
+import model.TurtleModel;
 
-public class MakeVariable implements Command <TurtleModelImpl> {
+public class MakeVariable implements Command <TurtleModel> {
     private String key;
     private double value;
 
@@ -12,8 +12,8 @@ public class MakeVariable implements Command <TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
-        turtleModel.getMemory().setDouble(key, value);
+    public double update(TurtleModel turtleModel) {
+        turtleModel.memory().setDouble(key, value);
         return value;
     }
 }

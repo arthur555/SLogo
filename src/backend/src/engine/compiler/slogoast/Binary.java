@@ -3,6 +3,7 @@ package engine.compiler.slogoast;
 import engine.compiler.Token;
 import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
+import model.TurtleManager;
 import model.TurtleModel;
 
 /**
@@ -31,16 +32,16 @@ public class Binary implements Expression {
         return String.format("{%s %s %s}", myToken.getString(), myFirstExpr.toString(), mySecondExpr.toString());
     }
 
+
     /**
      * This method lets the AST act on a Turtle model.
      *
-     * @param turtle : The TurtleModel that is affected by applying the abstract syntax tree.
-     * @param state  : The StateMachine that records the variables.
+     * @param turtleManager : The TurtleManager that is affected by applying the abstract syntax tree.
      * @throws InterpretationException
      */
     @Override
-    public double interpret(TurtleModel turtle, StateMachine state) throws InterpretationException {
-        return evaluate(state);
+    public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        return evaluate(turtleManager.memory());
     }
 
     /**

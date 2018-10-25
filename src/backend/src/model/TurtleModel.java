@@ -1,7 +1,7 @@
 package model;
 
+import engine.compiler.storage.StateMachine;
 import javafx.beans.property.SimpleBooleanProperty;
-
 
 public interface TurtleModel {
     double TRUE = 1;
@@ -9,7 +9,7 @@ public interface TurtleModel {
 
     double setPenDown(boolean down);
     double setVisible(boolean visible);
-    double moveTo(double x, double y);
+    double moveTo(double x, double y, boolean forcePenUp);
     double setAngle(double angle);
     double getX();
     double getY();
@@ -17,12 +17,11 @@ public interface TurtleModel {
 
     boolean isPenDown();
     boolean isVisible();
-    boolean isMove();
     SimpleBooleanProperty isPenDownModel();
     SimpleBooleanProperty isVisibleModel();
-    SimpleBooleanProperty isMoveModel();
     PosAndAngle posAndAngleModel();
 
+    StateMachine memory();
     void registerClearListener(ClearListener cl);
-    void clear();
+    double clear();
 }

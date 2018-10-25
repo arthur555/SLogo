@@ -1,14 +1,14 @@
 package engine.commands;
 
-import model.impl.TurtleModelImpl;
+import model.TurtleModel;
 
-public class ArcTangent implements Command<TurtleModelImpl> {
+public class ArcTangent implements Command<TurtleModel> {
     private double degree;
     public ArcTangent(double d){
         degree = d;
     }
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return Math.atan(degree);
     }
 }

@@ -1,4 +1,5 @@
 package model.impl;
+import engine.compiler.storage.StateMachine;
 import javafx.beans.property.SimpleBooleanProperty;
 import model.ClearListener;
 import model.PosAndAngle;
@@ -8,18 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TurtleModelImpl implements TurtleModel {
-    private SimpleBooleanProperty move;
     private SimpleBooleanProperty visible;
     private SimpleBooleanProperty penDown;
     private PosAndAngle pa;
     private List<ClearListener> listeners;
+    private StateMachine memory;
 
-    public TurtleModelImpl(){
+    public TurtleModelImpl(StateMachine memory){
         listeners = new ArrayList<>();
         pa = new PosAndAngle(0, 0, 0);
         visible = new SimpleBooleanProperty(true);
         penDown = new SimpleBooleanProperty(true);
-        move = new SimpleBooleanProperty(false);
+        this.memory = memory;
     }
 
     public double setPenDown(boolean down){
@@ -31,11 +32,14 @@ public class TurtleModelImpl implements TurtleModel {
         return visible ? TRUE : FALSE;
     }
 
-    public double moveTo(double x, double y){
+    public double moveTo(double x, double y, boolean forcePenUp){
         var dx = x - pa.x();
         var dy = y - pa.y();
         double dist = Math.sqrt(dx*dx + dy*dy);
+        var prevPen = penDown;
+        if(forcePenUp) setPenDown(false);
         pa.setXY(x, y);
+        setPenDown(prevPen.getValue());
         return dist;
     }
 
@@ -50,12 +54,12 @@ public class TurtleModelImpl implements TurtleModel {
     public double getAngle(){return pa.angle();}
     public boolean isPenDown(){ return penDown.getValue(); }
     public boolean isVisible(){ return visible.getValue(); }
-    public boolean isMove(){ return move.getValue(); }
     public SimpleBooleanProperty isPenDownModel(){ return penDown; }
     public SimpleBooleanProperty isVisibleModel(){ return visible; }
-    public SimpleBooleanProperty isMoveModel(){ return move; }
     public PosAndAngle posAndAngleModel() { return pa;}
 
+    public StateMachine memory() { return memory; }
+
     public void registerClearListener(ClearListener cl) { listeners.add(cl); }
-    public void clear() { listeners.forEach(ClearListener::clear); }
+    public double clear() { listeners.forEach(ClearListener::clear); return 0; }
 }

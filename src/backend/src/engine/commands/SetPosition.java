@@ -16,10 +16,7 @@ public class SetPosition implements Command<TurtleModel> {
     public double update(TurtleModel turtleModel) {
         double myX = turtleModel.getX();
         double myY = turtleModel.getY();
-        turtleModel.setX(x);
-        turtleModel.move(true);
-        turtleModel.setY(y);
-        turtleModel.move(false);
+        turtleModel.moveTo(x, y, false);
         return Math.sqrt((myX - x)*(myX-x) + (myY - y)*(myY - y));
 
     }

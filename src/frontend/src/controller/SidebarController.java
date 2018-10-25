@@ -1,7 +1,6 @@
 package controller;
 
 import app.TabbedApp;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -29,6 +28,7 @@ public class SidebarController {
     private CanvasView canvasView;
 
     private EditorController editorController;
+    private CanvasController canvasController;
 
     private String lang;
 
@@ -46,9 +46,11 @@ public class SidebarController {
     }
 
     public void registerControllers(
-            EditorController editorController
+            EditorController editorController,
+            CanvasController canvasController
     ) {
         this.editorController = editorController;
+        this.canvasController = canvasController;
     }
 
     private void setupHandlers() {
@@ -68,7 +70,7 @@ public class SidebarController {
     }
 
     private void penColorOnChange(ActionEvent e) {
-        turtleView.setPenColor(sidebar.backgroundColor().getValue());
+        canvasController.setPenColor(sidebar.backgroundColor().getValue());
     }
 
     private void turtleImageOnClick(MouseEvent me) {
@@ -81,7 +83,7 @@ public class SidebarController {
             var image = ImageUtils.getImageFromAbsUrl(is, TurtleView.TURTLE_SIZE, TurtleView.TURTLE_SIZE);
             if(image.getException() != null)
                 throw new RuntimeException("The chosen image file is either not an image or corrupted");
-            turtleView.setTurtleImage(image);
+            canvasController.setTurtleImage(image);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
