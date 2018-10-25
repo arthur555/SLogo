@@ -41,6 +41,9 @@ public class IfElse implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (myToken.getString().equals("IfElse")) {
+            // TODO
+        }
         return 0;
     }
 

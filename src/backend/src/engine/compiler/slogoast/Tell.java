@@ -26,6 +26,9 @@ public class Tell implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (myToken.getString().equals("Tell")) {
+            // TODO
+        }
         return 0;
     }
 
