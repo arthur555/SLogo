@@ -3,12 +3,12 @@ package app;
 import controller.ControllerModule;
 import engine.api.ASTEngineAPI;
 import engine.api.EngineAPI;
-import fake_model.ModelModule;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import model.ModelModule;
 import view.ViewModule;
 
 import java.util.ResourceBundle;
@@ -43,7 +43,7 @@ public class SLogoApp extends Application implements TabbedApp {
     @Override
     public void newInstance() {
         ModelModule modelModule = new ModelModule();
-        EngineAPI engineApi = new ASTEngineAPI(modelModule.turtleModel());
+        EngineAPI engineApi = new ASTEngineAPI(modelModule.turtleManager());
         ViewModule viewModule = new ViewModule(modelModule, engineApi);
         new ControllerModule(this, modelModule, viewModule, engineApi);
         var tab = new Tab("Untitled "+tabIndex++);

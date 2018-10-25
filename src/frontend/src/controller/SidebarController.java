@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import view.CanvasView;
 import view.SidebarView;
 import view.TurtleView;
 import view.reference.ReferenceDialog;
@@ -25,9 +26,8 @@ public class SidebarController {
     private TabbedApp app;
 
     private SidebarView sidebar;
-    private TurtleView turtleView;
+    private CanvasView canvasView;
 
-    private TurtleController turtleController;
     private EditorController editorController;
 
     private String lang;
@@ -36,20 +36,18 @@ public class SidebarController {
             String lang,
             TabbedApp app,
             SidebarView sidebar,
-            TurtleView turtleView
+            CanvasView canvasView
     ) {
         this.app = app;
         this.lang = lang;
         this.sidebar = sidebar;
-        this.turtleView = turtleView;
+        this.canvasView = canvasView;
         setupHandlers();
     }
 
     public void registerControllers(
-            TurtleController turtleController,
             EditorController editorController
     ) {
-        this.turtleController = turtleController;
         this.editorController = editorController;
     }
 
@@ -60,17 +58,13 @@ public class SidebarController {
         sidebar.turtleImageButton().setOnMouseClicked(this::turtleImageOnClick);
         sidebar.languageButton().setOnMouseClicked(this::languageOnClick);
         sidebar.helpButton().setOnMouseClicked(this::helpOnClick);
-        sidebar.speedSlider().valueProperty().addListener(this::speedOnChange);
+        canvasView.durationModel().bind(sidebar.speedSlider().valueProperty());
     }
 
     private void newInstanceOnClick(MouseEvent e) { app.newInstance(); }
 
     private void backgroundColorOnChange(ActionEvent e) {
-        turtleView.setBackgroundColor(sidebar.backgroundColor().getValue());
-    }
-
-    private void speedOnChange(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        turtleView.setDuration(newValue.doubleValue());
+        canvasView.setBackgroundColor(sidebar.backgroundColor().getValue());
     }
 
     private void penColorOnChange(ActionEvent e) {

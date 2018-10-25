@@ -1,6 +1,6 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.impl.TurtleModelImpl;
 
 public class MakeVariable implements Command <TurtleModelImpl> {
     private String key;

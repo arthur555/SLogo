@@ -1,10 +1,9 @@
 package model;
 
+import model.impl.TurtleManagerImpl;
+
 public class ModelModule {
-    private TurtleModel turtleModel;
-
-    public ModelModule() { turtleModel = new TurtleModelImpl(); }
-
-
-    public TurtleModel turtleModel() { return turtleModel; }
+    private TurtleManager turtleManager;
+    public ModelModule() { turtleManager = new TurtleManagerImpl(); }
+    public TurtleManager turtleManager() { return turtleManager; }
 }

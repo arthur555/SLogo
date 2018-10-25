@@ -40,32 +40,23 @@ public class Direct implements Expression {
     @Override
     public double interpret(TurtleModel turtle, StateMachine state) throws InterpretationException {
         if (myToken.getString().equals("PenUp")) {
-            turtle.setPenDown(false);
-            return 0;
+            return turtle.setPenDown(TurtleModel.TRUE);
         } else if (myToken.getString().equals("PenDown")) {
-            turtle.setPenDown(true);
-            return 1;
+            return turtle.setPenDown(TurtleModel.TRUE);
         } else if (myToken.getString().equals("ShowTurtle")) {
-            turtle.setVisible(true);
-            return 1;
+            return turtle.setVisible(TurtleModel.TRUE);
         } else if (myToken.getString().equals("HideTurtle")) {
-            turtle.setVisible(false);
-            return 0;
+            return turtle.setVisible(TurtleModel.FALSE);
         } else if (myToken.getString().equals("Home")) {
-            var prevPen = turtle.isPenDown().getValue();
-            turtle.setPenDown(false);
-            double myX = turtle.getX();
-            double myY = turtle.getY();
-            turtle.setX(0);
-            turtle.move(true);
-            turtle.setY(0);
-            turtle.move(false);
+            var prevPen = turtle.isPenDown();
+            turtle.setPenDown(TurtleModel.FALSE);
+            double dist = turtle.moveTo(0, 0);
             turtle.setPenDown(prevPen);
-            return Math.sqrt(myX*myX + myY*myY);
+            return dist;
         } else if (myToken.getString().equals("ClearScreen")) {
             Home hm = new Home();
             turtle.clean();
-            turtle.setVisible(true);
+            turtle.setVisible(TurtleModel.TRUE);
             return hm.update(turtle);
         } 
         return 0;

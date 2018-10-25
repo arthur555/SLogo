@@ -1,7 +1,6 @@
 package engine.commands;
 
-import model.TurtleModel;
-import model.TurtleModelImpl;
+import model.impl.TurtleModelImpl;
 
 import java.util.ArrayList;
 import java.util.List;

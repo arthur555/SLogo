@@ -1,22 +1,28 @@
 package model;
 
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.ObservableList;
+
 
 public interface TurtleModel {
-    void setPenDown(boolean down);
-    void setVisible(boolean visible);
-    void move(boolean move);
-    void setX(double x);
-    void setY(double y);
-    void setAngle(double angle);
-    void clean();
+    double TRUE = 1;
+    double FALSE = 0;
+
+    double setPenDown(boolean down);
+    double setVisible(boolean visible);
+    double moveTo(double x, double y);
+    double setAngle(double angle);
     double getX();
     double getY();
     double getAngle();
-    SimpleBooleanProperty getClean();
-    SimpleBooleanProperty isPenDown();
-    SimpleBooleanProperty isVisible();
-    SimpleBooleanProperty isMove();
-    ObservableList<Double> getPoints ();
+
+    boolean isPenDown();
+    boolean isVisible();
+    boolean isMove();
+    SimpleBooleanProperty isPenDownModel();
+    SimpleBooleanProperty isVisibleModel();
+    SimpleBooleanProperty isMoveModel();
+    PosAndAngle posAndAngleModel();
+
+    void registerClearListener(ClearListener cl);
+    void clear();
 }

@@ -2,10 +2,9 @@ package controller;
 
 import app.TabbedApp;
 import engine.api.EngineAPI;
-import fake_model.ModelModule;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import model.ModelModule;
 import view.ViewModule;
 
 import java.util.Collections;
@@ -27,7 +26,6 @@ public class ControllerModule {
 
     private static final String DEFAULT_LANG = "English";
 
-    private TurtleController turtleController;
     private EditorController editorController;
     private SidebarController sidebarController;
 
@@ -37,14 +35,13 @@ public class ControllerModule {
             ViewModule viewModule,
             EngineAPI engineApi
     ) {
-        turtleController = new TurtleController(modelModule.turtleModel(), viewModule.turtleView());
         editorController = new EditorController(DEFAULT_LANG, viewModule.commandView(), viewModule.historyView(), engineApi);
-        sidebarController = new SidebarController(DEFAULT_LANG, app, viewModule.sidebarView(), viewModule.turtleView());
+        sidebarController = new SidebarController(DEFAULT_LANG, app, viewModule.sidebarView(), viewModule.canvasView());
         assemble();
         setupTopLevelHandler(viewModule.mainView().view());
     }
 
-    private void assemble() { sidebarController.registerControllers(turtleController, editorController); }
+    private void assemble() { sidebarController.registerControllers(editorController); }
 
     private void setupTopLevelHandler(Node topLevelNode) {
         topLevelNode.addEventFilter(KeyEvent.KEY_PRESSED, editorController::handleKeyPressed);

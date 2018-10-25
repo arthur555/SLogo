@@ -17,14 +17,14 @@ public class MainView {
 
     MainView(
             SidebarView sidebarView,
-            TurtleView turtleView,
+            CanvasView canvasView,
             VariableView variableView,
             HistoryView historyView,
             CommandView commandView
     ) {
         setupRoot();
         assembleRight(variableView, historyView);
-        assembleCenter(turtleView, commandView);
+        assembleCenter(canvasView, commandView);
 
         root.add(sidebarView.view(), 0, 0);
         root.add(center, 1, 0);
@@ -34,11 +34,11 @@ public class MainView {
     private void setupRoot() {
         root = new GridPane();
         root.getColumnConstraints().add(new ColumnConstraints(SidebarView.SIDEBAR_VIEW_WIDTH));
-        root.getColumnConstraints().add(new ColumnConstraints(TurtleView.TURTLE_VIEW_WIDTH));
+        root.getColumnConstraints().add(new ColumnConstraints(CanvasView.TURTLE_VIEW_WIDTH));
         root.getStyleClass().add(ROOT_CSS_CLASS);
     }
 
-    private void assembleCenter(TurtleView turtleView, CommandView commandView) {
+    private void assembleCenter(CanvasView canvasView, CommandView commandView) {
         center = new SplitPane();
         center.setMinHeight(SLogoApp.APP_SCREEN_HEIGHT-SLogoApp.APP_TAB_HEIGHT);
         center.setMaxHeight(SLogoApp.APP_SCREEN_HEIGHT-SLogoApp.APP_TAB_HEIGHT);
@@ -47,7 +47,7 @@ public class MainView {
         center.setOrientation(Orientation.VERTICAL);
         center.setDividerPositions(0.7f);
 
-        center.getItems().addAll(turtleView.view(), commandView.view());
+        center.getItems().addAll(canvasView.view(), commandView.view());
     }
 
     private void assembleRight(VariableView variableView, HistoryView historyView) {

@@ -7,6 +7,6 @@ public class IsShowing implements Command<TurtleModel> {
 
     @Override
     public double update(TurtleModel turtleModel) {
-        return turtleModel.isVisible().getValue() ? 1 : 0;
+        return turtleModel.isVisible() ? TurtleModel.TRUE : TurtleModel.FALSE;
     }
 }
