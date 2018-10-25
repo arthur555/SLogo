@@ -1,11 +1,8 @@
 package engine.compiler.slogoast;
 
-import engine.commands.Home;
 import engine.compiler.Token;
-import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
-import model.TurtleModel;
 
 /**
  * This class is a terminal node in the AST.
@@ -52,6 +49,16 @@ public class Direct implements Expression {
         } else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
             return turtleManager.moveTo(0,0,true);
+        } else if (myToken.getString().equals("XCoordinate")) {
+
+        } else if (myToken.getString().equals("YCoordinate")) {
+
+        } else if (myToken.getString().equals("Heading")) {
+
+        } else if (myToken.getString().equals("IsPenDown")) {
+
+        } else if (myToken.getString().equals("IsShowing")) {
+
         }
         return 0;
     }
@@ -59,12 +66,12 @@ public class Direct implements Expression {
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     * @param state : The StateMachine that records the variables.
-     * @return A double value returned by evaluating the expression.
+     *
+     * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override
-    public double evaluate(StateMachine state) throws InterpretationException {
+    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
         return 0;
     }
 }

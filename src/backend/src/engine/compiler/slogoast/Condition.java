@@ -1,10 +1,8 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
-import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
-import model.TurtleModel;
 
 /**
  * This class handles the Repeat and If logic. They are in the form of Condition Expression [ (Expression)* ].
@@ -48,12 +46,12 @@ public class Condition implements Expression {
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     * @param state : The StateMachine that records the variables.
-     * @return A double value returned by evaluating the expression.
+     *
+     * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override
-    public double evaluate(StateMachine state) throws InterpretationException {
+    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
         return 0;
     }
 

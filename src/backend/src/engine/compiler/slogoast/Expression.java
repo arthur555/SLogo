@@ -1,9 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.errors.InterpretationException;
-import engine.compiler.storage.StateMachine;
 import model.TurtleManager;
-import model.TurtleModel;
 
 /**
  * This is an abstract class that all AST nodes shall extend from.
@@ -30,9 +28,9 @@ public interface Expression {
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     * @param state: The StateMachine that records the variables.
-     * @return A double value returned by evaluating the expression.
+     *
+     * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
-    double evaluate(StateMachine state) throws InterpretationException;
+    double evaluate(TurtleManager turtleManager) throws InterpretationException;
 }
