@@ -6,6 +6,8 @@ import javafx.scene.input.KeyEvent;
 import view.CommandView;
 import view.HistoryView;
 
+import java.util.Arrays;
+
 public class EditorController {
     private static final char NEWLINE = '\n';
     private static final String BLANK = "";
@@ -19,6 +21,10 @@ public class EditorController {
         this.lang = lang;
         this.commandView = commandView;
         this.historyView = historyView;
+        this.historyView.registerOnHistoryClick(s -> {
+            commandView.clear();
+            for(char ch : s.toCharArray()) commandView.insert(ch);
+        });
         this.commandView.setLang(lang);
         this.engineApi = engineApi;
     }
