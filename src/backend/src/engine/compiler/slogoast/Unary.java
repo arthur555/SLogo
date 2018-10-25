@@ -58,26 +58,23 @@ public class Unary implements Expression {
         else if (myToken.getString().equals("SetHeading")){
             return turtleManager.setAngle(value);
         }
-        else if (myToken.getString().equals("SetTowards")){
-
-        }
         else if (myToken.getString().equals("Minus")){
-
+            return -1*value;
         }
         else if (myToken.getString().equals("Sine")){
-
+            return Math.sin(Math.toRadians(value));
         }
         else if (myToken.getString().equals("Tangent")){
-
+            return Math.tan(Math.toRadians(value));
         }
         else if (myToken.getString().equals("ArcTangent")){
-
+            return Math.atan(Math.toRadians(value));
         }
         else if (myToken.getString().equals("NaturalLog")){
-
+            return Math.log(value);
         }
         else if (myToken.getString().equals("Not")){
-
+            return (value == 0) ? 1:0;
         }
 
         return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);
