@@ -77,7 +77,7 @@ public class Unary implements Expression {
 
         }
         else if (myToken.getString().equals("Not")){
-            
+
         }
 
         return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);

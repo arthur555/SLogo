@@ -39,7 +39,32 @@ public class Binary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return evaluate(turtleManager);
+        if (myToken.getString().equals("Sum")) {
+            // TODO
+        } else if (myToken.getString().equals("Difference")) {
+            // TODO
+        } else if (myToken.getString().equals("Quotient")) {
+            // TODO
+        } else if (myToken.getString().equals("Product")) {
+            // TODO
+        } else if (myToken.getString().equals("Remainder")) {
+            // TODO
+        } else if (myToken.getString().equals("Power")) {
+            // TODO
+        } else if (myToken.getString().equals("LessThan")) {
+            // TODO
+        } else if (myToken.getString().equals("GreaterThan")) {
+            // TODO
+        } else if (myToken.getString().equals("Equal")) {
+            // TODO
+        } else if (myToken.getString().equals("NotEqual")) {
+            // TODO
+        } else if (myToken.getString().equals("And")) {
+            // TODO
+        } else if (myToken.getString().equals("Or")) {
+            // TODO
+        }
+        return 0;
     }
 
     /**
@@ -51,6 +76,6 @@ public class Binary implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return myFirstExpr.evaluate(turtleManager) + mySecondExpr.evaluate(turtleManager);
+        return interpret(turtleManager);
     }
 }
