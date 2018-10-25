@@ -4,6 +4,7 @@ import engine.commands.Home;
 import engine.compiler.Token;
 import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
+import model.TurtleManager;
 import model.TurtleModel;
 
 /**
@@ -31,43 +32,27 @@ public class Direct implements Expression {
     /**
      * This method lets the AST act on a Turtle model.
      *
-     * @param turtle : The TurtleModel that is affected by applying the abstract syntax tree.
-     * @param state  : The StateMachine that records the variables.
+     * @param turtleManager : The TurtleManager that is affected by applying the abstract syntax tree.
      * @return A double value returned by evaluating the expression.
      * @throws InterpretationException
      * @author Rahul Ramesh
      */
     @Override
-    public double interpret(TurtleModel turtle, StateMachine state) throws InterpretationException {
+    public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("PenUp")) {
-            turtle.setPenDown(false);
-            return 0;
+            return turtleManager.setPenDown(true);
         } else if (myToken.getString().equals("PenDown")) {
-            turtle.setPenDown(true);
-            return 1;
+            return turtleManager.setPenDown(true);
         } else if (myToken.getString().equals("ShowTurtle")) {
-            turtle.setVisible(true);
-            return 1;
+            return turtleManager.setVisible(true);
         } else if (myToken.getString().equals("HideTurtle")) {
-            turtle.setVisible(false);
-            return 0;
+            return turtleManager.setVisible(false);
         } else if (myToken.getString().equals("Home")) {
-            var prevPen = turtle.isPenDown().getValue();
-            turtle.setPenDown(false);
-            double myX = turtle.getX();
-            double myY = turtle.getY();
-            turtle.setX(0);
-            turtle.move(true);
-            turtle.setY(0);
-            turtle.move(false);
-            turtle.setPenDown(prevPen);
-            return Math.sqrt(myX*myX + myY*myY);
+            return turtleManager.moveTo(0,0,true);
         } else if (myToken.getString().equals("ClearScreen")) {
-            Home hm = new Home();
-            turtle.clean();
-            turtle.setVisible(true);
-            return hm.update(turtle);
-        } 
+            turtleManager.clear();
+            return turtleManager.moveTo(0,0,true);
+        }
         return 0;
     }
 
@@ -82,6 +67,4 @@ public class Direct implements Expression {
     public double evaluate(StateMachine state) throws InterpretationException {
         return 0;
     }
-
-
 }

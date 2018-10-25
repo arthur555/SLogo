@@ -1,26 +1,26 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 import java.util.List;
 
-public class Repeat implements Command<TurtleModelImpl> {
+public class Repeat implements Command<TurtleModel> {
     private static final String repeatCountKey = ":repcount";
 
 
     private int numTimes;
-    private List<Command<TurtleModelImpl>> commandList;
+    private List<Command<TurtleModel>> commandList;
 
-    public Repeat(int numTimes, List<Command<TurtleModelImpl>> commandList){
+    public Repeat(int numTimes, List<Command<TurtleModel>> commandList){
         this.numTimes = numTimes;
         this.commandList = commandList;
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         double ret = 0;
         for (int i = 1; i <= numTimes; i++){
-            turtleModel.getMemory().setInteger(repeatCountKey, i);
-            for (Command command: commandList){
+            turtleModel.memory().setInteger(repeatCountKey, i);
+            for (Command<TurtleModel> command: commandList){
                 ret = command.update(turtleModel);
             }
         }

@@ -9,7 +9,7 @@ import view.utils.PrettyUI;
 
 public class HistoryView {
     static final int HISTORY_VIEW_WIDTH =
-            SLogoApp.APP_SCREEN_WIDTH - SidebarView.SIDEBAR_VIEW_WIDTH - TurtleView.TURTLE_VIEW_WIDTH;
+            SLogoApp.APP_SCREEN_WIDTH - SidebarView.SIDEBAR_VIEW_WIDTH - CanvasView.TURTLE_VIEW_WIDTH;
     private final int FONT_SIZE = 12;
 
 

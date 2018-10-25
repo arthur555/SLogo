@@ -3,12 +3,12 @@ package app;
 import controller.ControllerModule;
 import engine.api.ASTEngineAPI;
 import engine.api.EngineAPI;
-import fake_model.ModelModule;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import model.ModelModule;
 import view.ViewModule;
 
 import java.util.ResourceBundle;
@@ -30,6 +30,7 @@ public class SLogoApp extends Application implements TabbedApp {
     public void start(Stage primaryStage) {
         tabIndex = 1;
         tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         tabPane.getStyleClass().add(TAB_STYLE);
         primaryStage.setResizable(false);
         primaryStage.setTitle(APP_PROPERTIES.getString("Title"));
@@ -43,10 +44,13 @@ public class SLogoApp extends Application implements TabbedApp {
     @Override
     public void newInstance() {
         ModelModule modelModule = new ModelModule();
-        EngineAPI engineApi = new ASTEngineAPI(modelModule.turtleModel());
-        ViewModule viewModule = new ViewModule(modelModule, engineApi);
-        new ControllerModule(this, modelModule, viewModule, engineApi);
-        var tab = new Tab("Untitled "+tabIndex++);
+        EngineAPI engineApi = new ASTEngineAPI(modelModule.turtleManager());
+        ViewModule viewModule = new ViewModule(engineApi);
+        new ControllerModule(this, modelModule, engineApi, viewModule);
+
+        var tab = new Tab("Untitled " + tabIndex);
+        if(tabIndex == 1) tab.setClosable(false);
+        tabIndex ++;
         tab.setContent(viewModule.mainView().view());
         tabPane.getTabs().add(tab);
     }

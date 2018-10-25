@@ -11,7 +11,7 @@ import engine.compiler.storage.StateMachine;
 import engine.errors.CommandSyntaxException;
 import engine.errors.InterpretationException;
 import engine.errors.UndefinedKeywordException;
-import model.TurtleModel;
+import model.TurtleManager;
 
 import java.util.List;
 
@@ -24,13 +24,14 @@ public class ASTEngineAPI implements EngineAPI {
     private Lexer lexer;
     private Parser parser;
     private StateMachine stateMachine;
-    private TurtleModel turtle;
+    private TurtleManager manager;
 
-    public ASTEngineAPI(TurtleModel turtleModel) {
+    public ASTEngineAPI(TurtleManager turtleManager) {
         lexer = new CrudeLexer();
         parser = new CrudeParser();
+        manager = turtleManager;
         stateMachine = new CrudeStateMachine();
-        turtle = turtleModel;
+        manager.equipMemory(stateMachine);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class ASTEngineAPI implements EngineAPI {
         List<Token> listOfTokens = lexer.getTokens();
         parser.readTokens(listOfTokens);
         Expression command = parser.returnAST();
-        return command.interpret(turtle, stateMachine);
+        return command.interpret(manager);
     }
 
     @Override

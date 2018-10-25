@@ -1,10 +1,14 @@
 package model;
 
+import model.impl.TurtleManagerImpl;
+
 public class ModelModule {
-    private TurtleModel turtleModel;
+    public static final int INITIAL_TURTLE_ID = 1;
 
-    public ModelModule() { turtleModel = new TurtleModelImpl(); }
-
-
-    public TurtleModel turtleModel() { return turtleModel; }
+    private TurtleManager turtleManager;
+    public ModelModule() {
+        turtleManager = new TurtleManagerImpl();
+        try { turtleManager.addTurtle(1); } catch (Exception ignored) { }
+    }
+    public TurtleManager turtleManager() { return turtleManager; }
 }

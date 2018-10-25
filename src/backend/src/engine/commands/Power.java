@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Power implements Command<TurtleModelImpl> {
+public class Power implements Command<TurtleModel> {
     private double base;
     private double exp;
     public Power (double base, double exp){
@@ -11,7 +11,7 @@ public class Power implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return Math.pow(base, exp);
     }
 }

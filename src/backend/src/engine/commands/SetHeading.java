@@ -11,10 +11,6 @@ public class SetHeading implements  Command<TurtleModel> {
 
     @Override
     public double update(TurtleModel turtleModel) {
-        double angleMoved = head - turtleModel.getAngle();
-        turtleModel.move(true);
-        turtleModel.setAngle(head);
-        turtleModel.move(false);
-        return angleMoved%360;
+        return turtleModel.setAngle(head);
     }
 }

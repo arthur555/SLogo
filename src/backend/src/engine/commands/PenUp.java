@@ -7,7 +7,6 @@ public class PenUp implements Command<TurtleModel> {
 
     @Override
     public double update(TurtleModel turtleModel) {
-        turtleModel.setPenDown(false);
-        return 0;
+        return turtleModel.setPenDown(false);
     }
 }

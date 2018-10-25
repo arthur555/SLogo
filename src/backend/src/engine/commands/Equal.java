@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Equal implements Command<TurtleModelImpl> {
+public class Equal implements Command<TurtleModel> {
     private double num1;
     private double num2;
     public Equal(double a, double b){
@@ -10,7 +10,7 @@ public class Equal implements Command<TurtleModelImpl> {
         num2 = b;
     }
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return (num1 == num2) ? 1:0;
     }
 }

@@ -76,6 +76,7 @@ public class EditorController {
             double ret = engineApi.processString(cmd);
             historyView.addText(cmd, ret);
         }  catch (Exception e) {
+            e.printStackTrace(); // TODO: ERASE ONCE DONE
             historyView.displayError(cmd, e);
         }
     }

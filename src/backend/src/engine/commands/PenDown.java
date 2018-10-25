@@ -8,7 +8,6 @@ public class PenDown implements Command<TurtleModel> {
 
     @Override
     public double update(TurtleModel turtleModel) {
-        turtleModel.setPenDown(true);
-        return 1;
+        return turtleModel.setPenDown(true);
     }
 }

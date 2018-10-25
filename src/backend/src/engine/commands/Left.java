@@ -9,9 +9,7 @@ public class Left implements Command<TurtleModel> {
     }
     @Override
     public double update(TurtleModel turtleModel) {
-        turtleModel.move(true);
         turtleModel.setAngle((degree + turtleModel.getAngle())%360);
-        turtleModel.move(false);
         return degree;
     }
 }

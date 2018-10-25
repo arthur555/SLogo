@@ -5,7 +5,7 @@ import javafx.scene.text.TextFlow;
 import view.utils.PrettyUI;
 
 public class CommandView {
-    private static final double COMMAND_WIDTH = TurtleView.TURTLE_VIEW_WIDTH;
+    private static final double COMMAND_WIDTH = CanvasView.TURTLE_VIEW_WIDTH;
     public static final String CARET = "<:";
     private static final String EMPTY = "";
     private static final int FONT_SIZE = 16;

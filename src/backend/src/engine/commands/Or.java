@@ -1,8 +1,8 @@
 package engine.commands;
 
-import model.TurtleModelImpl;
+import model.TurtleModel;
 
-public class Or implements Command<TurtleModelImpl> {
+public class Or implements Command<TurtleModel> {
     private double num1;
     private double num2;
     public Or(double a, double b){
@@ -11,7 +11,7 @@ public class Or implements Command<TurtleModelImpl> {
     }
 
     @Override
-    public double update(TurtleModelImpl turtleModel) {
+    public double update(TurtleModel turtleModel) {
         return (num1 != 0 || num2 != 0) ? 1:0;
     }
 }

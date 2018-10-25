@@ -1,7 +1,6 @@
 package controller;
 
 import app.TabbedApp;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -9,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import view.CanvasView;
 import view.SidebarView;
 import view.TurtleView;
 import view.reference.ReferenceDialog;
@@ -25,32 +25,30 @@ public class SidebarController {
     private TabbedApp app;
 
     private SidebarView sidebar;
-    private TurtleView turtleView;
 
-    private TurtleController turtleController;
     private EditorController editorController;
+    private CanvasController canvasController;
 
     private String lang;
 
     public SidebarController(
             String lang,
             TabbedApp app,
-            SidebarView sidebar,
-            TurtleView turtleView
+            SidebarView sidebar
     ) {
         this.app = app;
         this.lang = lang;
         this.sidebar = sidebar;
-        this.turtleView = turtleView;
         setupHandlers();
     }
 
     public void registerControllers(
-            TurtleController turtleController,
-            EditorController editorController
+            EditorController editorController,
+            CanvasController canvasController
     ) {
-        this.turtleController = turtleController;
         this.editorController = editorController;
+        this.canvasController = canvasController;
+        canvasController.bindDuration(sidebar.speedSlider().valueProperty());
     }
 
     private void setupHandlers() {
@@ -60,21 +58,16 @@ public class SidebarController {
         sidebar.turtleImageButton().setOnMouseClicked(this::turtleImageOnClick);
         sidebar.languageButton().setOnMouseClicked(this::languageOnClick);
         sidebar.helpButton().setOnMouseClicked(this::helpOnClick);
-        sidebar.speedSlider().valueProperty().addListener(this::speedOnChange);
     }
 
     private void newInstanceOnClick(MouseEvent e) { app.newInstance(); }
 
     private void backgroundColorOnChange(ActionEvent e) {
-        turtleView.setBackgroundColor(sidebar.backgroundColor().getValue());
-    }
-
-    private void speedOnChange(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        turtleView.setDuration(newValue.doubleValue());
+        canvasController.setBackgroundColor(sidebar.backgroundColor().getValue());
     }
 
     private void penColorOnChange(ActionEvent e) {
-        turtleView.setPenColor(sidebar.backgroundColor().getValue());
+        canvasController.setPenColor(sidebar.penColor().getValue());
     }
 
     private void turtleImageOnClick(MouseEvent me) {
@@ -87,7 +80,7 @@ public class SidebarController {
             var image = ImageUtils.getImageFromAbsUrl(is, TurtleView.TURTLE_SIZE, TurtleView.TURTLE_SIZE);
             if(image.getException() != null)
                 throw new RuntimeException("The chosen image file is either not an image or corrupted");
-            turtleView.setTurtleImage(image);
+            canvasController.setTurtleImage(image);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
