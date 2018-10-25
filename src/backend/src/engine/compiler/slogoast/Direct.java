@@ -59,6 +59,8 @@ public class Direct implements Expression {
 
         } else if (myToken.getString().equals("IsShowing")) {
 
+        } else if (myToken.getType().equals("Constant")) {
+            return Double.parseDouble(myToken.getString());
         }
         return 0;
     }
@@ -72,6 +74,6 @@ public class Direct implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 }

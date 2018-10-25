@@ -39,7 +39,7 @@ public class Binary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return evaluate(turtleManager);
+        return 0;
     }
 
     /**
@@ -51,6 +51,6 @@ public class Binary implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return myFirstExpr.evaluate(turtleManager) + mySecondExpr.evaluate(turtleManager);
+        return interpret(turtleManager);
     }
 }
