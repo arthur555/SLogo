@@ -9,6 +9,9 @@ import model.TurtleManager;
 import model.TurtleModel;
 import view.CanvasView;
 
+/**
+ *  Interfaces between the Turtle Manager and Canvas View
+ */
 public class CanvasController {
     private TurtleManager turtleManager;
     private CanvasView canvasView;
