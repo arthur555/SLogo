@@ -1,15 +1,14 @@
 package view;
 
+import app.SLogoApp;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class MainView {
-    static final int SCREEN_WIDTH = 1200;
-    static final int SCREEN_HEIGHT = 800;
-
     private static final String ROOT_CSS_CLASS = "root";
 
     private GridPane root;
@@ -41,10 +40,10 @@ public class MainView {
 
     private void assembleCenter(TurtleView turtleView, CommandView commandView) {
         center = new SplitPane();
-        center.setMinHeight(SCREEN_HEIGHT);
-        center.setMaxHeight(SCREEN_HEIGHT);
-        center.setMinWidth(SCREEN_WIDTH);
-        center.setMaxWidth(SCREEN_WIDTH);
+        center.setMinHeight(SLogoApp.APP_SCREEN_HEIGHT-SLogoApp.APP_TAB_HEIGHT);
+        center.setMaxHeight(SLogoApp.APP_SCREEN_HEIGHT-SLogoApp.APP_TAB_HEIGHT);
+        center.setMinWidth(SLogoApp.APP_SCREEN_WIDTH);
+        center.setMaxWidth(SLogoApp.APP_SCREEN_WIDTH);
         center.setOrientation(Orientation.VERTICAL);
         center.setDividerPositions(0.7f);
 
@@ -53,8 +52,8 @@ public class MainView {
 
     private void assembleRight(VariableView variableView, HistoryView historyView) {
         right = new SplitPane();
-        right.setMinHeight(SCREEN_HEIGHT);
-        right.setMaxHeight(SCREEN_HEIGHT);
+        right.setMinHeight(SLogoApp.APP_SCREEN_HEIGHT-SLogoApp.APP_TAB_HEIGHT);
+        right.setMaxHeight(SLogoApp.APP_SCREEN_HEIGHT-SLogoApp.APP_TAB_HEIGHT);
         right.setMinWidth(HistoryView.HISTORY_VIEW_WIDTH);
         right.setMaxWidth(HistoryView.HISTORY_VIEW_WIDTH);
         right.setOrientation(Orientation.VERTICAL);
@@ -63,5 +62,5 @@ public class MainView {
         right.getItems().addAll(variableView.view(), historyView.view());
     }
 
-    public Parent view() { return root; }
+    public GridPane view() { return root; }
 }

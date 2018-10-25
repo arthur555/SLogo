@@ -1,5 +1,6 @@
 package view;
 
+import app.SLogoApp;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -8,7 +9,7 @@ import view.utils.PrettyUI;
 
 public class HistoryView {
     static final int HISTORY_VIEW_WIDTH =
-            MainView.SCREEN_WIDTH - SidebarView.SIDEBAR_VIEW_WIDTH - TurtleView.TURTLE_VIEW_WIDTH;
+            SLogoApp.APP_SCREEN_WIDTH - SidebarView.SIDEBAR_VIEW_WIDTH - TurtleView.TURTLE_VIEW_WIDTH;
     private final int FONT_SIZE = 12;
 
 

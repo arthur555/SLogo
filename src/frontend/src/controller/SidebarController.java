@@ -1,7 +1,7 @@
 package controller;
 
+import app.TabbedApp;
 import javafx.beans.value.ObservableValue;
-import view.reference.ReferenceDialog;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import view.SidebarView;
 import view.TurtleView;
+import view.reference.ReferenceDialog;
 import view.utils.ImageUtils;
 
 import java.io.FileInputStream;
@@ -20,6 +21,8 @@ import java.util.Optional;
 public class SidebarController {
     private static final int ICON_WIDTH = 100;
     private static final int ICON_HEIGHT = 80;
+
+    private TabbedApp app;
 
     private SidebarView sidebar;
     private TurtleView turtleView;
@@ -31,9 +34,11 @@ public class SidebarController {
 
     public SidebarController(
             String lang,
+            TabbedApp app,
             SidebarView sidebar,
             TurtleView turtleView
     ) {
+        this.app = app;
         this.lang = lang;
         this.sidebar = sidebar;
         this.turtleView = turtleView;
@@ -49,6 +54,7 @@ public class SidebarController {
     }
 
     private void setupHandlers() {
+        sidebar.newButton().setOnMouseClicked(this::newInstanceOnClick);
         sidebar.backgroundColor().setOnAction(this::backgroundColorOnChange);
         sidebar.penColor().setOnAction(this::penColorOnChange);
         sidebar.turtleImageButton().setOnMouseClicked(this::turtleImageOnClick);
@@ -56,6 +62,8 @@ public class SidebarController {
         sidebar.helpButton().setOnMouseClicked(this::helpOnClick);
         sidebar.speedSlider().valueProperty().addListener(this::speedOnChange);
     }
+
+    private void newInstanceOnClick(MouseEvent e) { app.newInstance(); }
 
     private void backgroundColorOnChange(ActionEvent e) {
         turtleView.setBackgroundColor(sidebar.backgroundColor().getValue());

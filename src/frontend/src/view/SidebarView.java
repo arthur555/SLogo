@@ -24,13 +24,15 @@ public class SidebarView {
     private static final int BUTTON_MARGIN = 10;
     private static final int BUTTON_SIZE = 50;
 
-    private static final int BACKGROUND_BUTTON = 0;
-    private static final int TURTLE_IMAGE_BUTTON = 1;
-    private static final int PEN_COLOR_BUTTON = 2;
-    private static final int LANGUAGE_BUTTON = 3;
-    private static final int HELP_BUTTON = 4;
+    private static final int NEW_INSTANCE_BUTTON = 0;
+    private static final int BACKGROUND_BUTTON = 1;
+    private static final int TURTLE_IMAGE_BUTTON = 2;
+    private static final int PEN_COLOR_BUTTON = 3;
+    private static final int LANGUAGE_BUTTON = 4;
+    private static final int HELP_BUTTON = 5;
 
     private static final List<Image> ICONS = Collections.unmodifiableList(List.of(
+            ImageUtils.getImageFromUrl("new_button.png", BUTTON_SIZE, BUTTON_SIZE),
             ImageUtils.getImageFromUrl("background_button.png", BUTTON_SIZE, BUTTON_SIZE),
             ImageUtils.getImageFromUrl("turtle_image_button.png", BUTTON_SIZE, BUTTON_SIZE),
             ImageUtils.getImageFromUrl("pen_color_button.png", BUTTON_SIZE, BUTTON_SIZE),
@@ -39,6 +41,7 @@ public class SidebarView {
     ));
 
     private static final List<String> TOOLTIPS = Collections.unmodifiableList(List.of(
+            "Creates a new workspace",
             "Set background color",
             "Set turtle image",
             "Set pen color",
@@ -46,13 +49,19 @@ public class SidebarView {
             "Open documentation"
     ));
 
+    private static final String DURATION_TOOLTIP = "Adjust the duration of single movement";
+
+    private static final double ANIMATION_DURATION_MIN = 0.01;
+    private static final double ANIMATION_DURATION_MAX = 10.01;
+    private static final double ANIMATION_DURATION_PRECISION = 0.01;
+
     private Pane root;
     private VBox icons;
     private List<StackPane> buttons;
     private List<Tooltip> tooltips;
     private ColorPicker backgroundColor, penColor;
-    private StackPane speedWrapper;
-    private Slider speed;
+    private StackPane animationDurationWrapper;
+    private Slider animationDuration;
 
     SidebarView() {
         root = new Pane();
@@ -61,24 +70,20 @@ public class SidebarView {
         icons = new VBox(BUTTON_MARGIN);
         icons.getStyleClass().add("sidebar");
 
+        setupColorPickers();
+        setupButtons();
+        setupSliders();
+
+        icons.getChildren().addAll(buttons);
+        icons.getChildren().add(animationDurationWrapper);
+        root.getChildren().add(icons);
+    }
+
+    private void setupColorPickers() {
         backgroundColor = new ColorPicker();
         backgroundColor.getStyleClass().add("background-button");
         penColor = new ColorPicker();
         penColor.getStyleClass().add("pen-color-button");
-        setupButtons();
-
-        speedWrapper = new StackPane();
-        speed = new Slider(0.1, 10, 0.1); // TODO: remove magic values
-        speed.setOrientation(Orientation.VERTICAL);
-        speed.setShowTickMarks(true);
-        speed.setShowTickLabels(true);
-        setTooltip(speed, "Adjust the duration of single movement");
-        speedWrapper.getChildren().add(speed);
-        speedWrapper.setAlignment(Pos.CENTER);
-
-        icons.getChildren().addAll(buttons);
-        icons.getChildren().add(speedWrapper);
-        root.getChildren().add(icons);
     }
 
     private void setupButtons() {
@@ -100,6 +105,21 @@ public class SidebarView {
         buttons = Collections.unmodifiableList(buttons);
     }
 
+    private void setupSliders() {
+        animationDurationWrapper = new StackPane();
+        animationDuration = new Slider(
+                ANIMATION_DURATION_MIN,
+                ANIMATION_DURATION_MAX,
+                ANIMATION_DURATION_PRECISION
+        );
+        animationDuration.setOrientation(Orientation.VERTICAL);
+        animationDuration.setShowTickMarks(true);
+        animationDuration.setShowTickLabels(true);
+        setTooltip(animationDuration, DURATION_TOOLTIP);
+        animationDurationWrapper.getChildren().add(animationDuration);
+        animationDurationWrapper.setAlignment(Pos.CENTER);
+    }
+
     private Tooltip setTooltip(Node node, String text) {
         var tooltip = new Tooltip(text);
         tooltip.setShowDelay(Duration.ZERO);
@@ -114,10 +134,11 @@ public class SidebarView {
 
     public Pane view() { return root; }
 
+    public StackPane newButton() { return buttons.get(NEW_INSTANCE_BUTTON); }
     public ColorPicker backgroundColor() { return backgroundColor; }
     public StackPane turtleImageButton() { return buttons.get(TURTLE_IMAGE_BUTTON); }
     public ColorPicker penColor() { return penColor; }
     public StackPane languageButton() { return buttons.get(LANGUAGE_BUTTON); }
     public StackPane helpButton() { return buttons.get(HELP_BUTTON); }
-    public Slider speedSlider() { return speed; }
+    public Slider speedSlider() { return animationDuration; }
 }
