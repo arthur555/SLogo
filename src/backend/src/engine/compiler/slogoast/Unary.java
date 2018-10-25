@@ -37,7 +37,50 @@ public class Unary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false); // TODO: remove this once testing is done
+        double head = turtleManager.getAngle(); //in radians
+        double x = turtleManager.getX();
+        double y = turtleManager.getY();
+        double value = myExpr.evaluate(turtleManager);
+        if (myToken.getString().equals("Forward")){
+            double stepX = value*Math.cos(Math.toRadians(head));
+            double stepY = value*Math.sin(Math.toRadians(head));
+            return turtleManager.moveTo(x+stepX, y+stepY, false);
+        }
+        else if (myToken.getString().equals("Backward")){
+            return turtleManager.moveTo(x-value*Math.cos(Math.toRadians(head)), y-value*Math.sin(Math.toRadians(head)), false);
+        }
+        else if (myToken.getString().equals("Right")){
+            return turtleManager.setAngle((head + value)%360);
+        }
+        else if (myToken.getString().equals("Left")){
+            return turtleManager.setAngle((head - value)%360);
+        }
+        else if (myToken.getString().equals("SetHeading")){
+            return turtleManager.setAngle(value);
+        }
+        else if (myToken.getString().equals("SetTowards")){
+
+        }
+        else if (myToken.getString().equals("Minus")){
+
+        }
+        else if (myToken.getString().equals("Sine")){
+
+        }
+        else if (myToken.getString().equals("Tangent")){
+
+        }
+        else if (myToken.getString().equals("ArcTangent")){
+
+        }
+        else if (myToken.getString().equals("NaturalLog")){
+
+        }
+        else if (myToken.getString().equals("Not")){
+
+        }
+
+        return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);
     }
 
     /**
@@ -49,6 +92,6 @@ public class Unary implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 }
