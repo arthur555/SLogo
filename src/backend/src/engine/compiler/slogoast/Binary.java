@@ -1,10 +1,8 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
-import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
-import model.TurtleModel;
 
 /**
  * This class is an AST node representing binary operation that takes two expressions as commands.
@@ -41,18 +39,18 @@ public class Binary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return evaluate(turtleManager.memory());
+        return evaluate(turtleManager);
     }
 
     /**
      * This method evaluates the return value of the expression.
      *
-     * @param state : The StateMachine that records the variables.
-     * @return A double value returned by evaluating the expression.
+     *
+     * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override
-    public double evaluate(StateMachine state) throws InterpretationException {
-        return myFirstExpr.evaluate(state) + mySecondExpr.evaluate(state);
+    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
+        return myFirstExpr.evaluate(turtleManager) + mySecondExpr.evaluate(turtleManager);
     }
 }
