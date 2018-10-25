@@ -40,6 +40,11 @@ public class Condition implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (condition.getString().equals("If")) {
+            // TODO
+        } else if (condition.getString().equals("Repeat")) {
+            // TODO
+        }
         return 0;
     }
 

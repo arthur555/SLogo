@@ -40,7 +40,7 @@ public class Binary implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("Sum")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) + mySecondExpr.evaluate(turtleManager);
         } else if (myToken.getString().equals("Difference")) {
             // TODO
         } else if (myToken.getString().equals("Quotient")) {
@@ -62,6 +62,8 @@ public class Binary implements Expression {
         } else if (myToken.getString().equals("And")) {
             // TODO
         } else if (myToken.getString().equals("Or")) {
+            // TODO
+        } else if (myToken.getString().equals("Towards")) {
             // TODO
         }
         return 0;
