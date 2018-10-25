@@ -1,3 +1,27 @@
+.main-tab > .tab-header-area > .tab-header-background {
+    -fx-background-color: #6da800;
+}
+
+.main-tab {
+    -fx-tab-min-width: 100px;
+}
+
+.main-tab .tab:selected {
+    -fx-background-color: #62d162;
+}
+
+.main-tab .tab {
+    -fx-background-color: #246624;
+}
+
+.main-tab .tab:selected .tab-label {
+    -fx-text-fill: black;
+}
+
+.main-tab .tab-label {
+    -fx-text-fill: white;
+}
+
 .bg-theme {
     -fx-background-color: #F4FFCE;
     -fx-padding: 5 5 5 5;

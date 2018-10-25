@@ -1,5 +1,6 @@
 package view;
 
+import app.SLogoApp;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
@@ -19,7 +20,7 @@ import view.utils.ImageUtils;
 
 public class TurtleView {
     public static final int TURTLE_SIZE = 50;
-    public static final int TURTLE_VIEW_WIDTH = MainView.SCREEN_HEIGHT;
+    public static final int TURTLE_VIEW_WIDTH = SLogoApp.APP_SCREEN_HEIGHT;
 
     private Image turtleImg;
     private boolean penDown;
