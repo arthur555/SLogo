@@ -11,9 +11,9 @@ public class ViewModule {
     private HistoryView historyView;
     private CommandView commandView;
 
-    public ViewModule(ModelModule modelModule, EngineAPI engineAPI) {
+    public ViewModule(EngineAPI engineAPI) {
         sidebarView = new SidebarView();
-        canvasView = new CanvasView(modelModule.turtleManager());
+        canvasView = new CanvasView();
         variableView = new VariableView(engineAPI.stateMachine());
         historyView = new HistoryView();
         commandView = new CommandView();

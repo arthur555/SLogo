@@ -1,12 +1,13 @@
 package model.impl;
 
-import engine.compiler.storage.CrudeStateMachine;
 import engine.compiler.storage.StateMachine;
+import engine.errors.IllegalParameterException;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import model.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
@@ -18,18 +19,22 @@ public class TurtleManagerImpl implements TurtleManager {
     private List<Integer> selected;
 
     public TurtleManagerImpl() {
-        memory = new CrudeStateMachine();
         turtleModels = FXCollections.observableMap(new HashMap<>());
+        selected = List.of(ModelModule.INITIAL_TURTLE_ID);
     }
 
     @Override
     public int id() { return selected.get(selected.size()-1); }
 
     @Override
+    public List<Integer> selected() { return selected; }
+
+    @Override
     public int size() { return turtleModels.size(); }
 
     @Override
-    public int addTurtle(int id) {
+    public int addTurtle(int id) throws IllegalParameterException {
+        if(id <= 0) throw new IllegalParameterException("Turtle's ID must be STRICTLY bigger than 0");
         var newTurtle = new TurtleModelImpl(memory);
         turtleModels.put(id, newTurtle);
         return id;
@@ -47,15 +52,19 @@ public class TurtleManagerImpl implements TurtleManager {
         return results.get(results.size()-1);
     }
 
+    private List<Integer> checkWildcard(List<Integer> indices) {
+        return indices.contains(ALL) ? new ArrayList<>(turtleModels.keySet()) : indices;
+    }
+
     @Override
     public int tell(List<Integer> turtleIDs) {
-        selected = turtleIDs;
+        selected = checkWildcard(turtleIDs);
         return id();
     }
 
     @Override
     public <T> T ask(List<Integer> indices, TurtleOperations<T> ops) {
-        var results = indices
+        var results = checkWildcard(indices)
                 .stream()
                 .map(idx -> ops.op(turtleModels.get(idx)))
                 .collect(Collectors.toList());
@@ -77,13 +86,16 @@ public class TurtleManagerImpl implements TurtleManager {
     @Override
     public StateMachine memory() { return memory; }
 
+    @Override
+    public void equipMemory(StateMachine memory) { this.memory = memory; }
+
     private <T> T batchOperation(TurtleOperations<T> ops) {
         var results = selected
                 .stream()
                 .map(turtleModels::get)
                 .map(ops::op)
                 .collect(Collectors.toList());
-        return results.get(results.size());
+        return results.get(results.size()-1);
     }
 
     @Override

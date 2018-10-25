@@ -21,9 +21,7 @@ public interface Expression {
     /**
      * This method lets the AST act on a Turtle model.
      *
-     * TODO: HAOTIAN HELP!!!
-     * @param turtle: The TurtleModel that is affected by applying the abstract syntax tree.
-     * @param state: The StateMachine that records the variables.
+     * @param turtleManager : The TurtleManager that is affected by applying the abstract syntax tree.
      * @return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
@@ -32,7 +30,6 @@ public interface Expression {
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     * TODO: HAOTIAN HELP!!!
      * @param state: The StateMachine that records the variables.
      * @return A double value returned by evaluating the expression.
      * @throws InterpretationException

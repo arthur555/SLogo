@@ -25,7 +25,6 @@ public class SidebarController {
     private TabbedApp app;
 
     private SidebarView sidebar;
-    private CanvasView canvasView;
 
     private EditorController editorController;
     private CanvasController canvasController;
@@ -35,13 +34,11 @@ public class SidebarController {
     public SidebarController(
             String lang,
             TabbedApp app,
-            SidebarView sidebar,
-            CanvasView canvasView
+            SidebarView sidebar
     ) {
         this.app = app;
         this.lang = lang;
         this.sidebar = sidebar;
-        this.canvasView = canvasView;
         setupHandlers();
     }
 
@@ -51,6 +48,7 @@ public class SidebarController {
     ) {
         this.editorController = editorController;
         this.canvasController = canvasController;
+        canvasController.bindDuration(sidebar.speedSlider().valueProperty());
     }
 
     private void setupHandlers() {
@@ -60,17 +58,16 @@ public class SidebarController {
         sidebar.turtleImageButton().setOnMouseClicked(this::turtleImageOnClick);
         sidebar.languageButton().setOnMouseClicked(this::languageOnClick);
         sidebar.helpButton().setOnMouseClicked(this::helpOnClick);
-        canvasView.durationModel().bind(sidebar.speedSlider().valueProperty());
     }
 
     private void newInstanceOnClick(MouseEvent e) { app.newInstance(); }
 
     private void backgroundColorOnChange(ActionEvent e) {
-        canvasView.setBackgroundColor(sidebar.backgroundColor().getValue());
+        canvasController.setBackgroundColor(sidebar.backgroundColor().getValue());
     }
 
     private void penColorOnChange(ActionEvent e) {
-        canvasController.setPenColor(sidebar.backgroundColor().getValue());
+        canvasController.setPenColor(sidebar.penColor().getValue());
     }
 
     private void turtleImageOnClick(MouseEvent me) {

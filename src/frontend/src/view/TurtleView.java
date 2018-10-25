@@ -54,7 +54,7 @@ public class TurtleView implements ClearListener {
     }
 
     private void bindObservable(TurtleModel turtleModel) {
-        turtleModel.posAndAngleModel().addListener((observable, oldValue, newValue) -> {
+        turtleModel.posAndAngleModel().registerListener((newValue) -> {
             var newX = newValue.x();
             var newY = newValue.y();
             var newAngle = newValue.angle();

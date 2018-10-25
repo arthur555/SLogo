@@ -1,6 +1,7 @@
 package model;
 
 import engine.compiler.storage.StateMachine;
+import engine.errors.IllegalParameterException;
 import javafx.collections.ObservableMap;
 
 import java.util.List;
@@ -23,15 +24,21 @@ public interface TurtleManager extends TurtleModel {
     int id();
 
     /**
+     * @return id of the LAST turtle within the selected group, always > 0
+     */
+    List<Integer> selected();
+
+    /**
      * @return total number of turtles created
      */
     int size();
 
     /**
      * Adds a turtle with the given ID
+     * REJECTS ID <= 0
      * @return the ID of the turtle that we just added
      */
-    int addTurtle(int id);
+    int addTurtle(int id) throws IllegalParameterException;
 
     /**
      * Returns ObservableMap of (ID, TurtleModel)
@@ -68,4 +75,5 @@ public interface TurtleManager extends TurtleModel {
      * @return StateMachine
      */
     StateMachine memory();
+    void equipMemory(StateMachine memory);
 }

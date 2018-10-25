@@ -30,6 +30,7 @@ public class SLogoApp extends Application implements TabbedApp {
     public void start(Stage primaryStage) {
         tabIndex = 1;
         tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         tabPane.getStyleClass().add(TAB_STYLE);
         primaryStage.setResizable(false);
         primaryStage.setTitle(APP_PROPERTIES.getString("Title"));
@@ -44,9 +45,12 @@ public class SLogoApp extends Application implements TabbedApp {
     public void newInstance() {
         ModelModule modelModule = new ModelModule();
         EngineAPI engineApi = new ASTEngineAPI(modelModule.turtleManager());
-        ViewModule viewModule = new ViewModule(modelModule, engineApi);
-        new ControllerModule(this, modelModule, viewModule, engineApi);
-        var tab = new Tab("Untitled "+tabIndex++);
+        ViewModule viewModule = new ViewModule(engineApi);
+        new ControllerModule(this, modelModule, engineApi, viewModule);
+
+        var tab = new Tab("Untitled " + tabIndex);
+        if(tabIndex == 1) tab.setClosable(false);
+        tabIndex ++;
         tab.setContent(viewModule.mainView().view());
         tabPane.getTabs().add(tab);
     }
