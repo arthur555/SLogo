@@ -1,10 +1,8 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
-import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
-import model.TurtleModel;
 
 /**
  * This class handles the expression that takes in only one expression as parameter.
@@ -39,18 +37,58 @@ public class Unary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false); // TODO: remove this once testing is done
+        double head = turtleManager.getAngle(); //in radians
+        double x = turtleManager.getX();
+        double y = turtleManager.getY();
+        double value = myExpr.evaluate(turtleManager);
+        if (myToken.getString().equals("Forward")){
+            double stepX = value*Math.cos(Math.toRadians(head));
+            double stepY = value*Math.sin(Math.toRadians(head));
+            return turtleManager.moveTo(x+stepX, y+stepY, false);
+        }
+        else if (myToken.getString().equals("Backward")){
+            return turtleManager.moveTo(x-value*Math.cos(Math.toRadians(head)), y-value*Math.sin(Math.toRadians(head)), false);
+        }
+        else if (myToken.getString().equals("Right")){
+            return turtleManager.setAngle((head + value)%360);
+        }
+        else if (myToken.getString().equals("Left")){
+            return turtleManager.setAngle((head - value)%360);
+        }
+        else if (myToken.getString().equals("SetHeading")){
+            return turtleManager.setAngle(value);
+        }
+        else if (myToken.getString().equals("Minus")){
+            return -1*value;
+        }
+        else if (myToken.getString().equals("Sine")){
+            return Math.sin(Math.toRadians(value));
+        }
+        else if (myToken.getString().equals("Tangent")){
+            return Math.tan(Math.toRadians(value));
+        }
+        else if (myToken.getString().equals("ArcTangent")){
+            return Math.atan(Math.toRadians(value));
+        }
+        else if (myToken.getString().equals("NaturalLog")){
+            return Math.log(value);
+        }
+        else if (myToken.getString().equals("Not")){
+            return (value == 0) ? 1:0;
+        }
+
+        return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);
     }
 
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     * @param state : The StateMachine that records the variables.
-     * @return A double value returned by evaluating the expression.
+     *
+     * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override
-    public double evaluate(StateMachine state) throws InterpretationException {
-        return 0;
+    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
+        return interpret(turtleManager);
     }
 }

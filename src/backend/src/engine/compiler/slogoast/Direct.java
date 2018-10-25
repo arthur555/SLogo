@@ -1,11 +1,8 @@
 package engine.compiler.slogoast;
 
-import engine.commands.Home;
 import engine.compiler.Token;
-import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
-import model.TurtleModel;
 
 /**
  * This class is a terminal node in the AST.
@@ -41,17 +38,43 @@ public class Direct implements Expression {
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("PenUp")) {
             return turtleManager.setPenDown(true);
-        } else if (myToken.getString().equals("PenDown")) {
+        }
+        else if (myToken.getString().equals("PenDown")) {
             return turtleManager.setPenDown(true);
-        } else if (myToken.getString().equals("ShowTurtle")) {
+        }
+        else if (myToken.getString().equals("ShowTurtle")) {
             return turtleManager.setVisible(true);
-        } else if (myToken.getString().equals("HideTurtle")) {
+        }
+        else if (myToken.getString().equals("HideTurtle")) {
             return turtleManager.setVisible(false);
-        } else if (myToken.getString().equals("Home")) {
+        }
+        else if (myToken.getString().equals("Home")) {
             return turtleManager.moveTo(0,0,true);
-        } else if (myToken.getString().equals("ClearScreen")) {
+        }
+        else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
             return turtleManager.moveTo(0,0,true);
+        }
+        else if (myToken.getString().equals("XCoordinate")) {
+            return turtleManager.getX();
+        }
+        else if (myToken.getString().equals("YCoordinate")) {
+            return turtleManager.getY();
+        }
+        else if (myToken.getString().equals("Heading")) {
+            return turtleManager.getAngle();
+        }
+        else if (myToken.getString().equals("IsPenDown")) {
+            return turtleManager.isPenDown() ? turtleManager.TRUE : turtleManager.FALSE;
+        }
+        else if (myToken.getString().equals("IsShowing")) {
+            return turtleManager.isVisible() ? turtleManager.TRUE : turtleManager.FALSE;
+        }
+        else if (myToken.getString().equals("Pi")){
+            return Math.PI;
+        }
+        else if (myToken.getType().equals("Constant")){
+            return Double.parseDouble(myToken.getString());
         }
         return 0;
     }
@@ -59,12 +82,12 @@ public class Direct implements Expression {
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     * @param state : The StateMachine that records the variables.
-     * @return A double value returned by evaluating the expression.
+     *
+     * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override
-    public double evaluate(StateMachine state) throws InterpretationException {
-        return 0;
+    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
+        return interpret(turtleManager);
     }
 }
