@@ -14,6 +14,9 @@ import view.utils.BackgroundUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  Manages multiple Turtle Views, listening to how their view list changes
+ */
 public class CanvasView {
     public static final int TURTLE_VIEW_WIDTH = SLogoApp.APP_SCREEN_HEIGHT;
 
@@ -23,8 +26,8 @@ public class CanvasView {
 
     public CanvasView() {
         root = new Pane();
-        root.getStyleClass().add("canvas");
-        duration = new SimpleDoubleProperty(100);
+        setBackgroundColor(Color.WHITE);
+        duration = new SimpleDoubleProperty();
         turtleViews = new HashMap<>();
     }
     public void addTurtle(int id, TurtleModel model) {

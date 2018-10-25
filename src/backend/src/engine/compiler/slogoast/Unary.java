@@ -39,7 +39,7 @@ public class Unary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return turtleManager.moveTo(turtleManager.getX()+10, turtleManager.getY()+10, false); // TODO: remove this once testing is done
+        return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false); // TODO: remove this once testing is done
     }
 
     /**

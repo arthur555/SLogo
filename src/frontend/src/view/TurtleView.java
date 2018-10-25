@@ -22,6 +22,9 @@ import model.ClearListener;
 import model.TurtleModel;
 import view.utils.ImageUtils;
 
+/**
+ *  Takes care of one single Turtle
+ */
 public class TurtleView implements ClearListener {
     public static final int TURTLE_SIZE = 50;
 
