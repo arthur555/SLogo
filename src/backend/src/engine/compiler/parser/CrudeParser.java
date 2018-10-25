@@ -171,7 +171,7 @@ public class CrudeParser implements Parser {
             return new Pair<>(myTokens.get(index), index + 1);
         }
     }
-    
+
     /**
      * @param index
      * @return A pair of Expression and index for Quaternary grammar.
