@@ -33,6 +33,9 @@ public class Quaternary implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (myToken.getString().equals("SetPalette")) {
+            // TODO
+        }
         return 0;
     }
 

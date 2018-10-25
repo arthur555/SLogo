@@ -29,6 +29,11 @@ public class TwoList implements Expression{
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (myToken.getString().equals("Ask")) {
+            // TODO
+        } else if (myToken.getString().equals("AskWith")) {
+            // TODO
+        }
         return 0;
     }
 
