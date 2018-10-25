@@ -9,17 +9,19 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Ternary implements Expression {
+public class Quaternary implements Expression {
     private Token myToken;
     private Expression firstArg;
     private Expression secondArg;
     private Expression thirdArg;
+    private Expression fourthArg;
 
-    public Ternary(Token token, Expression expr1, Expression expr2, Expression expr3) {
+    public Quaternary(Token token, Expression expr1, Expression expr2, Expression expr3, Expression expr4) {
         myToken = token;
         firstArg = expr1;
         secondArg = expr2;
         thirdArg = expr3;
+        fourthArg = expr4;
     }
 
     /**

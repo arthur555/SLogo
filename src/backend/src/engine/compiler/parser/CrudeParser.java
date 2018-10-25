@@ -132,6 +132,18 @@ public class CrudeParser implements Parser {
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
         }
+        Pair<Expression, Integer> twoListPair = parseTwoList(index);
+        if (twoListPair.getKey() != null) {
+            return twoListPair;
+        }
+        Pair<Expression, Integer> tellPair = parseTell(index);
+        if (tellPair.getKey() != null) {
+            return tellPair;
+        }
+        Pair<Expression, Integer> ternaryPair = parseQuaternary(index);
+        if (ternaryPair.getKey() != null) {
+            return ternaryPair;
+        }
         Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
         if (expressionListPair.getKey() != null) {
             return expressionListPair;
@@ -158,6 +170,73 @@ public class CrudeParser implements Parser {
         } else {
             return new Pair<>(myTokens.get(index), index + 1);
         }
+    }
+    
+    /**
+     * @param index
+     * @return A pair of Expression and index for Quaternary grammar.
+     */
+    private Pair<Expression, Integer> parseQuaternary(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> quaternaryPair = parseToken(index, "Ternary");
+        if (quaternaryPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> firstPair = parseExpression(quaternaryPair.getValue());
+        if (firstPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for the the first part of expression in quaternary grammar", firstPair.getValue());
+        }
+        Pair<Expression, Integer> secondPair = parseExpression(firstPair.getValue());
+        if (secondPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for the the second part of expression in quaternary grammar", secondPair.getValue());
+        }
+        Pair<Expression, Integer> thirdPair = parseExpression(secondPair.getValue());
+        if (thirdPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for the the third part of expression in quaternary grammar", thirdPair.getValue());
+        }
+        Pair<Expression, Integer> fourthPair = parseExpression(thirdPair.getValue());
+        if (fourthPair.getKey() == null) {
+            throw generateSyntaxException("Illegal format for the the fourth part of expression in quaternary grammar", thirdPair.getValue());
+        }
+        return new Pair<>(new Quaternary(quaternaryPair.getKey(), firstPair.getKey(), secondPair.getKey(), thirdPair.getKey(), fourthPair.getKey()), secondPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for Tell grammar.
+     */
+    private Pair<Expression, Integer> parseTell(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> tellPair = parseToken(index, "Tell");
+        if (tellPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> listPair = parseExpressionList(tellPair.getValue());
+        if (listPair.getKey() == null) {
+            throw generateSyntaxException(String.format("The list of expressions following the keyword \"%s\" is illegal", tellPair.getKey().getString()), listPair.getValue());
+        }
+        return new Pair<>(new Tell(tellPair.getKey(), (ExpressionList) listPair.getKey()), listPair.getValue());
+    }
+
+    /**
+     * @param index
+     * @return A pair of Expression and index for TwoList grammar.
+     */
+    private Pair<Expression, Integer> parseTwoList(int index) throws CommandSyntaxException {
+        Pair<Expression, Integer> nullPair = new Pair<>(null, index);
+        Pair<Token, Integer> twoListPair = parseToken(index, "TwoList");
+        if (twoListPair.getKey() == null) {
+            return nullPair;
+        }
+        Pair<Expression, Integer> listOnePair = parseExpressionList(twoListPair.getValue());
+        if (listOnePair.getKey() == null) {
+            throw generateSyntaxException(String.format("The first list of expressions after the keyword \"%s\" is illegal", twoListPair.getKey().getString()), listOnePair.getValue());
+        }
+        Pair<Expression, Integer> listTwoPair = parseExpressionList(listOnePair.getValue());
+        if (listTwoPair.getKey() == null) {
+            throw generateSyntaxException(String.format("The second list of expressions after the keyword \"%s\" is illegal", twoListPair.getKey().getString()), listTwoPair.getValue());
+        }
+        return new Pair<>(new TwoList(twoListPair.getKey(), (ExpressionList) listOnePair.getKey(), (ExpressionList) listTwoPair.getKey()), listTwoPair.getValue());
     }
 
     /**
