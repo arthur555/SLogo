@@ -52,8 +52,8 @@ public class SidebarView {
     private static final String DURATION_TOOLTIP = "Adjust the duration of single movement";
 
     private static final double ANIMATION_DURATION_MIN = 10;
-    private static final double ANIMATION_DURATION_MAX = 2000;
-    private static final double ANIMATION_DURATION_PRECISION = 10;
+    private static final double ANIMATION_DURATION_MAX = 20000;
+    private static final double ANIMATION_DURATION_PRECISION = 100;
 
     private Pane root;
     private VBox icons;
