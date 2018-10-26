@@ -22,11 +22,15 @@ import model.ClearListener;
 import model.TurtleModel;
 import view.utils.ImageUtils;
 
+import java.util.ArrayList;
+import java.util.Queue;
+
 /**
  *  Takes care of one single Turtle
  */
 public class TurtleView implements ClearListener {
     public static final int TURTLE_SIZE = 50;
+    public static final int SCREEN_SIZE = 800;
 
     private ObservableList<Node> views;
     private BooleanProperty penDown;
@@ -34,6 +38,10 @@ public class TurtleView implements ClearListener {
     private Image turtleImg;
     private Color penColor;
     private DoubleProperty duration;
+    private Animation currentAnimation;
+    private Queue<Animation> animationQueue;
+    private Queue<Path> pathQueue;
+    private Queue<Boolean> pendownQueue;
 
     public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
         views = FXCollections.observableArrayList();
@@ -58,16 +66,19 @@ public class TurtleView implements ClearListener {
 
     private void bindObservable(TurtleModel turtleModel) {
         turtleModel.posAndAngleModel().registerListener((newValue) -> {
-            var newX = newValue.x();
-            var newY = newValue.y();
+            var newX = newValue.x()%SCREEN_SIZE;
+            var newY = newValue.y()%SCREEN_SIZE;
             var newAngle = newValue.angle();
 
             var path = makePath(newX, newY, duration.doubleValue());
             var animation = makeAnimation(turtle, path, newAngle);
             var capturedPenDown = penDown.getValue();
+
             animation.currentTimeProperty().addListener((e, o, n) -> {
                 if(n.toMillis() > duration.doubleValue()) return;
-                if(capturedPenDown) { views.add(makePath(newX, newY, n.toMillis())); }
+                if(capturedPenDown) {
+                    views.remove(views.size()-1);
+                    views.add(makePath(newX, newY, n.toMillis())); }
             });
             animation.setOnFinished(e -> {
                 views.remove(turtle);
