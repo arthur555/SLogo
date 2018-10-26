@@ -37,7 +37,7 @@ public class ControllerModule {
             ViewModule viewModule
     ) {
         editorController = new EditorController(DEFAULT_LANG, viewModule.commandView(), viewModule.historyView(), engineApi);
-        sidebarController = new SidebarController(DEFAULT_LANG, app, viewModule.sidebarView());
+        sidebarController = new SidebarController(DEFAULT_LANG, app, viewModule.sidebarView(), modelModule.turtleManager());
         canvasController = new CanvasController(modelModule.turtleManager(), viewModule.canvasView());
         assemble();
         setupTopLevelHandler(viewModule.mainView().view());
