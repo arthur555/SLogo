@@ -89,6 +89,41 @@ public class TurtleManagerImpl implements TurtleManager {
     @Override
     public void equipMemory(StateMachine memory) { this.memory = memory; }
 
+    @Override
+    public int setBackground(int index) { // hmmm
+        return 0;
+    }
+
+    @Override
+    public int setPenColor(int index) {
+        return 0;
+    }
+
+    @Override
+    public int setPenSize(int pixels) {
+        return 0;
+    }
+
+    @Override
+    public int setShape(int index) {
+        return 0;
+    }
+
+    @Override
+    public int setPalette(int index, int r, int g, int b) {
+        return 0;
+    }
+
+    @Override
+    public int penColor() {
+        return 0;
+    }
+
+    @Override
+    public int shape() {
+        return 0;
+    }
+
     private <T> T batchOperation(TurtleOperations<T> ops) {
         var results = selected
                 .stream()
