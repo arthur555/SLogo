@@ -32,7 +32,6 @@ public class AnimationQueue {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue==false && !queue.isEmpty())
                 {
-                    System.out.println("haha");
                     playNew();
                 }
             }
@@ -54,7 +53,7 @@ public class AnimationQueue {
         if (queue.size()>= limit)
             throw new StackOverflowError("The animation Queue is overloaded");
         var pt = new PathTransition(Duration.millis(duration.doubleValue()),path,turtle);
-        var rt = new RotateTransition(Duration.millis(duration.doubleValue()/2));
+        var rt = new RotateTransition(Duration.millis(duration.doubleValue()/2), turtle);
         rt.setToAngle(newAngle);
         pt.setDuration(Duration.millis(duration.doubleValue()));
         rt.setDuration(Duration.millis(duration.doubleValue()));
