@@ -30,6 +30,7 @@ public class SidebarView {
     private static final int PEN_COLOR_BUTTON = 3;
     private static final int LANGUAGE_BUTTON = 4;
     private static final int HELP_BUTTON = 5;
+    private static final int MULTI_TURTLE_BUTTON = 6;
 
     private static final List<Image> ICONS = Collections.unmodifiableList(List.of(
             ImageUtils.getImageFromUrl("new_button.png", BUTTON_SIZE, BUTTON_SIZE),
@@ -37,7 +38,8 @@ public class SidebarView {
             ImageUtils.getImageFromUrl("turtle_image_button.png", BUTTON_SIZE, BUTTON_SIZE),
             ImageUtils.getImageFromUrl("pen_color_button.png", BUTTON_SIZE, BUTTON_SIZE),
             ImageUtils.getImageFromUrl("language_button.png", BUTTON_SIZE, BUTTON_SIZE),
-            ImageUtils.getImageFromUrl("help_button.png", BUTTON_SIZE, BUTTON_SIZE)
+            ImageUtils.getImageFromUrl("help_button.png", BUTTON_SIZE, BUTTON_SIZE),
+            ImageUtils.getImageFromUrl("multi_turtle_button.png", BUTTON_SIZE, BUTTON_SIZE)
     ));
 
     private static final List<String> TOOLTIPS = Collections.unmodifiableList(List.of(
@@ -46,7 +48,8 @@ public class SidebarView {
             "Set turtle image",
             "Set pen color",
             "Set language",
-            "Open documentation"
+            "Open documentation",
+            "Add new turtle"
     ));
 
     private static final String DURATION_TOOLTIP = "Adjust the duration of single movement";
@@ -141,4 +144,5 @@ public class SidebarView {
     public StackPane languageButton() { return buttons.get(LANGUAGE_BUTTON); }
     public StackPane helpButton() { return buttons.get(HELP_BUTTON); }
     public Slider speedSlider() { return animationDuration; }
+    public StackPane multiTurtle(){return buttons.get(MULTI_TURTLE_BUTTON);}
 }

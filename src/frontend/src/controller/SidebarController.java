@@ -1,6 +1,7 @@
 package controller;
 
 import app.TabbedApp;
+import engine.errors.IllegalParameterException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -17,10 +18,16 @@ import view.utils.ImageUtils;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
+import model.ModelModule;
+import model.TurtleManager;
+import model.TurtleModel;
+
 
 public class SidebarController {
     private static final int ICON_WIDTH = 100;
     private static final int ICON_HEIGHT = 80;
+
+    private TurtleManager turtleManager;
 
     private TabbedApp app;
 
@@ -34,11 +41,13 @@ public class SidebarController {
     public SidebarController(
             String lang,
             TabbedApp app,
-            SidebarView sidebar
+            SidebarView sidebar,
+            TurtleManager turtleManager
     ) {
         this.app = app;
         this.lang = lang;
         this.sidebar = sidebar;
+        this.turtleManager = turtleManager;
         setupHandlers();
     }
 
@@ -58,9 +67,12 @@ public class SidebarController {
         sidebar.turtleImageButton().setOnMouseClicked(this::turtleImageOnClick);
         sidebar.languageButton().setOnMouseClicked(this::languageOnClick);
         sidebar.helpButton().setOnMouseClicked(this::helpOnClick);
+        sidebar.multiTurtle().setOnMouseClicked(this::multiOnClick);
     }
 
-    private void newInstanceOnClick(MouseEvent e) { app.newInstance(); }
+    private void newInstanceOnClick(MouseEvent e) {
+        app.newInstance();
+    }
 
     private void backgroundColorOnChange(ActionEvent e) {
         canvasController.setBackgroundColor(sidebar.backgroundColor().getValue());
@@ -78,14 +90,14 @@ public class SidebarController {
         try {
             var is = new FileInputStream(file);
             var image = ImageUtils.getImageFromAbsUrl(is, TurtleView.TURTLE_SIZE, TurtleView.TURTLE_SIZE);
-            if(image.getException() != null)
+            if (image.getException() != null)
                 throw new RuntimeException("The chosen image file is either not an image or corrupted");
             canvasController.setTurtleImage(image);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
             alert.setHeaderText("Something went wrong ...");
-            alert.setContentText("While loading the Image, this happened:\n"+e.toString());
+            alert.setContentText("While loading the Image, this happened:\n" + e.toString());
             alert.showAndWait();
         }
     }
@@ -99,12 +111,20 @@ public class SidebarController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(chosenLanguage -> lang = chosenLanguage);
 
-        sidebar.appendLanguageTooltip("current: "+lang);
+        sidebar.appendLanguageTooltip("current: " + lang);
         editorController.setLang(lang);
     }
 
     private void helpOnClick(MouseEvent e) {
         var dialog = new ReferenceDialog();
         dialog.show();
+    }
+
+    private void multiOnClick(MouseEvent e) {
+        try {
+            turtleManager.addTurtle(turtleManager.id() + 1);
+        } catch (IllegalParameterException error) {
+            System.out.println("");
+        }
     }
 }
