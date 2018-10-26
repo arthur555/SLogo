@@ -46,6 +46,9 @@ public class DoTimes implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (myToken.getString().equals("DoTimes")) {
+            // TODO
+        }
         return 0;
     }
 

@@ -5,31 +5,18 @@ import engine.errors.InterpretationException;
 import model.TurtleManager;
 
 /**
- * This class handles the assignment grammar in the AST.
+ * This class implements the Tell grammar.
  *
  * @author Haotian Wang
  */
-public class MakeVariable implements Expression {
+public class Tell implements Expression {
     private Token myToken;
-    private Variable myVar;
-    private Expression myExpr;
+    private ExpressionList turtles;
 
-    public MakeVariable(Token token, Variable var, Expression a) {
+    public Tell(Token token, ExpressionList list) {
         myToken = token;
-        myVar = var;
-        myExpr = a;
+        turtles = list;
     }
-
-    /**
-     * This method gives a String representation of the Expression node enclosed by curly braces.
-     *
-     * @return A String representation of the abstract syntax tree node.
-     */
-    @Override
-    public String toString() {
-        return String.format("{%s %s %s}", myToken.getString(), myVar.toString(), myExpr.toString());
-    }
-
     /**
      * This method lets the AST act on a Turtle model.
      *
@@ -39,18 +26,16 @@ public class MakeVariable implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        if (myToken.getString().equals("MakeVariable")) {
+        if (myToken.getString().equals("Tell")) {
             // TODO
         }
-        // turtleManager.memory().setDouble("x"+((int) (Math.random() * 1000)), Math.random()); // just to test integration with the view
         return 0;
     }
 
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
+     * @param turtleManager @return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override

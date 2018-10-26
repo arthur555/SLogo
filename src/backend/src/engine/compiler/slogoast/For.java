@@ -49,6 +49,9 @@ public class For implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (myToken.getString().equals("For")) {
+            // TODO
+        }
         return 0;
     }
 

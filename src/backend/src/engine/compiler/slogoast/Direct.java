@@ -38,27 +38,43 @@ public class Direct implements Expression {
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("PenUp")) {
             return turtleManager.setPenDown(true);
-        } else if (myToken.getString().equals("PenDown")) {
+        }
+        else if (myToken.getString().equals("PenDown")) {
             return turtleManager.setPenDown(true);
-        } else if (myToken.getString().equals("ShowTurtle")) {
+        }
+        else if (myToken.getString().equals("ShowTurtle")) {
             return turtleManager.setVisible(true);
-        } else if (myToken.getString().equals("HideTurtle")) {
+        }
+        else if (myToken.getString().equals("HideTurtle")) {
             return turtleManager.setVisible(false);
-        } else if (myToken.getString().equals("Home")) {
+        }
+        else if (myToken.getString().equals("Home")) {
             return turtleManager.moveTo(0,0,true);
-        } else if (myToken.getString().equals("ClearScreen")) {
+        }
+        else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
             return turtleManager.moveTo(0,0,true);
-        } else if (myToken.getString().equals("XCoordinate")) {
-
-        } else if (myToken.getString().equals("YCoordinate")) {
-
-        } else if (myToken.getString().equals("Heading")) {
-
-        } else if (myToken.getString().equals("IsPenDown")) {
-
-        } else if (myToken.getString().equals("IsShowing")) {
-
+        }
+        else if (myToken.getString().equals("XCoordinate")) {
+            return turtleManager.getX();
+        }
+        else if (myToken.getString().equals("YCoordinate")) {
+            return turtleManager.getY();
+        }
+        else if (myToken.getString().equals("Heading")) {
+            return turtleManager.getAngle();
+        }
+        else if (myToken.getString().equals("IsPenDown")) {
+            return turtleManager.isPenDown() ? turtleManager.TRUE : turtleManager.FALSE;
+        }
+        else if (myToken.getString().equals("IsShowing")) {
+            return turtleManager.isVisible() ? turtleManager.TRUE : turtleManager.FALSE;
+        }
+        else if (myToken.getString().equals("Pi")){
+            return Math.PI;
+        }
+        else if (myToken.getType().equals("Constant")){
+            return Double.parseDouble(myToken.getString());
         }
         return 0;
     }
@@ -72,6 +88,6 @@ public class Direct implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 }

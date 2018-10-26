@@ -42,6 +42,9 @@ public class MakeUserInstruction implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        if (action.getString().equals("MakeUserInstruction")) {
+            // TODO
+        }
         return 0;
     }
 

@@ -5,29 +5,23 @@ import engine.errors.InterpretationException;
 import model.TurtleManager;
 
 /**
- * This class handles the assignment grammar in the AST.
+ * Implements the Ternary operator in AST node.
  *
  * @author Haotian Wang
  */
-public class MakeVariable implements Expression {
+public class Quaternary implements Expression {
     private Token myToken;
-    private Variable myVar;
-    private Expression myExpr;
+    private Expression firstArg;
+    private Expression secondArg;
+    private Expression thirdArg;
+    private Expression fourthArg;
 
-    public MakeVariable(Token token, Variable var, Expression a) {
+    public Quaternary(Token token, Expression expr1, Expression expr2, Expression expr3, Expression expr4) {
         myToken = token;
-        myVar = var;
-        myExpr = a;
-    }
-
-    /**
-     * This method gives a String representation of the Expression node enclosed by curly braces.
-     *
-     * @return A String representation of the abstract syntax tree node.
-     */
-    @Override
-    public String toString() {
-        return String.format("{%s %s %s}", myToken.getString(), myVar.toString(), myExpr.toString());
+        firstArg = expr1;
+        secondArg = expr2;
+        thirdArg = expr3;
+        fourthArg = expr4;
     }
 
     /**
@@ -39,18 +33,16 @@ public class MakeVariable implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        if (myToken.getString().equals("MakeVariable")) {
+        if (myToken.getString().equals("SetPalette")) {
             // TODO
         }
-        // turtleManager.memory().setDouble("x"+((int) (Math.random() * 1000)), Math.random()); // just to test integration with the view
         return 0;
     }
 
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
      *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
+     * @param turtleManager @return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
     @Override
