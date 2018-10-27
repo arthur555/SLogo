@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,30 +22,41 @@ import javafx.util.Duration;
 import model.ClearListener;
 import model.TurtleModel;
 import view.utils.ImageUtils;
+import view.utils.AnimationQueue;
+
+import java.util.ArrayList;
+import java.util.Queue;
 
 /**
  *  Takes care of one single Turtle
  */
 public class TurtleView implements ClearListener {
     public static final int TURTLE_SIZE = 50;
+    public static final int SCREEN_SIZE = 560;
+    public static final int ANIMATION_LIMIT = 200;
 
-    private ObservableList<Node> views;
+    private Group views;
     private BooleanProperty penDown;
     private ImageView turtle;
     private Image turtleImg;
     private Color penColor;
     private DoubleProperty duration;
+    private AnimationQueue animationQueue;
+    private double tempX;
+    private double tempY;
 
     public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
-        views = FXCollections.observableArrayList();
+        views = new Group();
 
         turtleImg = ImageUtils.getImageFromUrl("turtle_1.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView(turtleImg);
         turtle.setX(turtleModel.getX());
         turtle.setY(turtleModel.getY());
+        tempX = turtle.getX()+ TURTLE_SIZE/2;
+        tempY = turtle.getY()+ TURTLE_SIZE/2;
         turtle.setRotate(-turtleModel.getAngle());
         turtle.visibleProperty().bind(turtleModel.isVisibleModel());
-        views.add(turtle);
+        views.getChildren().add(turtle);
 
         penColor = Color.BLACK;
         penDown = new SimpleBooleanProperty();
@@ -52,7 +64,7 @@ public class TurtleView implements ClearListener {
 
         duration = new SimpleDoubleProperty();
         duration.bind(durationModel);
-
+        animationQueue = new AnimationQueue(ANIMATION_LIMIT);
         bindObservable(turtleModel);
     }
 
@@ -62,59 +74,67 @@ public class TurtleView implements ClearListener {
             var newY = newValue.y();
             var newAngle = newValue.angle();
 
-            var path = makePath(newX, newY, duration.doubleValue());
-            var animation = makeAnimation(turtle, path, newAngle);
-            var capturedPenDown = penDown.getValue();
-            animation.currentTimeProperty().addListener((e, o, n) -> {
-                if(n.toMillis() > duration.doubleValue()) return;
-                if(capturedPenDown) { views.add(makePath(newX, newY, n.toMillis())); }
-            });
-            animation.setOnFinished(e -> {
-                views.remove(turtle);
-                turtle = new ImageView(turtleImg);
-                turtle.setRotate(newAngle);
-                turtle.setX(newX);
-                turtle.setY(newY);
-                turtle.visibleProperty().bind(turtleModel.isVisibleModel());
-                views.add(turtle);
-            });
-            animation.play();
+            var path = makePath(newX, newY, duration.doubleValue(),tempX,tempY);
+            var animation = animationQueue.makeAnimation(turtle, path, newAngle, duration);
+            tempX = newX + TURTLE_SIZE/2;
+            tempY = newY + TURTLE_SIZE/2;
+            setupAnimation(turtleModel, newX, newY, newAngle, animation);
         });
     }
 
-    private Path makePath(double newX, double newY, double o) {
+    private void setupAnimation(TurtleModel turtleModel, double newX, double newY, double newAngle, Animation animation) {
+        var capturedPenDown = penDown.getValue();
+
+        animation.currentTimeProperty().addListener((e, o, n) -> {
+            if(n.toMillis() > duration.doubleValue()) return;
+            if(capturedPenDown) {
+                var temp = views.getChildren().get(views.getChildren().size()-1);
+                if (temp.getClass().getSimpleName().equals("Path"))
+                {
+                    views.getChildren().remove(views.getChildren().size()-1);
+                }
+                if(newX!=turtle.getX() || newY!=turtle.getY())
+                    views.getChildren().add(makePath(newX, newY, n.toMillis(),turtle.getX()+TURTLE_SIZE/2,turtle.getY()+TURTLE_SIZE/2)); }
+        });
+        animation.setOnFinished(e -> {
+            /*views.getChildren().remove(turtle);
+            System.out.println(turtle.getTranslateX());
+            System.out.println(turtle.getTranslateY());
+            turtle = new ImageView(turtleImg);
+            turtle.setRotate(newAngle);*/
+            views.getChildren().add(new Group());
+            turtle.setTranslateX(0);
+            turtle.setTranslateY(0);
+            turtle.setX(newX);
+            turtle.setY(newY);
+            //turtle.visibleProperty().bind(turtleModel.isVisibleModel());
+            //views.getChildren().add(turtle);
+            animationQueue.getPlaying().set(false);
+            views.getChildren().add(new Group());
+        });
+    }
+
+    private Path makePath(double newX, double newY, double o, double oldX, double oldY) {
         var path = new Path();
         if(o == duration.doubleValue())
             path.setFill(penColor);
-        path.getElements().add(new MoveTo(turtle.getX()+TURTLE_SIZE/2,turtle.getY()+TURTLE_SIZE/2));
-        path.getElements().add(new LineTo(
-                turtle.getX()+TURTLE_SIZE/2+o/duration.doubleValue() *(newX-turtle.getX()),
-                turtle.getY()+TURTLE_SIZE/2+o/duration.doubleValue() *(newY-turtle.getY())));
+        path.getElements().add(new MoveTo(oldX,oldY));
+        double currentX = turtle.getX()+TURTLE_SIZE/2+o/duration.doubleValue() *(newX-turtle.getX());
+        double currentY = turtle.getY()+TURTLE_SIZE/2+o/duration.doubleValue() *(newY-turtle.getY());
+        path.getElements().add(new LineTo(currentX,currentY));
         path.setStroke(penColor);
         return path;
     }
 
-    private Animation makeAnimation(ImageView turtle, Path path, Double newAngle){
-        var pt = new PathTransition(Duration.millis(duration.doubleValue()),path,turtle);
-        var rt = new RotateTransition(Duration.millis(duration.doubleValue()));
-        rt.setToAngle(newAngle);
-        pt.setDuration(Duration.millis(duration.doubleValue()));
-        rt.setDuration(Duration.millis(duration.doubleValue()));
 
-        if(newAngle == turtle.getRotate()) {
-            return new SequentialTransition(turtle,pt);
-        } else {
-            return new SequentialTransition(turtle,rt);
-        }
-    }
 
-    public ObservableList<Node> views() { return views; }
+    public Group views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }
     public void setPenColor(Color c) { penColor = c; }
 
     @Override
     public void clear() {
-        views.clear();
-        views.add(turtle);
+        views.getChildren().clear();
+        views.getChildren().add(turtle);
     }
 }

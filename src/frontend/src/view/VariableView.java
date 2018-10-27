@@ -62,6 +62,7 @@ public class VariableView implements StateMachineObserver {
         return grid;
     }
 
+
     private String trim(String in) {
         if(in.length() > MAX_LENGTH) return in.substring(0, MAX_LENGTH) + DOTDOTDOT;
         else return in;
