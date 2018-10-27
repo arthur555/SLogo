@@ -3,6 +3,10 @@ package engine.compiler.slogoast;
 import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
+import model.TurtleModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class implements the TwoList grammar.
@@ -29,12 +33,13 @@ public class TwoList implements Expression{
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        double ret = 0;
         if (myToken.getString().equals("Ask")) {
-            // TODO
+            //ret = turtleManager.ask(listA, listB);
         } else if (myToken.getString().equals("AskWith")) {
             // TODO
         }
-        return 0;
+        return ret;
     }
 
     /**
