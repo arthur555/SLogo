@@ -53,11 +53,23 @@ public class Condition implements Expression {
                 return 0;
             } else {
                 double ret = 0;
+                boolean needToReSet = false;
+                String type = null;
+                Object value = null;
+                if (turtleManager.memory().containsVariable(LOOP_COUNT)) {
+                    needToReSet = true;
+                    type = turtleManager.memory().getVariableType(LOOP_COUNT);
+                    value = turtleManager.memory().getValueleInGeneralForm(LOOP_COUNT);
+                }
                 for (int i = 1 ; i <= times; i++) {
                     turtleManager.memory().setInteger(LOOP_COUNT, i);
                     ret = expressionList.interpret(turtleManager);
                 }
-                turtleManager.memory().removeVariable(LOOP_COUNT);
+                if (needToReSet) {
+                    turtleManager.memory().setValue(LOOP_COUNT, value, type);
+                } else {
+                    turtleManager.memory().removeVariable(LOOP_COUNT);
+                }
                 return ret;
             }
         }
