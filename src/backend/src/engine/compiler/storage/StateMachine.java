@@ -51,7 +51,7 @@ public interface StateMachine {
      * @param value: The value of the variable to be stored in the Object format.
      * @param type: The String name of the type of the variable to be stored.
      */
-    void setValue(String key, Object value, String type) throws InterpretationException;
+    void setValue(String key, Object value, String type);
 
     /**
      * Get the type of the variable, either a double, an integer or a function.

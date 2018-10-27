@@ -11,6 +11,11 @@ import java.util.*;
  * @author Haotian Wang
  */
 public class CrudeStateMachine implements StateMachine {
+    private static final String INTEGER_TYPE = "Integer";
+    private static final String DOUBLE_TYPE = "Double";
+    private static final String STRING_TYPE = "String";
+    private static final String FUNCTION_TYPE = "Function";
+
     private Map<String, String> typeMap;
     private Map<String, Double> doubleMap;
     private Map<String, Integer> integerMap;
@@ -56,17 +61,17 @@ public class CrudeStateMachine implements StateMachine {
     public void setDouble(String key, double value) {
         if (typeMap.containsKey(key)) {
             String type = typeMap.get(key);
-            if (type.equals("Integer")) {
+            if (type.equals(INTEGER_TYPE)) {
                 integerMap.remove(key);
-            } else if (type.equals("String")) {
+            } else if (type.equals(STRING_TYPE)) {
                 stringMap.remove(key);
-            } else if (type.equals("Function")) {
+            } else if (type.equals(FUNCTION_TYPE)) {
                 functionMap.remove(key);
             }
         }
         doubleMap.put(key, value);
         aggregateMap.put(key, value);
-        typeMap.put(key, "Double");
+        typeMap.put(key, DOUBLE_TYPE);
         pushAlarm();
     }
 
@@ -79,17 +84,17 @@ public class CrudeStateMachine implements StateMachine {
     public void setInteger(String key, int value) {
         if (typeMap.containsKey(key)) {
             String type = typeMap.get(key);
-            if (type.equals("Double")) {
+            if (type.equals(DOUBLE_TYPE)) {
                 doubleMap.remove(key);
-            } else if (type.equals("String")) {
+            } else if (type.equals(STRING_TYPE)) {
                 stringMap.remove(key);
-            } else if (type.equals("Function")) {
+            } else if (type.equals(FUNCTION_TYPE)) {
                 functionMap.remove(key);
             }
         }
         integerMap.put(key, value);
         aggregateMap.put(key, value);
-        typeMap.put(key, "Integer");
+        typeMap.put(key, INTEGER_TYPE);
         pushAlarm();
     }
 
@@ -102,17 +107,17 @@ public class CrudeStateMachine implements StateMachine {
     public void setString(String key, String value) {
         if (typeMap.containsKey(key)) {
             String type = typeMap.get(key);
-            if (type.equals("Double")) {
+            if (type.equals(DOUBLE_TYPE)) {
                 doubleMap.remove(key);
-            } else if (type.equals("Integer")) {
+            } else if (type.equals(INTEGER_TYPE)) {
                 integerMap.remove(key);
-            } else if (type.equals("Function")) {
+            } else if (type.equals(FUNCTION_TYPE)) {
                 functionMap.remove(key);
             }
         }
         stringMap.put(key, value);
         aggregateMap.put(key, value);
-        typeMap.put(key, "Integer");
+        typeMap.put(key, INTEGER_TYPE);
         pushAlarm();
     }
 
@@ -126,17 +131,17 @@ public class CrudeStateMachine implements StateMachine {
     public void setFunction(String key, Expression function) {
         if (typeMap.containsKey(key)) {
             String type = typeMap.get(key);
-            if (type.equals("Double")) {
+            if (type.equals(DOUBLE_TYPE)) {
                 doubleMap.remove(key);
-            } else if (type.equals("Integer")) {
+            } else if (type.equals(INTEGER_TYPE)) {
                 integerMap.remove(key);
-            } else if (type.equals("String")) {
+            } else if (type.equals(STRING_TYPE)) {
                 stringMap.remove(key);
             }
         }
         functionMap.put(key, function);
         aggregateMap.put(key, function);
-        typeMap.put(key, "Integer");
+        typeMap.put(key, INTEGER_TYPE);
         pushAlarm();
     }
 
@@ -148,9 +153,15 @@ public class CrudeStateMachine implements StateMachine {
      * @param type  : The String name of the type of the variable to be stored.
      */
     @Override
-    public void setValue(String key, Object value, String type) throws InterpretationException {
-        if (containsVariable(key)) {
-            removeVariable(key);
+    public void setValue(String key, Object value, String type) {
+        if (type.equals(INTEGER_TYPE)) {
+            setInteger(key, (int) value);
+        } else if (type.equals(DOUBLE_TYPE)) {
+            setDouble(key, (double) value);
+        } else if (type.equals(STRING_TYPE)) {
+            setString(key, (String) value);
+        } else if (type.equals(FUNCTION_TYPE)) {
+            setFunction(key, (Expression) value);
         }
     }
 
@@ -192,15 +203,16 @@ public class CrudeStateMachine implements StateMachine {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore cannot be removed", key));
         }
         String type = typeMap.get(key);
-        if (type.equals("Double")) {
+        if (type.equals(DOUBLE_TYPE)) {
             doubleMap.remove(key);
-        } else if (type.equals("Integer")) {
+        } else if (type.equals(INTEGER_TYPE)) {
             integerMap.remove(key);
-        } else if (type.equals("Function")) {
+        } else if (type.equals(FUNCTION_TYPE)) {
             functionMap.remove(key);
-        } else if (type.equals("String")) {
+        } else if (type.equals(STRING_TYPE)) {
             stringMap.remove(key);
-        } aggregateMap.remove(key);
+        }
+        aggregateMap.remove(key);
         pushAlarm();
     }
 
