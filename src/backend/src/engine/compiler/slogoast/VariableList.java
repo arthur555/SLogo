@@ -42,7 +42,11 @@ public class VariableList implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        double ret = 0;
+        for (Variable var : variableList) {
+            ret = var.interpret(turtleManager);
+        }
+        return ret;
     }
 
     /**
@@ -54,6 +58,13 @@ public class VariableList implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
+    }
+
+    /**
+     * @return The List of Variable objects contained in this VariableList object.
+     */
+    List<Variable> getListOfVariables() {
+        return variableList;
     }
 }

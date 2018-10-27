@@ -274,7 +274,7 @@ public class CrudeParser implements Parser {
         if (makeUserInstructionPair.getKey() == null) {
             return nullPair;
         }
-        Pair<Expression, Integer> commandPair = parseVariable(index);
+        Pair<Expression, Integer> commandPair = parseVariable(makeUserInstructionPair.getValue());
         if (commandPair.getKey() == null) {
             throw generateSyntaxException("Missing a valid variable name to store the user-made function after the \"to\" keyword", commandPair.getValue());
         }
@@ -329,7 +329,7 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() == null) {
             return nullPair;
         }
-        Pair<Expression, Integer> expressionListPair = parseVariableList(variablePair.getValue());
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(variablePair.getValue());
         if (expressionListPair.getKey() == null) {
             return nullPair;
         }
@@ -547,7 +547,7 @@ public class CrudeParser implements Parser {
         if (middlePair.getKey() == null) {
             throw generateSyntaxException("Illegal expression for a Group after the \"(\" symbol", middlePair.getValue());
         }
-        Pair<Token, Integer> groupEndPair = parseToken(index, "GroupEnd");
+        Pair<Token, Integer> groupEndPair = parseToken(middlePair.getValue(), "GroupEnd");
         if (groupEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \")\" symbol for a Group after a valid expression", groupEndPair.getValue());
         }

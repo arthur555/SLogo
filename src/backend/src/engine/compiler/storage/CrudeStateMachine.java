@@ -1,6 +1,7 @@
 package engine.compiler.storage;
 
 import engine.compiler.slogoast.Expression;
+import engine.compiler.slogoast.Variable;
 import engine.errors.InterpretationException;
 
 import java.util.*;
@@ -11,12 +12,7 @@ import java.util.*;
  * @author Haotian Wang
  */
 public class CrudeStateMachine implements StateMachine {
-    private static final String INTEGER_TYPE = "Integer";
-    private static final String DOUBLE_TYPE = "Double";
-    private static final String STRING_TYPE = "String";
-    private static final String FUNCTION_TYPE = "Function";
-
-    private Map<String, String> typeMap;
+    private Map<String, VariableType> typeMap;
     private Map<String, Double> doubleMap;
     private Map<String, Integer> integerMap;
     private Map<String, String> stringMap;
@@ -46,8 +42,19 @@ public class CrudeStateMachine implements StateMachine {
      * @return A boolean value indicating whether the variable key is defined in the StateMachine.
      */
     @Override
-    public boolean containsVariable(String key) {
+    public boolean containsGlobalVariable(String key) {
         return aggregateMap.containsKey(key);
+    }
+
+    /**
+     * Returns true if the variable is defined in the local StateMachine and false otherwise.
+     *
+     * @param key : The String name of the local variable to be queried.
+     * @return A boolean value indicating whether the variable key is defined in the local scope.
+     */
+    @Override
+    public boolean containsLocalVariable(String key) {
+        return false;
     }
 
     public void pushAlarm() { observers.forEach(StateMachineObserver::notifyListener);}
@@ -60,18 +67,18 @@ public class CrudeStateMachine implements StateMachine {
      */
     public void setDouble(String key, double value) {
         if (typeMap.containsKey(key)) {
-            String type = typeMap.get(key);
-            if (type.equals(INTEGER_TYPE)) {
+            VariableType type = typeMap.get(key);
+            if (type == VariableType.INTEGER) {
                 integerMap.remove(key);
-            } else if (type.equals(STRING_TYPE)) {
+            } else if (type == VariableType.STRING) {
                 stringMap.remove(key);
-            } else if (type.equals(FUNCTION_TYPE)) {
+            } else if (type == VariableType.EXPRESSION) {
                 functionMap.remove(key);
             }
         }
         doubleMap.put(key, value);
         aggregateMap.put(key, value);
-        typeMap.put(key, DOUBLE_TYPE);
+        typeMap.put(key, VariableType.DOUBLE);
         pushAlarm();
     }
 
@@ -83,18 +90,18 @@ public class CrudeStateMachine implements StateMachine {
      */
     public void setInteger(String key, int value) {
         if (typeMap.containsKey(key)) {
-            String type = typeMap.get(key);
-            if (type.equals(DOUBLE_TYPE)) {
+            VariableType type = typeMap.get(key);
+            if (type == VariableType.DOUBLE) {
                 doubleMap.remove(key);
-            } else if (type.equals(STRING_TYPE)) {
+            } else if (type == VariableType.STRING) {
                 stringMap.remove(key);
-            } else if (type.equals(FUNCTION_TYPE)) {
+            } else if (type == VariableType.EXPRESSION) {
                 functionMap.remove(key);
             }
         }
         integerMap.put(key, value);
         aggregateMap.put(key, value);
-        typeMap.put(key, INTEGER_TYPE);
+        typeMap.put(key, VariableType.INTEGER);
         pushAlarm();
     }
 
@@ -106,18 +113,18 @@ public class CrudeStateMachine implements StateMachine {
      */
     public void setString(String key, String value) {
         if (typeMap.containsKey(key)) {
-            String type = typeMap.get(key);
-            if (type.equals(DOUBLE_TYPE)) {
+            VariableType type = typeMap.get(key);
+            if (type == VariableType.DOUBLE) {
                 doubleMap.remove(key);
-            } else if (type.equals(INTEGER_TYPE)) {
+            } else if (type == VariableType.INTEGER) {
                 integerMap.remove(key);
-            } else if (type.equals(FUNCTION_TYPE)) {
+            } else if (type == VariableType.EXPRESSION) {
                 functionMap.remove(key);
             }
         }
         stringMap.put(key, value);
         aggregateMap.put(key, value);
-        typeMap.put(key, INTEGER_TYPE);
+        typeMap.put(key, VariableType.INTEGER);
         pushAlarm();
     }
 
@@ -128,21 +135,107 @@ public class CrudeStateMachine implements StateMachine {
      * @param function
      */
     @Override
-    public void setFunction(String key, Expression function) {
+    public void setExpression(String key, Expression function) {
         if (typeMap.containsKey(key)) {
-            String type = typeMap.get(key);
-            if (type.equals(DOUBLE_TYPE)) {
+            VariableType type = typeMap.get(key);
+            if (type == VariableType.DOUBLE) {
                 doubleMap.remove(key);
-            } else if (type.equals(INTEGER_TYPE)) {
+            } else if (type == VariableType.INTEGER) {
                 integerMap.remove(key);
-            } else if (type.equals(STRING_TYPE)) {
+            } else if (type == VariableType.STRING) {
                 stringMap.remove(key);
             }
         }
         functionMap.put(key, function);
         aggregateMap.put(key, function);
-        typeMap.put(key, INTEGER_TYPE);
+        typeMap.put(key, VariableType.EXPRESSION);
         pushAlarm();
+    }
+
+    /**
+     * Set a local integer value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalInteger(String key, int value) {
+
+    }
+
+    /**
+     * Set a local double value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalDouble(String key, double value) {
+
+    }
+
+    /**
+     * Set a local String value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalString(String key, String value) {
+
+    }
+
+    /**
+     * Set an Expression value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalExpression(String key, Expression value) {
+
+    }
+
+    /**
+     * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
+     *
+     * @param key   : A String representation of the name of the variable.
+     * @param value : The value of the local variable to be stored, in the most general form of Object.
+     * @param type  : The type of object to be stored.
+     */
+    @Override
+    public void setLocalVariable(String key, Object value, VariableType type) {
+
+    }
+
+    /**
+     * Remove the local variable, either deleting the local variable if it is not set in the global dictionary, or restore its value to the global value.
+     *
+     * @param key : A String representation of the name of the variable to be removed.
+     */
+    @Override
+    public void removeLocalVariable(String key) {
+
+    }
+
+    /**
+     * Get the variable type of the local variable.
+     *
+     * @param key : The String name of the variable to query.
+     */
+    @Override
+    public VariableType getLocalVariableType(String key) {
+        return null;
+    }
+
+    /**
+     * Get the value of the local variable in the most general form.
+     *
+     * @param key : The String name of the variable to query.
+     */
+    @Override
+    public Object getLocalValueInGeneralForm(String key) {
+        return null;
     }
 
     /**
@@ -150,18 +243,18 @@ public class CrudeStateMachine implements StateMachine {
      *
      * @param key   : The String name of the variable.
      * @param value : The value of the variable to be stored in the Object format.
-     * @param type  : The String name of the type of the variable to be stored.
+     * @param type  : The type of the variable to be stored.
      */
     @Override
-    public void setValue(String key, Object value, String type) {
-        if (type.equals(INTEGER_TYPE)) {
+    public void setGlobalVariable(String key, Object value, VariableType type) {
+        if (type == VariableType.INTEGER) {
             setInteger(key, (int) value);
-        } else if (type.equals(DOUBLE_TYPE)) {
+        } else if (type == VariableType.DOUBLE) {
             setDouble(key, (double) value);
-        } else if (type.equals(STRING_TYPE)) {
+        } else if (type == VariableType.STRING) {
             setString(key, (String) value);
-        } else if (type.equals(FUNCTION_TYPE)) {
-            setFunction(key, (Expression) value);
+        } else if (type == VariableType.EXPRESSION) {
+            setExpression(key, (Expression) value);
         }
     }
 
@@ -172,7 +265,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return A String representation of the type of the variable.
      */
     @Override
-    public String getVariableType(String key) throws InterpretationException {
+    public VariableType getGlobalVariableType(String key) throws InterpretationException {
         if (!typeMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its type cannot be determined", key));
         }
@@ -186,7 +279,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return An Object representation of the value of the variable.
      */
     @Override
-    public Object getValueleInGeneralForm(String key) throws InterpretationException {
+    public Object getGlobalValueInGeneralForm(String key) throws InterpretationException {
         if (!aggregateMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its value cannot be returned", key));
         }
@@ -202,14 +295,14 @@ public class CrudeStateMachine implements StateMachine {
         if (!typeMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore cannot be removed", key));
         }
-        String type = typeMap.get(key);
-        if (type.equals(DOUBLE_TYPE)) {
+        VariableType type = typeMap.get(key);
+        if (type == VariableType.DOUBLE) {
             doubleMap.remove(key);
-        } else if (type.equals(INTEGER_TYPE)) {
+        } else if (type == VariableType.INTEGER) {
             integerMap.remove(key);
-        } else if (type.equals(FUNCTION_TYPE)) {
+        } else if (type == VariableType.EXPRESSION) {
             functionMap.remove(key);
-        } else if (type.equals(STRING_TYPE)) {
+        } else if (type == VariableType.STRING) {
             stringMap.remove(key);
         }
         aggregateMap.remove(key);
@@ -230,7 +323,7 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     @Override
-    public Map<String, Object> listOfVariables() { return Collections.unmodifiableMap(aggregateMap); }
+    public Map<String, Object> listOfGlobalVariables() { return Collections.unmodifiableMap(aggregateMap); }
 
     /**
      * Present the internal storage of the StateMachine in a list format, separated by newline.
@@ -253,5 +346,27 @@ public class CrudeStateMachine implements StateMachine {
             ans += entry.getKey() + " = " + entry.getValue() + "\n";
         }
         return ans;
+    }
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The value of the variable.
+     * @param key
+     */
+    @Override
+    public Object getValue(String key) {
+        return null;
+    }
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The type of the variable.
+     * @param key
+     */
+    @Override
+    public VariableType getVariableType(String key) {
+        return null;
     }
 }

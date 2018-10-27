@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -40,8 +41,10 @@ public class MakeVariable implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("MakeVariable")) {
-        }
-        return 0;
+            double ret = myExpr.evaluate(turtleManager);
+            turtleManager.memory().setGlobalVariable(myVar.getVariableName(), ret, VariableType.DOUBLE);
+            return ret;
+        } return 0;
     }
 
     /**
