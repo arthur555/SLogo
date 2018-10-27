@@ -1,7 +1,6 @@
 package engine.compiler.storage;
 
 import engine.compiler.slogoast.Expression;
-import engine.compiler.slogoast.Variable;
 import engine.errors.InterpretationException;
 
 import java.util.*;
@@ -224,6 +223,17 @@ public class StateMachineV2 implements StateMachine{
     @Override
     public boolean containsVariable(String key) {
         return globalMap.containsKey(key);
+    }
+
+    /**
+     * Returns true if the variable is defined in the local StateMachine and false otherwise.
+     *
+     * @param key : The String name of the local variable to be queried.
+     * @return A boolean value indicating whether the variable key is defined in the local scope.
+     */
+    @Override
+    public boolean containsLocalVariable(String key) {
+        return localMap.containsKey(key);
     }
 
     /**

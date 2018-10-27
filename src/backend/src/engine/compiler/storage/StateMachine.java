@@ -133,6 +133,14 @@ public interface StateMachine {
     boolean containsVariable(String key);
 
     /**
+     * Returns true if the variable is defined in the local StateMachine and false otherwise.
+     *
+     * @param key: The String name of the local variable to be queried.
+     * @return A boolean value indicating whether the variable key is defined in the local scope.
+     */
+    boolean containsLocalVariable(String key);
+
+    /**
      *  Push notifications to observers whenever there's change within the StateMachine.
      */
     void pushAlarm();
