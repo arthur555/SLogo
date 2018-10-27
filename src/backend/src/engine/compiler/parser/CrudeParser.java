@@ -178,7 +178,7 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseQuaternary(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        Pair<Token, Integer> quaternaryPair = parseToken(index, "Ternary");
+        Pair<Token, Integer> quaternaryPair = parseToken(index, "Quaternary");
         if (quaternaryPair.getKey() == null) {
             return nullPair;
         }

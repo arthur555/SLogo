@@ -13,6 +13,7 @@ public class Condition implements Expression {
     private Token condition;
     private Expression expr;
     private ExpressionList expressionList;
+    private static final String LOOP_COUNT = ":repcount";
 
     public Condition(Token a, Expression val, ExpressionList list) {
         condition = a;
@@ -41,9 +42,24 @@ public class Condition implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (condition.getString().equals("If")) {
-            // TODO
+            if (expr.evaluate(turtleManager) != 0) {
+                return expressionList.interpret(turtleManager);
+            } else {
+                return 0;
+            }
         } else if (condition.getString().equals("Repeat")) {
-            // TODO
+            int times = (int) expr.evaluate(turtleManager);
+            if (times == 0) {
+                return 0;
+            } else {
+                double ret = 0;
+                for (int i = 1 ; i <= times; i++) {
+                    turtleManager.memory().setInteger(LOOP_COUNT, i);
+                    ret = expressionList.interpret(turtleManager);
+                }
+                turtleManager.memory().removeVariable(LOOP_COUNT);
+                return ret;
+            }
         }
         return 0;
     }
@@ -57,7 +73,7 @@ public class Condition implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return evaluate(turtleManager);
     }
 
 
