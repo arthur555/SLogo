@@ -1,9 +1,9 @@
 package engine.compiler.storage;
 
 import engine.compiler.slogoast.Expression;
+import engine.compiler.slogoast.Variable;
 import engine.errors.InterpretationException;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -45,6 +45,38 @@ public interface StateMachine {
     void setExpression(String key, Expression function);
 
     /**
+     * Set a local integer value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    void setLocalInteger(String key, int value);
+
+    /**
+     * Set a local double value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    void setLocalDouble(String key, double value);
+
+    /**
+     * Set a local String value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    void setLocalString(String key, String value);
+
+    /**
+     * Set an Expression value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    void setLocalExpression(String key, Expression value);
+
+    /**
      * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
      *
      * @param key: A String representation of the name of the variable.
@@ -81,7 +113,7 @@ public interface StateMachine {
      * @param value: The value of the variable to be stored in the Object format.
      * @param type: The type of the variable to be stored.
      */
-    void setVariable(String key, Object value, VariableType type);
+    void setGlobalVariable(String key, Object value, VariableType type);
 
     /**
      * Get the type of the variable, either a double, an integer or a function.
@@ -89,7 +121,7 @@ public interface StateMachine {
      * @param key
      * @return The type of the variable.
      */
-    VariableType getVariableType(String key) throws InterpretationException;
+    VariableType getGlobalVariableType(String key) throws InterpretationException;
 
     /**
      * Get the value of the variable as an Object from the aggregate map.
@@ -97,7 +129,7 @@ public interface StateMachine {
      * @param key
      * @return An Object representation of the value of the variable.
      */
-    Object getValueInGeneralForm(String key) throws InterpretationException;
+    Object getGlobalValueInGeneralForm(String key) throws InterpretationException;
 
     /**
      * Remove the key entry from the map.
@@ -117,7 +149,7 @@ public interface StateMachine {
      *
      * @return A Map representation of the StateMachine.
      */
-    Map<String, Object> listOfVariables();
+    Map<String, Object> listOfGlobalVariables();
 
     /**
      *  Allow any observers to register as an observer to this StateMachine.
@@ -130,7 +162,7 @@ public interface StateMachine {
      * @param key: The String name of the variable to be queried.
      * @return A boolean value indicating whether the variable key is defined in the StateMachine.
      */
-    boolean containsVariable(String key);
+    boolean containsGlobalVariable(String key);
 
     /**
      * Returns true if the variable is defined in the local StateMachine and false otherwise.
@@ -151,4 +183,20 @@ public interface StateMachine {
      * @return A String representation of the StateMachine.
      */
     String toString();
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The value of the variable.
+     * @param key
+     */
+    Object getValue(String key) throws InterpretationException;
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The type of the variable.
+     * @param key
+     */
+    VariableType getVariableType(String key) throws InterpretationException;
 }

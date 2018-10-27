@@ -37,7 +37,7 @@ public class VariableView implements StateMachineObserver {
     @Override
     public void notifyListener() {
         variableView.getChildren().clear(); // we can optimize this if we need to
-        stateMachine.listOfVariables().forEach( (k, v) ->
+        stateMachine.listOfGlobalVariables().forEach( (k, v) ->
                 variableView.getChildren().add(keyValueText(variableView.getChildren().size(), k, v))
         );
     }
