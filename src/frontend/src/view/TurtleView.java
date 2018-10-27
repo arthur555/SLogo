@@ -17,9 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import model.ClearListener;
 import model.TurtleModel;
+import view.utils.CenteredImageView;
 import view.utils.ImageUtils;
 
 import java.util.ArrayList;
@@ -32,9 +34,9 @@ public class TurtleView implements ClearListener {
     public static final int TURTLE_SIZE = 50;
     public static final int SCREEN_SIZE = 800;
 
-    private ObservableList<Node> views;
+    private ObservableList<Path> paths;
     private BooleanProperty penDown;
-    private ImageView turtle;
+    private CenteredImageView turtle;
     private Image turtleImg;
     private Color penColor;
     private DoubleProperty duration;
@@ -44,15 +46,13 @@ public class TurtleView implements ClearListener {
     private Queue<Boolean> pendownQueue;
 
     public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
-        views = FXCollections.observableArrayList();
-
+        paths = FXCollections.observableArrayList();
         turtleImg = ImageUtils.getImageFromUrl("turtle_1.png", TURTLE_SIZE, TURTLE_SIZE);
-        turtle = new ImageView(turtleImg);
-        turtle.setX(turtleModel.getX());
-        turtle.setY(turtleModel.getY());
+        turtle = new CenteredImageView(turtleImg);
+        turtle.setCX(turtleModel.getX());
+        turtle.setCY(turtleModel.getY());
         turtle.setRotate(-turtleModel.getAngle());
         turtle.visibleProperty().bind(turtleModel.isVisibleModel());
-        views.add(turtle);
 
         penColor = Color.BLACK;
         penDown = new SimpleBooleanProperty();
@@ -77,17 +77,16 @@ public class TurtleView implements ClearListener {
             animation.currentTimeProperty().addListener((e, o, n) -> {
                 if(n.toMillis() > duration.doubleValue()) return;
                 if(capturedPenDown) {
-                    views.remove(views.size()-1);
-                    views.add(makePath(newX, newY, n.toMillis())); }
+                    paths.clear();
+                    paths.add(makePath(newX, newY, n.toMillis()));
+                }
             });
             animation.setOnFinished(e -> {
-                views.remove(turtle);
-                turtle = new ImageView(turtleImg);
+                turtle = new CenteredImageView(turtleImg);
                 turtle.setRotate(newAngle);
-                turtle.setX(newX);
-                turtle.setY(newY);
+                turtle.setCX(newX);
+                turtle.setCY(newY);
                 turtle.visibleProperty().bind(turtleModel.isVisibleModel());
-                views.add(turtle);
             });
             animation.play();
         });
@@ -97,10 +96,10 @@ public class TurtleView implements ClearListener {
         var path = new Path();
         if(o == duration.doubleValue())
             path.setFill(penColor);
-        path.getElements().add(new MoveTo(turtle.getX()+TURTLE_SIZE/2,turtle.getY()+TURTLE_SIZE/2));
+        path.getElements().add(new MoveTo(turtle.getCX(),turtle.getCY()));
         path.getElements().add(new LineTo(
-                turtle.getX()+TURTLE_SIZE/2+o/duration.doubleValue() *(newX-turtle.getX()),
-                turtle.getY()+TURTLE_SIZE/2+o/duration.doubleValue() *(newY-turtle.getY())));
+                turtle.getCX()+o/duration.doubleValue()*(newX-turtle.getCX()),
+                turtle.getCY()+o/duration.doubleValue()*(newY-turtle.getCY())));
         path.setStroke(penColor);
         return path;
     }
@@ -119,13 +118,18 @@ public class TurtleView implements ClearListener {
         }
     }
 
+    private void applyViewport(Rectangle viewport) {
+        for(var view : views) {
+
+        }
+    }
+
     public ObservableList<Node> views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }
     public void setPenColor(Color c) { penColor = c; }
 
     @Override
     public void clear() {
-        views.clear();
-        views.add(turtle);
+        paths.clear();
     }
 }

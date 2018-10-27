@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
 import view.utils.BackgroundUtils;
 
@@ -41,6 +42,11 @@ public class CanvasView {
         turtleViews.put(id, newView);
         root.getChildren().addAll(newView.views());
     }
+
+    public void applyViewport(Rectangle viewport) {
+
+    }
+
     public DoubleProperty durationProperty() { return duration; }
     public void setImage(int idx, Image img) { turtleViews.get(idx).setTurtleImage(img); }
     public void setBackgroundColor(Color c) { root.setBackground(BackgroundUtils.coloredBackground(c)); }
