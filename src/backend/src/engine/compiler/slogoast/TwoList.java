@@ -38,7 +38,7 @@ public class TwoList implements Expression{
         if (myToken.getString().equals("Ask")) {
             TurtleOperations<ExpressionList> ops = (TurtleOperations<ExpressionList>) listB;
             List<Integer> indices = new ArrayList<>();
-            for (Expression index: listA.getExpressions()){
+            for (Expression index: listA.getListOfExpressions()){
                 indices.add((int)index.evaluate(turtleManager));
             }
             ret = turtleManager.ask(indices, ops).evaluate(turtleManager);
