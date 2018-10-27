@@ -55,7 +55,7 @@ public class Condition implements Expression {
             } else {
                 double ret = 0;
                 for (int i = 1 ; i <= times; i++) {
-                    turtleManager.memory().setLocalVariable(LOOP_COUNT, new Integer(i), VariableType.INTEGER);
+                    turtleManager.memory().setLocalInteger(LOOP_COUNT, i);
                     ret = expressionList.interpret(turtleManager);
                 }
                 turtleManager.memory().removeLocalVariable(LOOP_COUNT);

@@ -55,7 +55,7 @@ public class DoTimes implements Expression {
                 String variableName = var.getVariableName();
                 double ret = 0;
                 for (int i = 1; i <= limitInt; i++) {
-                    turtleManager.memory().setLocalVariable(variableName, new Integer(i), VariableType.INTEGER);
+                    turtleManager.memory().setLocalInteger(variableName, i);
                     ret = expressionList.interpret(turtleManager);
                 }
                 turtleManager.memory().removeLocalVariable(variableName);
