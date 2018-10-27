@@ -33,18 +33,8 @@ public class CanvasView {
     }
     public void addTurtle(int id, TurtleModel model) {
         var newView = new TurtleView(model, duration);
-        newView.views().addListener((ListChangeListener<Node>) c -> {
-            while(c.next()) {
-                if(c.wasAdded()) root.getChildren().addAll(c.getAddedSubList());
-                if(c.wasRemoved()) root.getChildren().removeAll(c.getRemoved());
-            }
-        });
         turtleViews.put(id, newView);
         root.getChildren().addAll(newView.views());
-    }
-
-    public void applyViewport(Rectangle viewport) {
-
     }
 
     public DoubleProperty durationProperty() { return duration; }
