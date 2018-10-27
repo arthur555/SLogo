@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -54,7 +55,7 @@ public class Condition implements Expression {
             } else {
                 double ret = 0;
                 boolean needToReSet = false;
-                String type = null;
+                VariableType type = null;
                 Object value = null;
                 if (turtleManager.memory().containsVariable(LOOP_COUNT)) {
                     needToReSet = true;
