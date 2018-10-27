@@ -329,7 +329,7 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() == null) {
             return nullPair;
         }
-        Pair<Expression, Integer> expressionListPair = parseVariableList(variablePair.getValue());
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(variablePair.getValue());
         if (expressionListPair.getKey() == null) {
             return nullPair;
         }
