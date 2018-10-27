@@ -42,7 +42,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return A boolean value indicating whether the variable key is defined in the StateMachine.
      */
     @Override
-    public boolean containsVariable(String key) {
+    public boolean containsGlobalVariable(String key) {
         return aggregateMap.containsKey(key);
     }
 
@@ -153,6 +153,50 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     /**
+     * Set a local integer value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalInteger(String key, int value) {
+
+    }
+
+    /**
+     * Set a local double value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalDouble(String key, double value) {
+
+    }
+
+    /**
+     * Set a local String value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalString(String key, String value) {
+
+    }
+
+    /**
+     * Set an Expression value for a key.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void setLocalExpression(String key, Expression value) {
+
+    }
+
+    /**
      * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
      *
      * @param key   : A String representation of the name of the variable.
@@ -202,7 +246,7 @@ public class CrudeStateMachine implements StateMachine {
      * @param type  : The type of the variable to be stored.
      */
     @Override
-    public void setVariable(String key, Object value, VariableType type) {
+    public void setGlobalVariable(String key, Object value, VariableType type) {
         if (type == VariableType.INTEGER) {
             setInteger(key, (int) value);
         } else if (type == VariableType.DOUBLE) {
@@ -221,7 +265,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return A String representation of the type of the variable.
      */
     @Override
-    public VariableType getVariableType(String key) throws InterpretationException {
+    public VariableType getGlobalVariableType(String key) throws InterpretationException {
         if (!typeMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its type cannot be determined", key));
         }
@@ -235,7 +279,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return An Object representation of the value of the variable.
      */
     @Override
-    public Object getValueInGeneralForm(String key) throws InterpretationException {
+    public Object getGlobalValueInGeneralForm(String key) throws InterpretationException {
         if (!aggregateMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its value cannot be returned", key));
         }
@@ -279,7 +323,7 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     @Override
-    public Map<String, Object> listOfVariables() { return Collections.unmodifiableMap(aggregateMap); }
+    public Map<String, Object> listOfGlobalVariables() { return Collections.unmodifiableMap(aggregateMap); }
 
     /**
      * Present the internal storage of the StateMachine in a list format, separated by newline.
@@ -302,5 +346,27 @@ public class CrudeStateMachine implements StateMachine {
             ans += entry.getKey() + " = " + entry.getValue() + "\n";
         }
         return ans;
+    }
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The value of the variable.
+     * @param key
+     */
+    @Override
+    public Object getValue(String key) {
+        return null;
+    }
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The type of the variable.
+     * @param key
+     */
+    @Override
+    public VariableType getVariableType(String key) {
+        return null;
     }
 }
