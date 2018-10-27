@@ -53,24 +53,12 @@ public class DoTimes implements Expression {
                 return 0;
             } else {
                 String variableName = var.getVariableName();
-                boolean needToReSet = false;
                 double ret = 0;
-                VariableType type = null;
-                Object value = null;
-                if (turtleManager.memory().containsVariable(variableName)) {
-                    needToReSet = true;
-                    type = turtleManager.memory().getVariableType(variableName);
-                    value = turtleManager.memory().getValueleInGeneralForm(variableName);
-                }
                 for (int i = 1; i <= limitInt; i++) {
-                    turtleManager.memory().setInteger(variableName, i);
+                    turtleManager.memory().setLocalVariable(variableName, new Integer(i), VariableType.INTEGER);
                     ret = expressionList.interpret(turtleManager);
                 }
-                if (needToReSet) {
-                    turtleManager.memory().setValue(variableName, value, type);
-                } else {
-                    turtleManager.memory().removeVariable(variableName);
-                }
+                turtleManager.memory().removeLocalVariable(variableName);
                 return ret;
             }
         }

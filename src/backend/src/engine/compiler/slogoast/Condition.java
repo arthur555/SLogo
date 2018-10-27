@@ -50,27 +50,15 @@ public class Condition implements Expression {
             }
         } else if (condition.getString().equals("Repeat")) {
             int times = (int) expr.evaluate(turtleManager);
-            if (times == 0) {
+            if (times <= 0) {
                 return 0;
             } else {
                 double ret = 0;
-                boolean needToReSet = false;
-                VariableType type = null;
-                Object value = null;
-                if (turtleManager.memory().containsVariable(LOOP_COUNT)) {
-                    needToReSet = true;
-                    type = turtleManager.memory().getVariableType(LOOP_COUNT);
-                    value = turtleManager.memory().getValueleInGeneralForm(LOOP_COUNT);
-                }
                 for (int i = 1 ; i <= times; i++) {
-                    turtleManager.memory().setInteger(LOOP_COUNT, i);
+                    turtleManager.memory().setLocalVariable(LOOP_COUNT, new Integer(i), VariableType.INTEGER);
                     ret = expressionList.interpret(turtleManager);
                 }
-                if (needToReSet) {
-                    turtleManager.memory().setValue(LOOP_COUNT, value, type);
-                } else {
-                    turtleManager.memory().removeVariable(LOOP_COUNT);
-                }
+                turtleManager.memory().removeLocalVariable(LOOP_COUNT);
                 return ret;
             }
         }
