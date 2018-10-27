@@ -4,6 +4,7 @@ import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 import model.TurtleModel;
+import model.TurtleOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,12 @@ public class TwoList implements Expression{
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         double ret = 0;
         if (myToken.getString().equals("Ask")) {
-            //ret = turtleManager.ask(listA, listB);
+            TurtleOperations<ExpressionList> ops = (TurtleOperations<ExpressionList>) listB;
+            List<Integer> indices = new ArrayList<>();
+            for (Expression index: listA.getExpressions()){
+                indices.add((int)index.evaluate(turtleManager));
+            }
+            ret = turtleManager.ask(indices, ops).evaluate(turtleManager);
         } else if (myToken.getString().equals("AskWith")) {
             // TODO
         }

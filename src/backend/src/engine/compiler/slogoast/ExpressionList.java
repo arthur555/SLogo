@@ -56,5 +56,8 @@ public class ExpressionList implements Expression {
         return 0;
     }
 
+    public List<Expression> getExpressions(){
+        return expressionList;
+    }
 
 }
