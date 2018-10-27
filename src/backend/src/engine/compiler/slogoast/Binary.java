@@ -42,27 +42,39 @@ public class Binary implements Expression {
         if (myToken.getString().equals("Sum")) {
             return myFirstExpr.evaluate(turtleManager) + mySecondExpr.evaluate(turtleManager);
         } else if (myToken.getString().equals("Difference")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) - mySecondExpr.evaluate(turtleManager);
         } else if (myToken.getString().equals("Quotient")) {
-            // TODO
+            if (mySecondExpr.evaluate(turtleManager) == 0) {
+                throw new InterpretationException("The denominator in a Quotient operation cannot be zero");
+            }
+            return myFirstExpr.evaluate(turtleManager) / mySecondExpr.evaluate(turtleManager);
         } else if (myToken.getString().equals("Product")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) * mySecondExpr.evaluate(turtleManager);
         } else if (myToken.getString().equals("Remainder")) {
-            // TODO
+            double first = myFirstExpr.evaluate(turtleManager);
+            double second = mySecondExpr.evaluate(turtleManager);
+            if (second == 0) {
+                throw new InterpretationException("The denominator in a Remainder operation cannot be zero");
+            }
+            int firstInt = (int) first;
+            int secondInt = (int) second;
+            if (firstInt != first || secondInt != second) {
+                throw new InterpretationException("The two values used for a Remainder operation must be integers");
+            }
         } else if (myToken.getString().equals("Power")) {
-            // TODO
+            return Math.pow(myFirstExpr.evaluate(turtleManager), mySecondExpr.evaluate(turtleManager));
         } else if (myToken.getString().equals("LessThan")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) < mySecondExpr.evaluate(turtleManager) ? 1 : 0;
         } else if (myToken.getString().equals("GreaterThan")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) > mySecondExpr.evaluate(turtleManager) ? 1 : 0;
         } else if (myToken.getString().equals("Equal")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) == mySecondExpr.evaluate(turtleManager) ? 1 : 0;
         } else if (myToken.getString().equals("NotEqual")) {
-            // TODO
+            return mySecondExpr.evaluate(turtleManager) != mySecondExpr.evaluate(turtleManager) ? 1 : 0;
         } else if (myToken.getString().equals("And")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) != 0 && mySecondExpr.evaluate(turtleManager) != 0 ? 1 : 0;
         } else if (myToken.getString().equals("Or")) {
-            // TODO
+            return myFirstExpr.evaluate(turtleManager) != 0 || mySecondExpr.evaluate(turtleManager) != 0 ? 1 : 0;
         } else if (myToken.getString().equals("Towards")) {
             // TODO
         }
