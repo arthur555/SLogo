@@ -60,10 +60,12 @@ public class ExpressionList implements Expression {
         return interpret(turtleManager);
     }
 
+
     /**
      * @return The actual List of Expression associated with this ExpressionList object.
      */
     List<Expression> getListOfExpressions() {
         return expressionList;
     }
+
 }

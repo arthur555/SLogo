@@ -1,6 +1,8 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -49,10 +51,16 @@ public class For implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        double ret = 0;
         if (myToken.getString().equals("For")) {
-            // TODO
+            StateMachine memory = turtleManager.memory();
+            for (double counter = min.evaluate(turtleManager); counter < max.evaluate(turtleManager);  counter += step.evaluate(turtleManager)){
+                memory.setLocalVariable(var.getVariableName(), counter, VariableType.DOUBLE);
+                ret = expressionList.interpret(turtleManager);
+            }
+            memory.removeLocalVariable(var.getVariableName());
         }
-        return 0;
+        return ret;
     }
 
     /**
