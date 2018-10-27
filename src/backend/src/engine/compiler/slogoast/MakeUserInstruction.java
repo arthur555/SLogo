@@ -43,7 +43,7 @@ public class MakeUserInstruction implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (action.getString().equals("MakeUserInstruction")) {
-            // TODO
+            turtleManager.memory().setExpression(myVar.getVariableName(), this);
         }
         return 0;
     }
@@ -57,6 +57,22 @@ public class MakeUserInstruction implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
+    }
+
+    /**
+     * Get the variableList object associated with this MakeUserInstruction class.
+     *
+     * @return A VariableList object.
+     */
+    VariableList getParameters() {
+        return variableList;
+    }
+
+    /**
+     * @return An ExpressionList object associated with this MakeUserInstruction object.
+     */
+    ExpressionList getExpressionList() {
+        return expressionList;
     }
 }

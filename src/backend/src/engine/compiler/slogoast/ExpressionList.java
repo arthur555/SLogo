@@ -53,8 +53,13 @@ public class ExpressionList implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 
-
+    /**
+     * @return The actual List of Expression associated with this ExpressionList object.
+     */
+    List<Expression> getListOfExpressions() {
+        return expressionList;
+    }
 }

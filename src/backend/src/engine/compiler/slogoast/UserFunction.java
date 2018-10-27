@@ -36,7 +36,20 @@ public class UserFunction implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        MakeUserInstruction function = (MakeUserInstruction) turtleManager.memory().getGlobalValueInGeneralForm(myVariable.getVariableName());
+        VariableList desiredParameters = function.getParameters();
+        ExpressionList desiredExpressions = function.getExpressionList();
+        if (desiredParameters.getListOfVariables().size() != parameters.getListOfExpressions().size()) {
+            throw new InterpretationException(String.format("The number of expressions passed in, %d, does not match the number of desired parameters defined earlier, %d", parameters.getListOfExpressions().size(), desiredParameters.getListOfVariables().size()));
+        }
+        for (int i = 0; i < parameters.getListOfExpressions().size(); i++) {
+            turtleManager.memory().setLocalDouble(desiredParameters.getListOfVariables().get(i).getVariableName(), parameters.getListOfExpressions().get(i).evaluate(turtleManager));
+        }
+        double ret = desiredExpressions.interpret(turtleManager);
+        for (int i = 0; i < desiredParameters.getListOfVariables().size(); i++) {
+            turtleManager.memory().removeLocalVariable(desiredParameters.getListOfVariables().get(i).getVariableName());
+        }
+        return ret;
     }
 
     /**
@@ -48,6 +61,6 @@ public class UserFunction implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 }
