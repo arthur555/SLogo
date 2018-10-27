@@ -67,7 +67,7 @@ public class Condition implements Expression {
                     ret = expressionList.interpret(turtleManager);
                 }
                 if (needToReSet) {
-                    turtleManager.memory().setValue(LOOP_COUNT, value, type);
+                    turtleManager.memory().setVariable(LOOP_COUNT, value, type);
                 } else {
                     turtleManager.memory().removeVariable(LOOP_COUNT);
                 }

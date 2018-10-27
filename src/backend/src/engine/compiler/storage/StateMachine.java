@@ -58,7 +58,21 @@ public interface StateMachine {
      *
      * @param key: A String representation of the name of the variable to be removed.
      */
-    void removeLocalVariable(String key);
+    void removeLocalVariable(String key) throws InterpretationException;
+
+    /**
+     * Get the variable type of the local variable.
+     *
+     * @param key: The String name of the variable to query.
+     */
+    VariableType getLocalVariableType(String key) throws InterpretationException;
+
+    /**
+     * Get the value of the local variable in the most general form.
+     *
+     * @param key: The String name of the variable to query.
+     */
+    Object getLocalValueInGeneralForm(String key) throws InterpretationException;
 
     /**
      * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
@@ -67,7 +81,7 @@ public interface StateMachine {
      * @param value: The value of the variable to be stored in the Object format.
      * @param type: The type of the variable to be stored.
      */
-    void setValue(String key, Object value, VariableType type);
+    void setVariable(String key, Object value, VariableType type);
 
     /**
      * Get the type of the variable, either a double, an integer or a function.
@@ -83,7 +97,7 @@ public interface StateMachine {
      * @param key
      * @return An Object representation of the value of the variable.
      */
-    Object getValueleInGeneralForm(String key) throws InterpretationException;
+    Object getValueInGeneralForm(String key) throws InterpretationException;
 
     /**
      * Remove the key entry from the map.
@@ -122,4 +136,11 @@ public interface StateMachine {
      *  Push notifications to observers whenever there's change within the StateMachine.
      */
     void pushAlarm();
+
+    /**
+     * Present the internal storage of the StateMachine in a list format, separated by newline.
+     *
+     * @return A String representation of the StateMachine.
+     */
+    String toString();
 }

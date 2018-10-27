@@ -67,7 +67,7 @@ public class DoTimes implements Expression {
                     ret = expressionList.interpret(turtleManager);
                 }
                 if (needToReSet) {
-                    turtleManager.memory().setValue(variableName, value, type);
+                    turtleManager.memory().setVariable(variableName, value, type);
                 } else {
                     turtleManager.memory().removeVariable(variableName);
                 }
