@@ -56,4 +56,11 @@ public class VariableList implements Expression {
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
         return 0;
     }
+
+    /**
+     * @return The List of Variable objects contained in this VariableList object.
+     */
+    List<Variable> getListOfVariables() {
+        return variableList;
+    }
 }
