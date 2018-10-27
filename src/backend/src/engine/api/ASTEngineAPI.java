@@ -6,8 +6,8 @@ import engine.compiler.lexer.Lexer;
 import engine.compiler.parser.CrudeParser;
 import engine.compiler.parser.Parser;
 import engine.compiler.slogoast.Expression;
-import engine.compiler.storage.CrudeStateMachine;
 import engine.compiler.storage.StateMachine;
+import engine.compiler.storage.StateMachineV2;
 import engine.errors.CommandSyntaxException;
 import engine.errors.InterpretationException;
 import engine.errors.UndefinedKeywordException;
@@ -30,7 +30,7 @@ public class ASTEngineAPI implements EngineAPI {
         lexer = new CrudeLexer();
         parser = new CrudeParser();
         manager = turtleManager;
-        stateMachine = new CrudeStateMachine();
+        stateMachine = new StateMachineV2();
         manager.equipMemory(stateMachine);
     }
 

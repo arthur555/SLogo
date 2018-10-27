@@ -46,6 +46,17 @@ public class CrudeStateMachine implements StateMachine {
         return aggregateMap.containsKey(key);
     }
 
+    /**
+     * Returns true if the variable is defined in the local StateMachine and false otherwise.
+     *
+     * @param key : The String name of the local variable to be queried.
+     * @return A boolean value indicating whether the variable key is defined in the local scope.
+     */
+    @Override
+    public boolean containsLocalVariable(String key) {
+        return false;
+    }
+
     public void pushAlarm() { observers.forEach(StateMachineObserver::notifyListener);}
 
     /**
@@ -164,6 +175,26 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     /**
+     * Get the variable type of the local variable.
+     *
+     * @param key : The String name of the variable to query.
+     */
+    @Override
+    public VariableType getLocalVariableType(String key) {
+        return null;
+    }
+
+    /**
+     * Get the value of the local variable in the most general form.
+     *
+     * @param key : The String name of the variable to query.
+     */
+    @Override
+    public Object getLocalValueInGeneralForm(String key) {
+        return null;
+    }
+
+    /**
      * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
      *
      * @param key   : The String name of the variable.
@@ -171,7 +202,7 @@ public class CrudeStateMachine implements StateMachine {
      * @param type  : The type of the variable to be stored.
      */
     @Override
-    public void setValue(String key, Object value, VariableType type) {
+    public void setVariable(String key, Object value, VariableType type) {
         if (type == VariableType.INTEGER) {
             setInteger(key, (int) value);
         } else if (type == VariableType.DOUBLE) {
@@ -204,7 +235,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return An Object representation of the value of the variable.
      */
     @Override
-    public Object getValueleInGeneralForm(String key) throws InterpretationException {
+    public Object getValueInGeneralForm(String key) throws InterpretationException {
         if (!aggregateMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its value cannot be returned", key));
         }
