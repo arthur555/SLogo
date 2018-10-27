@@ -41,7 +41,11 @@ public class ExpressionList implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        double ret = 0;
+        for (Expression expr : expressionList) {
+            ret = expr.interpret(turtleManager);
+        }
+        return ret;
     }
 
     /**
@@ -53,8 +57,13 @@ public class ExpressionList implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 
-
+    /**
+     * @return The actual List of Expression associated with this ExpressionList object.
+     */
+    List<Expression> getListOfExpressions() {
+        return expressionList;
+    }
 }
