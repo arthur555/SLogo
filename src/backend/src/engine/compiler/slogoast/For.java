@@ -49,10 +49,13 @@ public class For implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        double ret = 0;
         if (myToken.getString().equals("For")) {
-            // TODO
+            for (double counter = min.evaluate(turtleManager); counter < max.evaluate(turtleManager);  counter += step.evaluate(turtleManager)){
+                
+            }
         }
-        return 0;
+        return ret;
     }
 
     /**
