@@ -42,24 +42,40 @@ public interface StateMachine {
      * @param key
      * @param function
      */
-    void setFunction(String key, Expression function);
+    void setExpression(String key, Expression function);
+
+    /**
+     * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
+     *
+     * @param key: A String representation of the name of the variable.
+     * @param value: The value of the local variable to be stored, in the most general form of Object.
+     * @param type: The type of object to be stored.
+     */
+    void setLocalVariable(String key, Object value, VariableType type);
+
+    /**
+     * Remove the local variable, either deleting the local variable if it is not set in the global dictionary, or restore its value to the global value.
+     *
+     * @param key: A String representation of the name of the variable to be removed.
+     */
+    void removeLocalVariable(String key);
 
     /**
      * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
      *
      * @param key: The String name of the variable.
      * @param value: The value of the variable to be stored in the Object format.
-     * @param type: The String name of the type of the variable to be stored.
+     * @param type: The type of the variable to be stored.
      */
-    void setValue(String key, Object value, String type);
+    void setValue(String key, Object value, VariableType type);
 
     /**
      * Get the type of the variable, either a double, an integer or a function.
      *
      * @param key
-     * @return A String representation of the type of the variable.
+     * @return The type of the variable.
      */
-    String getVariableType(String key) throws InterpretationException;
+    VariableType getVariableType(String key) throws InterpretationException;
 
     /**
      * Get the value of the variable as an Object from the aggregate map.
