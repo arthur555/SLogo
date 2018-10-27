@@ -41,7 +41,11 @@ public class ExpressionList implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        double ret = 0;
+        for (Expression expr : expressionList) {
+            ret = expr.interpret(turtleManager);
+        }
+        return ret;
     }
 
     /**
