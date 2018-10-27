@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 import model.TurtleModel;
@@ -14,12 +15,13 @@ import java.util.List;
  *
  * @author Haotian Wang
  */
-public class TwoList implements Expression{
+public class TwoList extends Expression{
     private Token myToken;
     private ExpressionList listA;
     private ExpressionList listB;
 
-    public TwoList(Token token, ExpressionList list1, ExpressionList list2) {
+    public TwoList(Token token, ExpressionList list1, ExpressionList list2, StateMachine glob) {
+        super(glob);
         myToken = token;
         listA = list1;
         listB = list2;

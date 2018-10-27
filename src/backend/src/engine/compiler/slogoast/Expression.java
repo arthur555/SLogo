@@ -1,5 +1,7 @@
 package engine.compiler.slogoast;
 
+import engine.compiler.storage.StateMachine;
+import engine.compiler.storage.StateMachineV2;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -8,13 +10,23 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public interface Expression {
+public abstract class Expression {
+
+    StateMachine myMemory;
+    StateMachine myGlobal;
+
+
+    public Expression(StateMachine glob){
+        myGlobal = glob;
+    }
+
+
     /**
      * This method gives a String representation of the Expression node enclosed by curly braces.
      *
      * @return A String representation of the abstract syntax tree node.
      */
-    String toString();
+    //String toString();
 
     /**
      * This method lets the AST act on a Turtle model.
@@ -23,7 +35,7 @@ public interface Expression {
      * @return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
-    double interpret(TurtleManager turtleManager) throws InterpretationException;
+    public abstract double interpret(TurtleManager turtleManager) throws InterpretationException;
 
     /**
      * This method evaluates the return value of the expression, without applying actual effects on the turtle.
@@ -32,5 +44,5 @@ public interface Expression {
      * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
-    double evaluate(TurtleManager turtleManager) throws InterpretationException;
+    abstract double evaluate(TurtleManager turtleManager) throws InterpretationException;
 }

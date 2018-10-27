@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
@@ -10,10 +11,11 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Variable implements Expression {
+public class Variable extends Expression {
     private Token myToken;
 
-    public Variable(Token token) {
+    public Variable(Token token, StateMachine glob) {
+        super(glob);
         myToken = token;
     }
 
@@ -37,8 +39,8 @@ public class Variable implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         String variableName = myToken.getString();
-        Object value = turtleManager.memory().getValue(variableName);
-        VariableType type = turtleManager.memory().getVariableType(variableName);
+        Object value = myGlobal.getValue(variableName);
+        VariableType type = myGlobal.getVariableType(variableName);
         if (type == VariableType.STRING) {
             throw new InterpretationException(String.format("The variable \"%s\" defined as a String", variableName));
         } else if (type == VariableType.EXPRESSION) {

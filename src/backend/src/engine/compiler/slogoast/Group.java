@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,12 +10,13 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Group implements Expression {
+public class Group extends Expression {
     private Token groupStart;
     private Token groupEnd;
     private Expression myExpr;
 
-    public Group(Token start, Expression a, Token end) {
+    public Group(Token start, Expression a, Token end, StateMachine glob) {
+        super(glob);
         groupStart = start;
         groupEnd = end;
         myExpr = a;

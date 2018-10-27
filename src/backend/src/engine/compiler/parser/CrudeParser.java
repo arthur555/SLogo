@@ -1,6 +1,7 @@
 package engine.compiler.parser;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.CommandSyntaxException;
 import engine.compiler.slogoast.*;
 import javafx.util.Pair;
@@ -22,7 +23,10 @@ public class CrudeParser implements Parser {
     private Expression myAST;
     private String tokenStream;
 
-    public CrudeParser() {
+    private StateMachine globalMemory;
+
+    public CrudeParser(StateMachine glob) {
+        globalMemory = glob;
         myTokens = new ArrayList<>();
     }
 
@@ -198,7 +202,7 @@ public class CrudeParser implements Parser {
         if (fourthPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for the the fourth part of expression in quaternary grammar", thirdPair.getValue());
         }
-        return new Pair<>(new Quaternary(quaternaryPair.getKey(), firstPair.getKey(), secondPair.getKey(), thirdPair.getKey(), fourthPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Quaternary(quaternaryPair.getKey(), firstPair.getKey(), secondPair.getKey(), thirdPair.getKey(), fourthPair.getKey(), globalMemory), secondPair.getValue());
     }
 
     /**
@@ -215,7 +219,7 @@ public class CrudeParser implements Parser {
         if (listPair.getKey() == null) {
             throw generateSyntaxException(String.format("The list of expressions following the keyword \"%s\" is illegal", tellPair.getKey().getString()), listPair.getValue());
         }
-        return new Pair<>(new Tell(tellPair.getKey(), (ExpressionList) listPair.getKey()), listPair.getValue());
+        return new Pair<>(new Tell(tellPair.getKey(), (ExpressionList) listPair.getKey(), globalMemory), listPair.getValue());
     }
 
     /**
@@ -236,7 +240,7 @@ public class CrudeParser implements Parser {
         if (listTwoPair.getKey() == null) {
             throw generateSyntaxException(String.format("The second list of expressions after the keyword \"%s\" is illegal", twoListPair.getKey().getString()), listTwoPair.getValue());
         }
-        return new Pair<>(new TwoList(twoListPair.getKey(), (ExpressionList) listOnePair.getKey(), (ExpressionList) listTwoPair.getKey()), listTwoPair.getValue());
+        return new Pair<>(new TwoList(twoListPair.getKey(), (ExpressionList) listOnePair.getKey(), (ExpressionList) listTwoPair.getKey(), globalMemory), listTwoPair.getValue());
     }
 
     /**
@@ -261,7 +265,7 @@ public class CrudeParser implements Parser {
         if (listBPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for a list of expressions that is run when the ifelse expression is evaluated false", listBPair.getValue());
         }
-        return new Pair<>(new IfElse(ifElsePair.getKey(), expressionPair.getKey(), (ExpressionList) listAPair.getKey(), (ExpressionList) listBPair.getKey()), listBPair.getValue());
+        return new Pair<>(new IfElse(ifElsePair.getKey(), expressionPair.getKey(), (ExpressionList) listAPair.getKey(), (ExpressionList) listBPair.getKey(), globalMemory), listBPair.getValue());
     }
 
     /**
@@ -286,7 +290,8 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for defining a list of expressions for use with the user-defined function", expressionListPair.getValue());
         }
-        return new Pair<>(new MakeUserInstruction(makeUserInstructionPair.getKey(), (Variable) commandPair.getKey(), (VariableList) variableListPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new MakeUserInstruction(makeUserInstructionPair.getKey(), (Variable) commandPair.getKey(),
+                (VariableList) variableListPair.getKey(), (ExpressionList) expressionListPair.getKey(), globalMemory), expressionListPair.getValue());
     }
 
     /**
@@ -316,7 +321,7 @@ public class CrudeParser implements Parser {
         if (listEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
-        return new Pair<>(new VariableList(listStart, variableList, listEnd), listEndPair.getValue());
+        return new Pair<>(new VariableList(listStart, variableList, listEnd, globalMemory), listEndPair.getValue());
     }
 
     /**
@@ -333,7 +338,7 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new UserFunction((Variable) variablePair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new UserFunction((Variable) variablePair.getKey(), (ExpressionList) expressionListPair.getKey(), globalMemory), expressionListPair.getValue());
     }
 
     /**
@@ -374,7 +379,8 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() == null) {
             throw generateSyntaxException("Illegal list of commands in a for loop", expressionListPair.getValue());
         }
-        return new Pair<>(new For(forPair.getKey(), listStart, (Variable) variablePair.getKey(), startPair.getKey(), endPair.getKey(), stepPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new For(forPair.getKey(), listStart, (Variable) variablePair.getKey(), startPair.getKey(),
+                endPair.getKey(), stepPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey(), globalMemory), expressionListPair.getValue());
     }
 
     /**
@@ -407,7 +413,8 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() == null) {
             throw generateSyntaxException("Illegal format of a list of commands in a dotimes loop", expressionListPair.getValue());
         }
-        return new Pair<>(new DoTimes(doTimesPair.getKey(), listStart, (Variable) variablePair.getKey(), limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new DoTimes(doTimesPair.getKey(), listStart, (Variable) variablePair.getKey(),
+                limitPair.getKey(), listEnd, (ExpressionList) expressionListPair.getKey(), globalMemory), expressionListPair.getValue());
     }
 
     /**
@@ -437,7 +444,7 @@ public class CrudeParser implements Parser {
         if (listEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
-        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), listEndPair.getValue());
+        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd, globalMemory), listEndPair.getValue());
     }
 
     /**
@@ -458,7 +465,8 @@ public class CrudeParser implements Parser {
         if (expressionListPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for a list of expressions in a repeat or if loop", expressionListPair.getValue());
         }
-        return new Pair<>(new Condition(conditionPair.getKey(), expressionPair.getKey(), (ExpressionList) expressionListPair.getKey()), expressionListPair.getValue());
+        return new Pair<>(new Condition(conditionPair.getKey(), expressionPair.getKey(), (ExpressionList) expressionListPair.getKey(), globalMemory),
+                expressionListPair.getValue());
     }
 
     /**
@@ -479,7 +487,7 @@ public class CrudeParser implements Parser {
         if (expressionPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for an expression that is assigned to the variable in a MakeVariable command", expressionPair.getValue());
         }
-        return new Pair<>(new MakeVariable(makeVariablePair.getKey(), (Variable) variablePair.getKey(), expressionPair.getKey()), expressionPair.getValue());
+        return new Pair<>(new MakeVariable(makeVariablePair.getKey(), (Variable) variablePair.getKey(), expressionPair.getKey(), globalMemory), expressionPair.getValue());
     }
 
     /**
@@ -500,7 +508,7 @@ public class CrudeParser implements Parser {
         if (secondPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for the second part of a binary expression", secondPair.getValue());
         }
-        return new Pair<>(new Binary(binaryPair.getKey(), firstPair.getKey(), secondPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Binary(binaryPair.getKey(), firstPair.getKey(), secondPair.getKey(), globalMemory), secondPair.getValue());
     }
 
     /**
@@ -513,7 +521,7 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() == null) {
             return nullPair;
         }
-        return new Pair<>(new Variable(variablePair.getKey()), variablePair.getValue());
+        return new Pair<>(new Variable(variablePair.getKey(), globalMemory), variablePair.getValue());
     }
 
     /**
@@ -530,7 +538,7 @@ public class CrudeParser implements Parser {
         if (secondPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for the expression after a unary operator", secondPair.getValue());
         }
-        return new Pair<>(new Unary(unaryPair.getKey(), secondPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Unary(unaryPair.getKey(), secondPair.getKey(), globalMemory), secondPair.getValue());
     }
 
     /**
@@ -551,7 +559,7 @@ public class CrudeParser implements Parser {
         if (groupEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \")\" symbol for a Group after a valid expression", groupEndPair.getValue());
         }
-        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), groupEndPair.getValue());
+        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd, globalMemory), groupEndPair.getValue());
     }
 
     /**
@@ -567,6 +575,6 @@ public class CrudeParser implements Parser {
                 return nullPair;
             }
         }
-        return new Pair<>(new Direct(directPair.getKey()), directPair.getValue());
+        return new Pair<>(new Direct(directPair.getKey(), globalMemory), directPair.getValue());
     }
 }

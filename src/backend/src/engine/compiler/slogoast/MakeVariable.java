@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
@@ -10,12 +11,13 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class MakeVariable implements Expression {
+public class MakeVariable extends Expression {
     private Token myToken;
     private Variable myVar;
     private Expression myExpr;
 
-    public MakeVariable(Token token, Variable var, Expression a) {
+    public MakeVariable(Token token, Variable var, Expression a, StateMachine glob) {
+        super(glob);
         myToken = token;
         myVar = var;
         myExpr = a;

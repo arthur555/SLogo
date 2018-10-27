@@ -11,7 +11,7 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class For implements Expression {
+public class For extends Expression {
     private Token myToken;
     private Token start;
     private Variable var;
@@ -21,7 +21,9 @@ public class For implements Expression {
     private Token end;
     private ExpressionList expressionList;
 
-    public For(Token token, Token firstStart, Variable variable, Expression lower, Expression higher, Expression increment, Token firstEnd, ExpressionList list) {
+    public For(Token token, Token firstStart, Variable variable, Expression lower, Expression higher, Expression increment,
+               Token firstEnd, ExpressionList list, StateMachine glob) {
+        super(glob);
         myToken = token;
         start = firstStart;
         var = variable;

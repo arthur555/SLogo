@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,11 +10,13 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Unary implements Expression {
+public class Unary extends Expression {
     private final Token myToken;
     private final Expression myExpr;
 
-    public Unary(Token token, Expression a) {
+    public Unary(Token token, Expression a, StateMachine glob)
+    {
+        super(glob);
         myToken = token;
         myExpr = a;
     }

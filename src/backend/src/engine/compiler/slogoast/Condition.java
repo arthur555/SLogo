@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
@@ -10,13 +11,14 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Condition implements Expression {
+public class Condition extends Expression {
     private Token condition;
     private Expression expr;
     private ExpressionList expressionList;
     private static final String LOOP_COUNT = ":repcount";
 
-    public Condition(Token a, Expression val, ExpressionList list) {
+    public Condition(Token a, Expression val, ExpressionList list, StateMachine glob) {
+        super(glob);
         condition = a;
         expr = val;
         expressionList = list;

@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,11 +10,12 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Tell implements Expression {
+public class Tell extends Expression {
     private Token myToken;
     private ExpressionList turtles;
 
-    public Tell(Token token, ExpressionList list) {
+    public Tell(Token token, ExpressionList list, StateMachine glob) {
+        super(glob);
         myToken = token;
         turtles = list;
     }

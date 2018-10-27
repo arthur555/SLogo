@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
@@ -10,7 +11,7 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class DoTimes implements Expression {
+public class DoTimes extends Expression {
     private Token myToken;
     private Token start;
     private Variable var;
@@ -18,7 +19,8 @@ public class DoTimes implements Expression {
     private Token end;
     private ExpressionList expressionList;
 
-    public DoTimes(Token token, Token firstStart, Variable variable, Expression varLit, Token firstEnd, ExpressionList list) {
+    public DoTimes(Token token, Token firstStart, Variable variable, Expression varLit, Token firstEnd, ExpressionList list, StateMachine glob) {
+        super(glob);
         myToken = token;
         start = firstStart;
         var = variable;

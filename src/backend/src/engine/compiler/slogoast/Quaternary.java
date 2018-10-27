@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,14 +10,15 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Quaternary implements Expression {
+public class Quaternary extends Expression {
     private Token myToken;
     private Expression firstArg;
     private Expression secondArg;
     private Expression thirdArg;
     private Expression fourthArg;
 
-    public Quaternary(Token token, Expression expr1, Expression expr2, Expression expr3, Expression expr4) {
+    public Quaternary(Token token, Expression expr1, Expression expr2, Expression expr3, Expression expr4, StateMachine glob) {
+        super(glob);
         myToken = token;
         firstArg = expr1;
         secondArg = expr2;

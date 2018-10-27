@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,12 +10,13 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class Binary implements Expression {
+public class Binary extends Expression {
     private Token myToken;
     private Expression myFirstExpr;
     private Expression mySecondExpr;
 
-    public Binary(Token token, Expression a, Expression b) {
+    public Binary(Token token, Expression a, Expression b, StateMachine glob) {
+        super(glob);
         myToken = token;
         myFirstExpr = a;
         mySecondExpr = b;

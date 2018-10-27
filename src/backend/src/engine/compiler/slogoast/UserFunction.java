@@ -1,5 +1,6 @@
 package engine.compiler.slogoast;
 
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -8,11 +9,12 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class UserFunction implements Expression {
+public class UserFunction extends Expression {
     private Variable myVariable;
     private ExpressionList parameters;
 
-    public UserFunction(Variable var, ExpressionList list) {
+    public UserFunction(Variable var, ExpressionList list, StateMachine glob) {
+        super(glob);
         myVariable = var;
         parameters = list;
     }

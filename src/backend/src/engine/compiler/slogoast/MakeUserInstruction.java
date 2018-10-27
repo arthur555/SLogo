@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,14 +10,15 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class MakeUserInstruction implements Expression {
+public class MakeUserInstruction extends Expression {
     private Token action;
     private Variable myVar;
     private VariableList variableList;
     private ExpressionList expressionList;
 
 
-    public MakeUserInstruction(Token a, Variable variable, VariableList varList, ExpressionList exprList) {
+    public MakeUserInstruction(Token a, Variable variable, VariableList varList, ExpressionList exprList, StateMachine glob) {
+        super(glob);
         action = a;
         myVar = variable;
         variableList = varList;

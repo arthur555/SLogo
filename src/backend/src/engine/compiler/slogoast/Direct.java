@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,10 +10,11 @@ import model.TurtleManager;
  *
  * @author Haotian Wang, Rahul Ramesh
  */
-public class Direct implements Expression {
+public class Direct extends Expression {
     private Token myToken;
 
-    public Direct(Token token) {
+    public Direct(Token token, StateMachine glob) {
+        super(glob);
         myToken = token;
     }
 

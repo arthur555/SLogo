@@ -28,7 +28,7 @@ public class ASTEngineAPI implements EngineAPI {
 
     public ASTEngineAPI(TurtleManager turtleManager) {
         lexer = new CrudeLexer();
-        parser = new CrudeParser();
+        parser = new CrudeParser(stateMachine());
         manager = turtleManager;
         stateMachine = new StateMachineV2();
         manager.equipMemory(stateMachine);

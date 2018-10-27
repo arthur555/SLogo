@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -9,13 +10,14 @@ import model.TurtleManager;
  *
  * @author Haotian Wang
  */
-public class IfElse implements Expression {
+public class IfElse extends Expression {
     private Token myToken;
     private Expression expr;
     private ExpressionList expressionListA;
     private ExpressionList expressionListB;
 
-    public IfElse(Token a, Expression val, ExpressionList listA, ExpressionList listB) {
+    public IfElse(Token a, Expression val, ExpressionList listA, ExpressionList listB, StateMachine glob) {
+        super(glob);
         myToken = a;
         expr = val;
         expressionListA = listA;

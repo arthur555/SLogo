@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -12,12 +13,13 @@ import java.util.List;
  *
  * @author Haotian Wang
  */
-public class ExpressionList implements Expression {
+public class ExpressionList extends Expression {
     private Token listStart;
     private List<Expression> expressionList;
     private Token listEnd;
 
-    public ExpressionList(Token start, List<Expression> list, Token end) {
+    public ExpressionList(Token start, List<Expression> list, Token end, StateMachine glob) {
+        super(glob);
         listStart = start;
         expressionList = list;
         listEnd = end;
