@@ -547,7 +547,7 @@ public class CrudeParser implements Parser {
         if (middlePair.getKey() == null) {
             throw generateSyntaxException("Illegal expression for a Group after the \"(\" symbol", middlePair.getValue());
         }
-        Pair<Token, Integer> groupEndPair = parseToken(index, "GroupEnd");
+        Pair<Token, Integer> groupEndPair = parseToken(middlePair.getValue(), "GroupEnd");
         if (groupEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \")\" symbol for a Group after a valid expression", groupEndPair.getValue());
         }
