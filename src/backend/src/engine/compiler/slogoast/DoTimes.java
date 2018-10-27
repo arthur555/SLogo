@@ -47,7 +47,19 @@ public class DoTimes implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("DoTimes")) {
-            // TODO
+            int limitInt = (int) limit.evaluate(turtleManager);
+            if (limitInt < 1) {
+                return 0;
+            } else {
+                String variableName = var.getVariableName();
+                if (turtleManager.memory().containsVariable(variableName) {
+                    String type = turtleManager.memory().getVariableType(variableName);
+                    Object value = turtleManager.memory().getValueleInGeneralForm(variableName);
+                }
+                for (int i = 1; i <= limitInt; i++) {
+                    turtleManager.memory().setInteger();
+                }
+            }
         }
         return 0;
     }
@@ -61,7 +73,7 @@ public class DoTimes implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 
 

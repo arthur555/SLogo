@@ -49,4 +49,13 @@ public class Variable implements Expression {
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
         return 0;
     }
+
+    /**
+     * This method returns the String representation of the variable name.
+     *
+     * @return The String representation of the name of the variable.
+     */
+    public String getVariableName() {
+        return myToken.getString();
+    }
 }

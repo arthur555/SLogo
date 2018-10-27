@@ -33,6 +33,18 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     public void register(StateMachineObserver observer) { observers.add(observer); }
+
+    /**
+     * Returns true if the variable is already defined in the StateMachine and false otherwise.
+     *
+     * @param key : The String name of the variable to be queried.
+     * @return A boolean value indicating whether the variable key is defined in the StateMachine.
+     */
+    @Override
+    public boolean containsVariable(String key) {
+        return aggregateMap.containsKey(key);
+    }
+
     public void pushAlarm() { observers.forEach(StateMachineObserver::notifyListener);}
 
     /**
@@ -105,14 +117,69 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     /**
+     * Set an Expression value for a variable.
+     *
+     * @param key
+     * @param function
+     */
+    @Override
+    public void setFunction(String key, Expression function) {
+        if (typeMap.containsKey(key)) {
+            String type = typeMap.get(key);
+            if (type.equals("Double")) {
+                doubleMap.remove(key);
+            } else if (type.equals("Integer")) {
+                integerMap.remove(key);
+            } else if (type.equals("String")) {
+                stringMap.remove(key);
+            }
+        }
+        functionMap.put(key, function);
+        aggregateMap.put(key, function);
+        typeMap.put(key, "Integer");
+        pushAlarm();
+    }
+
+    /**
+     * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
+     *
+     * @param key   : The String name of the variable.
+     * @param value : The value of the variable to be stored in the Object format.
+     * @param type  : The String name of the type of the variable to be stored.
+     */
+    @Override
+    public void setValue(String key, Object value, String type) throws InterpretationException {
+        if (containsVariable(key)) {
+            removeVariable(key);
+        }
+    }
+
+    /**
      * Get the type of the variable, either a double, an integer or a function.
      *
      * @param key
      * @return A String representation of the type of the variable.
      */
     @Override
-    public String getVariableType(String key) {
+    public String getVariableType(String key) throws InterpretationException {
+        if (!typeMap.containsKey(key)) {
+            throw new InterpretationException(String.format("The variable %s is not defined, therefore its type cannot be determined", key));
+        }
         return typeMap.get(key);
+    }
+
+    /**
+     * Get the value of the variable as an Object from the aggregate map.
+     *
+     * @param key
+     * @return An Object representation of the value of the variable.
+     */
+    @Override
+    public Object getValueleInGeneralForm(String key) throws InterpretationException {
+        if (!aggregateMap.containsKey(key)) {
+            throw new InterpretationException(String.format("The variable %s is not defined, therefore its value cannot be returned", key));
+        }
+        return aggregateMap.get(key);
     }
 
     /**
