@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -54,7 +55,7 @@ public class DoTimes implements Expression {
                 String variableName = var.getVariableName();
                 boolean needToReSet = false;
                 double ret = 0;
-                String type = null;
+                VariableType type = null;
                 Object value = null;
                 if (turtleManager.memory().containsVariable(variableName)) {
                     needToReSet = true;
