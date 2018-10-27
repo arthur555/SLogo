@@ -45,6 +45,15 @@ public interface StateMachine {
     void setFunction(String key, Expression function);
 
     /**
+     * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
+     *
+     * @param key: A String representation of the name of the variable.
+     * @param value: The value of the local variable to be stored, in the most general form of Object.
+     * @param type: The type of object to be stored.
+     */
+    void setLocalVariable(String key, Object value, String type);
+
+    /**
      * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
      *
      * @param key: The String name of the variable.
