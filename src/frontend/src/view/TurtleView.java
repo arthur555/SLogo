@@ -80,13 +80,14 @@ public class TurtleView implements ClearListener {
         animation.currentTimeProperty().addListener((e, o, n) -> {
             if(n.toMillis() > duration.doubleValue()) return;
             if(capturedPenDown) {
-                var temp = views.getChildren().get(views.getChildren().size()-1);
-                if (temp.getClass().getSimpleName().equals("Path"))
-                {
-                    views.getChildren().remove(views.getChildren().size()-1);
+                var temp = views.getChildren().get(views.getChildren().size() - 1);
+                if (temp.getClass().getSimpleName().equals("Path")) {
+                    views.getChildren().remove(views.getChildren().size() - 1);
                 }
-                if(newX!=turtle.getX() || newY!=turtle.getY())
-                    views.getChildren().add(makePath(newX, newY, n.toMillis(),turtle.getX()+TURTLE_SIZE/2,turtle.getY()+TURTLE_SIZE/2)); }
+                if (newX != turtle.getX() || newY != turtle.getY()) {
+                    views.getChildren().add(makePath(newX, newY, n.toMillis(), turtle.getX() + TURTLE_SIZE / 2, turtle.getY() + TURTLE_SIZE / 2));
+                }
+            }
         });
         animation.setOnFinished(e -> {
             views.getChildren().add(new Group());
@@ -111,6 +112,7 @@ public class TurtleView implements ClearListener {
         return path;
     }
 
+    public ImageView turtle() { return turtle; }
     public Group views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }
     public void setPenColor(Color c) { penColor = c; }

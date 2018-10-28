@@ -92,4 +92,6 @@ public interface TurtleManager extends TurtleModel {
     int setPalette(int index, int r, int g, int b);
     int penColor();
     int shape();
+
+    void registerSelectionListener(SelectionListener listener);
 }

@@ -17,14 +17,19 @@ public class TurtleManagerImpl implements TurtleManager {
     private StateMachine memory;
     private ObservableMap<Integer, TurtleModel> turtleModels;
     private List<Integer> selected;
+    private List<SelectionListener> selectionListeners;
 
     public TurtleManagerImpl() {
         turtleModels = FXCollections.observableMap(new HashMap<>());
-        selected = List.of(ModelModule.INITIAL_TURTLE_ID);
+        selected = new ArrayList<>(ModelModule.INITIAL_TURTLE_ID);
+        selectionListeners = new ArrayList<>();
     }
 
     @Override
-    public int id() { return selected.get(selected.size()-1); }
+    public int id() {
+        if(selected.isEmpty()) return -1;
+        else return selected.get(selected.size()-1);
+    }
 
     @Override
     public List<Integer> selected() { return selected; }
@@ -58,7 +63,9 @@ public class TurtleManagerImpl implements TurtleManager {
 
     @Override
     public int tell(List<Integer> turtleIDs) {
-        selected = checkWildcard(turtleIDs);
+        if(turtleIDs.isEmpty()) selected.clear();
+        else selected = checkWildcard(turtleIDs);
+        selectionListeners.forEach(listener -> listener.selectionUpdated(selected));
         return id();
     }
 
@@ -124,6 +131,11 @@ public class TurtleManagerImpl implements TurtleManager {
         return 0;
     }
 
+    @Override
+    public void registerSelectionListener(SelectionListener listener) {
+        selectionListeners.add(listener);
+    }
+
     private <T> T batchOperation(TurtleOperations<T> ops) {
         var results = selected
                 .stream()
@@ -139,6 +151,8 @@ public class TurtleManagerImpl implements TurtleManager {
     @Override
     public double setVisible(boolean visible) { return batchOperation(t -> t.setVisible(visible)); }
 
+    @Override
+    public double forward(double by) { return batchOperation(t -> t.forward(by)); }
 
     @Override
     public double moveTo(double x, double y, boolean forcePenUp) { return batchOperation(t -> t.moveTo(x, y, forcePenUp)); }

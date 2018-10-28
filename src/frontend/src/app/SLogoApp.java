@@ -46,7 +46,7 @@ public class SLogoApp extends Application implements TabbedApp {
         ModelModule modelModule = new ModelModule();
         EngineAPI engineApi = new ASTEngineAPI(modelModule.turtleManager());
         ViewModule viewModule = new ViewModule(engineApi);
-        new ControllerModule(this, modelModule, engineApi, viewModule);
+        new ControllerModule(this, modelModule, engineApi, viewModule, engineApi::setLanguage);
 
         var tab = new Tab("Untitled " + tabIndex);
         if(tabIndex == 1) tab.setClosable(false);
