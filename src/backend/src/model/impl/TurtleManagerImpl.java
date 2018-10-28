@@ -75,26 +75,6 @@ public class TurtleManagerImpl implements TurtleManager {
         return id();
     }
 
-    @Override
-    public <T> T ask(List<Integer> indices, TurtleOperations<T> ops) {
-        var results = checkWildcard(indices)
-                .stream()
-                .map(idx -> ops.op(turtleModels.get(idx)))
-                .collect(Collectors.toList());
-        return results.get(results.size()-1);
-    }
-
-    @Override
-    public <T> T askWith(Predicate<TurtleModel> p, TurtleOperations<T> ops) {
-        var results = turtleModels
-                .keySet()
-                .stream()
-                .map(turtleModels::get)
-                .filter(p)
-                .map(ops::op)
-                .collect(Collectors.toList());
-        return results.get(results.size()-1);
-    }
 
     @Override
     public StateMachine memory() { return memory; }
