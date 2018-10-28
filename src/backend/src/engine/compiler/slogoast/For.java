@@ -53,12 +53,23 @@ public class For implements Expression {
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         double ret = 0;
         if (myToken.getString().equals("For")) {
+            String variableName = var.getVariableName();
+            boolean reset = turtleManager.memory().containsGlobalVariable(variableName);
+            double old = 0;
+            if (reset){
+                old = (double)turtleManager.memory().getValue(variableName);
+            }
+
             StateMachine memory = turtleManager.memory();
             for (double counter = min.evaluate(turtleManager); counter < max.evaluate(turtleManager);  counter += step.evaluate(turtleManager)){
-                memory.setLocalVariable(var.getVariableName(), counter, VariableType.DOUBLE);
+                memory.setGlobalVariable(var.getVariableName(), counter, VariableType.DOUBLE);
                 ret = expressionList.interpret(turtleManager);
             }
-            memory.removeLocalVariable(var.getVariableName());
+            if (reset){
+                turtleManager.memory().setGlobalVariable(variableName, old, VariableType.DOUBLE);
+            } else{
+                turtleManager.memory().removeVariable(variableName);
+            }
         }
         return ret;
     }

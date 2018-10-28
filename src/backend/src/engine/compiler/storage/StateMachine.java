@@ -50,69 +50,7 @@ public interface StateMachine {
      * @param key
      * @param value
      */
-    void setLocalInteger(String key, int value);
 
-    /**
-     * Set a local double value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    void setLocalDouble(String key, double value);
-
-    /**
-     * Set a local String value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    void setLocalString(String key, String value);
-
-    /**
-     * Set an Expression value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    void setLocalExpression(String key, Expression value);
-
-    /**
-     * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
-     *
-     * @param key: A String representation of the name of the variable.
-     * @param value: The value of the local variable to be stored, in the most general form of Object.
-     * @param type: The type of object to be stored.
-     */
-    void setLocalVariable(String key, Object value, VariableType type);
-
-    /**
-     * Remove the local variable, either deleting the local variable if it is not set in the global dictionary, or restore its value to the global value.
-     *
-     * @param key: A String representation of the name of the variable to be removed.
-     */
-    void removeLocalVariable(String key) throws InterpretationException;
-
-    /**
-     * Get the variable type of the local variable.
-     *
-     * @param key: The String name of the variable to query.
-     */
-    VariableType getLocalVariableType(String key) throws InterpretationException;
-
-    /**
-     * Get the value of the local variable in the most general form.
-     *
-     * @param key: The String name of the variable to query.
-     */
-    Object getLocalValueInGeneralForm(String key) throws InterpretationException;
-
-    /**
-     * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
-     *
-     * @param key: The String name of the variable.
-     * @param value: The value of the variable to be stored in the Object format.
-     * @param type: The type of the variable to be stored.
-     */
     void setGlobalVariable(String key, Object value, VariableType type);
 
     /**
@@ -169,11 +107,6 @@ public interface StateMachine {
      *
      * @param key: The String name of the local variable to be queried.
      * @return A boolean value indicating whether the variable key is defined in the local scope.
-     */
-    boolean containsLocalVariable(String key);
-
-    /**
-     *  Push notifications to observers whenever there's change within the StateMachine.
      */
     void pushAlarm();
 

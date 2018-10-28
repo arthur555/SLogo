@@ -1,5 +1,7 @@
 package engine.compiler.slogoast;
 
+import engine.compiler.storage.StateMachine;
+import engine.compiler.storage.StateMachineV2;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -42,12 +44,23 @@ public class UserFunction implements Expression {
         if (desiredParameters.getListOfVariables().size() != parameters.getListOfExpressions().size()) {
             throw new InterpretationException(String.format("The number of expressions passed in, %d, does not match the number of desired parameters defined earlier, %d", parameters.getListOfExpressions().size(), desiredParameters.getListOfVariables().size()));
         }
+
+        StateMachine oldGlobalMemory = new StateMachineV2();
+
         for (int i = 0; i < parameters.getListOfExpressions().size(); i++) {
-            turtleManager.memory().setLocalDouble(desiredParameters.getListOfVariables().get(i).getVariableName(), parameters.getListOfExpressions().get(i).evaluate(turtleManager));
+            var desiredParameter = desiredParameters.getListOfVariables().get(i).getVariableName();
+            if (turtleManager.memory().containsGlobalVariable(desiredParameter)){
+                oldGlobalMemory.setDouble(desiredParameter, (double)turtleManager.memory().getValue(desiredParameter));
+            }
+            turtleManager.memory().setDouble(desiredParameter, parameters.getListOfExpressions().get(i).evaluate(turtleManager));
         }
         double ret = desiredExpressions.interpret(turtleManager);
         for (int i = 0; i < desiredParameters.getListOfVariables().size(); i++) {
-            turtleManager.memory().removeLocalVariable(desiredParameters.getListOfVariables().get(i).getVariableName());
+            var desiredParameter = desiredParameters.getListOfVariables().get(i).getVariableName();
+            turtleManager.memory().removeVariable(desiredParameters.getListOfVariables().get(i).getVariableName());
+            if (oldGlobalMemory.containsGlobalVariable(desiredParameter)){
+                turtleManager.memory().setDouble(desiredParameter, (double)oldGlobalMemory.getValue(desiredParameter));
+            }
         }
         return ret;
     }
