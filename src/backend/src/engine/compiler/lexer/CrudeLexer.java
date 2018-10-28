@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author Haotian Wang
  */
-public class CrudeLexer implements Lexer{
+public class CrudeLexer implements Lexer {
     private static final String PREFIX = "engine/compiler/languages/";
     private static final String DEFAULT_LANGUAGE = "English";
     private static final String SYNTAX = "Syntax";

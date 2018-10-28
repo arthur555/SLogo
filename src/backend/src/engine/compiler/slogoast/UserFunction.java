@@ -38,7 +38,7 @@ public class UserFunction implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        MakeUserInstruction function = (MakeUserInstruction) turtleManager.memory().getGlobalValueInGeneralForm(myVariable.getVariableName());
+        MakeUserInstruction function = (MakeUserInstruction) turtleManager.memory().getValueInGeneralForm(myVariable.getVariableName());
         VariableList desiredParameters = function.getParameters();
         ExpressionList desiredExpressions = function.getExpressionList();
         if (desiredParameters.getListOfVariables().size() != parameters.getListOfExpressions().size()) {
@@ -49,7 +49,7 @@ public class UserFunction implements Expression {
 
         for (int i = 0; i < parameters.getListOfExpressions().size(); i++) {
             var desiredParameter = desiredParameters.getListOfVariables().get(i).getVariableName();
-            if (turtleManager.memory().containsGlobalVariable(desiredParameter)){
+            if (turtleManager.memory().containsVariable(desiredParameter)){
                 oldGlobalMemory.setDouble(desiredParameter, (double)turtleManager.memory().getValue(desiredParameter));
             }
             turtleManager.memory().setDouble(desiredParameter, parameters.getListOfExpressions().get(i).evaluate(turtleManager));
@@ -58,7 +58,7 @@ public class UserFunction implements Expression {
         for (int i = 0; i < desiredParameters.getListOfVariables().size(); i++) {
             var desiredParameter = desiredParameters.getListOfVariables().get(i).getVariableName();
             turtleManager.memory().removeVariable(desiredParameters.getListOfVariables().get(i).getVariableName());
-            if (oldGlobalMemory.containsGlobalVariable(desiredParameter)){
+            if (oldGlobalMemory.containsVariable(desiredParameter)){
                 turtleManager.memory().setDouble(desiredParameter, (double)oldGlobalMemory.getValue(desiredParameter));
             }
         }

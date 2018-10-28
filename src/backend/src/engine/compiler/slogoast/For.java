@@ -54,7 +54,7 @@ public class For implements Expression {
         double ret = 0;
         if (myToken.getString().equals("For")) {
             String variableName = var.getVariableName();
-            boolean reset = turtleManager.memory().containsGlobalVariable(variableName);
+            boolean reset = turtleManager.memory().containsVariable(variableName);
             double old = 0;
             if (reset){
                 old = (double)turtleManager.memory().getValue(variableName);
@@ -62,11 +62,11 @@ public class For implements Expression {
 
             StateMachine memory = turtleManager.memory();
             for (double counter = min.evaluate(turtleManager); counter < max.evaluate(turtleManager);  counter += step.evaluate(turtleManager)){
-                memory.setGlobalVariable(var.getVariableName(), counter, VariableType.DOUBLE);
+                memory.setVariable(var.getVariableName(), counter, VariableType.DOUBLE);
                 ret = expressionList.interpret(turtleManager);
             }
             if (reset){
-                turtleManager.memory().setGlobalVariable(variableName, old, VariableType.DOUBLE);
+                turtleManager.memory().setVariable(variableName, old, VariableType.DOUBLE);
             } else{
                 turtleManager.memory().removeVariable(variableName);
             }

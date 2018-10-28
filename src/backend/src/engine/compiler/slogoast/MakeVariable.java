@@ -42,7 +42,7 @@ public class MakeVariable implements Expression {
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("MakeVariable")) {
             double ret = myExpr.evaluate(turtleManager);
-            turtleManager.memory().setGlobalVariable(myVar.getVariableName(), ret, VariableType.DOUBLE);
+            turtleManager.memory().setVariable(myVar.getVariableName(), ret, VariableType.DOUBLE);
             return ret;
         } return 0;
     }

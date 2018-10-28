@@ -1,7 +1,6 @@
 package engine.compiler.storage;
 
 import engine.compiler.slogoast.Expression;
-import engine.compiler.slogoast.Variable;
 import engine.errors.InterpretationException;
 
 import java.util.*;
@@ -42,7 +41,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return A boolean value indicating whether the variable key is defined in the StateMachine.
      */
     @Override
-    public boolean containsGlobalVariable(String key) {
+    public boolean containsVariable(String key) {
         return aggregateMap.containsKey(key);
     }
 
@@ -142,7 +141,7 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     @Override
-    public void setGlobalVariable(String key, Object value, VariableType type) {
+    public void setVariable(String key, Object value, VariableType type) {
         if (type == VariableType.INTEGER) {
             setInteger(key, (int) value);
         } else if (type == VariableType.DOUBLE) {
@@ -161,7 +160,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return A String representation of the type of the variable.
      */
     @Override
-    public VariableType getGlobalVariableType(String key) throws InterpretationException {
+    public VariableType getVariableType(String key) throws InterpretationException {
         if (!typeMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its type cannot be determined", key));
         }
@@ -175,7 +174,7 @@ public class CrudeStateMachine implements StateMachine {
      * @return An Object representation of the value of the variable.
      */
     @Override
-    public Object getGlobalValueInGeneralForm(String key) throws InterpretationException {
+    public Object getValueInGeneralForm(String key) throws InterpretationException {
         if (!aggregateMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable %s is not defined, therefore its value cannot be returned", key));
         }
@@ -219,7 +218,7 @@ public class CrudeStateMachine implements StateMachine {
     }
 
     @Override
-    public Map<String, Object> listOfGlobalVariables() { return Collections.unmodifiableMap(aggregateMap); }
+    public Map<String, Object> listOfVariables() { return Collections.unmodifiableMap(aggregateMap); }
 
     /**
      * Present the internal storage of the StateMachine in a list format, separated by newline.
@@ -252,17 +251,6 @@ public class CrudeStateMachine implements StateMachine {
      */
     @Override
     public Object getValue(String key) {
-        return null;
-    }
-
-    /**
-     * Look at the local variable and then the global variables for the queried variable.
-     *
-     * @return The type of the variable.
-     * @param key
-     */
-    @Override
-    public VariableType getVariableType(String key) {
         return null;
     }
 }
