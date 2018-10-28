@@ -14,7 +14,6 @@ public class CommandView {
     private TextFlow display;
 
     private String model;
-    private String lang;
 
     CommandView() {
         display = new TextFlow();
@@ -29,7 +28,6 @@ public class CommandView {
         updateView();
     }
 
-    public void setLang(String lang) { this.lang = lang; }
     public void clear() { this.model = CARET; updateView(); }
     public void insert(char newChar) {
         int caretPos = model.indexOf(CARET);
