@@ -53,6 +53,7 @@ public class Direct implements Expression {
         }
         else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
+            turtleManager.setAngle(0);
             return turtleManager.moveTo(0,0,true);
         }
         else if (myToken.getString().equals("XCoordinate")) {

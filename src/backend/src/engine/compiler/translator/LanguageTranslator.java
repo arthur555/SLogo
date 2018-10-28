@@ -37,9 +37,10 @@ public class LanguageTranslator implements Translator {
      */
     @Override
     public void addPatterns (String syntax) throws MissingResourceException {
-        if (syntax.isEmpty() || syntax == null) {
+        if (syntax == null || syntax.isEmpty()) {
             return;
         }
+        System.out.println(syntax);
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);

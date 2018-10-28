@@ -7,6 +7,6 @@ import engine.errors.UndefinedKeywordException;
 
 public interface EngineAPI {
     double processString(String str) throws ClassNotFoundException, UndefinedKeywordException, CommandSyntaxException, InterpretationException;
-
+    void setLanguage(String language);
     StateMachine stateMachine();
 }

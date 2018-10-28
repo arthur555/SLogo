@@ -44,5 +44,8 @@ public class ASTEngineAPI implements EngineAPI {
     }
 
     @Override
+    public void setLanguage(String language) { lexer.setLanguage(language); }
+
+    @Override
     public StateMachine stateMachine() { return stateMachine; }
 }

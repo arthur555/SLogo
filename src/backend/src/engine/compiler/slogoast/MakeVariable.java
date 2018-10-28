@@ -44,9 +44,7 @@ public class MakeVariable implements Expression {
             double ret = myExpr.evaluate(turtleManager);
             turtleManager.memory().setGlobalVariable(myVar.getVariableName(), ret, VariableType.DOUBLE);
             return ret;
-        }
-        // turtleManager.memory().setDouble("x"+((int) (Math.random() * 1000)), Math.random()); // just to test integration with the view
-        return 0;
+        } return 0;
     }
 
     /**

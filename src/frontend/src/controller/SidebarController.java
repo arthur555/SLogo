@@ -18,6 +18,8 @@ import view.utils.ImageUtils;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+
 import model.ModelModule;
 import model.TurtleManager;
 import model.TurtleModel;
@@ -38,16 +40,20 @@ public class SidebarController {
 
     private String lang;
 
+    private Consumer<String> setEngineLanguage;
+
     public SidebarController(
             String lang,
             TabbedApp app,
             SidebarView sidebar,
-            TurtleManager turtleManager
+            TurtleManager turtleManager,
+            Consumer<String> setEngineLanguage
     ) {
         this.app = app;
         this.lang = lang;
         this.sidebar = sidebar;
         this.turtleManager = turtleManager;
+        this.setEngineLanguage = setEngineLanguage;
         setupHandlers();
     }
 
@@ -112,7 +118,7 @@ public class SidebarController {
         result.ifPresent(chosenLanguage -> lang = chosenLanguage);
 
         sidebar.appendLanguageTooltip("current: " + lang);
-        editorController.setLang(lang);
+        setEngineLanguage.accept(lang);
     }
 
     private void helpOnClick(MouseEvent e) {

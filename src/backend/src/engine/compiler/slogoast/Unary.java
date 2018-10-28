@@ -38,16 +38,12 @@ public class Unary implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         double head = turtleManager.getAngle(); //in radians
-        double x = turtleManager.getX();
-        double y = turtleManager.getY();
         double value = myExpr.evaluate(turtleManager);
         if (myToken.getString().equals("Forward")){
-            double stepX = value*Math.cos(Math.toRadians(head));
-            double stepY = value*Math.sin(Math.toRadians(head));
-            return turtleManager.moveTo(x+stepX, y+stepY, false);
+            return turtleManager.forward(value);
         }
         else if (myToken.getString().equals("Backward")){
-            return turtleManager.moveTo(x-value*Math.cos(Math.toRadians(head)), y-value*Math.sin(Math.toRadians(head)), false);
+            return turtleManager.forward(-value);
         }
         else if (myToken.getString().equals("Right")){
             return turtleManager.setAngle((head + value)%360);
