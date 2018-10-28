@@ -44,6 +44,8 @@ public class TurtleView implements ClearListener {
     private AnimationQueue animationQueue;
     private double tempX;
     private double tempY;
+    private double oldAngle;
+
 
     public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
         views = new Group();
@@ -54,6 +56,7 @@ public class TurtleView implements ClearListener {
         turtle.setY(turtleModel.getY());
         tempX = turtle.getX()+ TURTLE_SIZE/2;
         tempY = turtle.getY()+ TURTLE_SIZE/2;
+        oldAngle = 0;
         turtle.setRotate(-turtleModel.getAngle());
         turtle.visibleProperty().bind(turtleModel.isVisibleModel());
         views.getChildren().add(turtle);
@@ -74,8 +77,10 @@ public class TurtleView implements ClearListener {
             var newY = newValue.y();
             var newAngle = newValue.angle();
 
+
             var path = makePath(newX, newY, duration.doubleValue(),tempX,tempY);
-            var animation = animationQueue.makeAnimation(turtle, path, newAngle, duration);
+            var animation = animationQueue.makeAnimation(turtle, path, newAngle, duration, oldAngle);
+            oldAngle = newAngle;
             tempX = newX + TURTLE_SIZE/2;
             tempY = newY + TURTLE_SIZE/2;
             setupAnimation(turtleModel, newX, newY, newAngle, animation);
@@ -86,6 +91,7 @@ public class TurtleView implements ClearListener {
         var capturedPenDown = penDown.getValue();
 
         animation.currentTimeProperty().addListener((e, o, n) -> {
+
             if(n.toMillis() > duration.doubleValue()) return;
             if(capturedPenDown) {
                 var temp = views.getChildren().get(views.getChildren().size()-1);
@@ -101,12 +107,13 @@ public class TurtleView implements ClearListener {
             System.out.println(turtle.getTranslateX());
             System.out.println(turtle.getTranslateY());
             turtle = new ImageView(turtleImg);
-            turtle.setRotate(newAngle);*/
+            */
             views.getChildren().add(new Group());
             turtle.setTranslateX(0);
             turtle.setTranslateY(0);
             turtle.setX(newX);
             turtle.setY(newY);
+            turtle.setRotate(newAngle);
             //turtle.visibleProperty().bind(turtleModel.isVisibleModel());
             //views.getChildren().add(turtle);
             animationQueue.getPlaying().set(false);
