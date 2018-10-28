@@ -56,7 +56,7 @@ public class Condition implements Expression {
                 double ret = 0;
                 for (int i = 1; i <= times; i++) {
 
-                    boolean reset = turtleManager.memory().containsGlobalVariable(LOOP_COUNT);
+                    boolean reset = turtleManager.memory().containsVariable(LOOP_COUNT);
                     int old = 0;
                     if (reset) {
                         old = (int) turtleManager.memory().getValue(LOOP_COUNT);
@@ -68,7 +68,7 @@ public class Condition implements Expression {
 
 
                     if (reset) {
-                        turtleManager.memory().setGlobalVariable(LOOP_COUNT, old, VariableType.INTEGER);
+                        turtleManager.memory().setVariable(LOOP_COUNT, old, VariableType.INTEGER);
                     } else {
                         turtleManager.memory().removeVariable(LOOP_COUNT);
                     }

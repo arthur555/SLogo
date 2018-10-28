@@ -54,7 +54,7 @@ public class DoTimes implements Expression {
             } else {
                 String variableName = var.getVariableName();
 
-                boolean reset = turtleManager.memory().containsGlobalVariable(variableName);
+                boolean reset = turtleManager.memory().containsVariable(variableName);
                 var old = 0;
                 if (reset){
                     old = (int)turtleManager.memory().getValue(variableName);
@@ -66,7 +66,7 @@ public class DoTimes implements Expression {
                     ret = expressionList.interpret(turtleManager);
                 }
                 if (reset){
-                    turtleManager.memory().setGlobalVariable(variableName, old, VariableType.DOUBLE);
+                    turtleManager.memory().setVariable(variableName, old, VariableType.DOUBLE);
                 } else{
                     turtleManager.memory().removeVariable(variableName);
                 }

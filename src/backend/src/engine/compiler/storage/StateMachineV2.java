@@ -1,7 +1,6 @@
 package engine.compiler.storage;
 
 import engine.compiler.slogoast.Expression;
-import engine.compiler.slogoast.Variable;
 import engine.errors.InterpretationException;
 
 import java.util.*;
@@ -12,13 +11,13 @@ import java.util.*;
  * @author Haotian Wang
  */
 public class StateMachineV2 implements StateMachine{
-    private Map<String, VariableType> globalTypeMap;
-    private Map<String, Object> globalMap;
+    private Map<String, VariableType> typeMap;
+    private Map<String, Object> valueMap;
     private List<StateMachineObserver> observers;
 
     public StateMachineV2() {
-        globalTypeMap = new HashMap<>();
-        globalMap = new HashMap<>();
+        typeMap = new HashMap<>();
+        valueMap = new HashMap<>();
         observers = new ArrayList<>();
     }
 
@@ -30,7 +29,7 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void setDouble(String key, double value) {
-        setGlobalVariable(key, new Double(value), VariableType.DOUBLE);
+        setVariable(key, new Double(value), VariableType.DOUBLE);
     }
 
     /**
@@ -41,7 +40,7 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void setInteger(String key, int value) {
-        setGlobalVariable(key, new Integer(value), VariableType.INTEGER);
+        setVariable(key, new Integer(value), VariableType.INTEGER);
     }
 
     /**
@@ -52,7 +51,7 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void setString(String key, String value) {
-        setGlobalVariable(key, value, VariableType.STRING);
+        setVariable(key, value, VariableType.STRING);
     }
 
     /**
@@ -63,7 +62,7 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void setExpression(String key, Expression function) {
-        setGlobalVariable(key, function, VariableType.EXPRESSION);
+        setVariable(key, function, VariableType.EXPRESSION);
     }
 
     /**
@@ -74,9 +73,9 @@ public class StateMachineV2 implements StateMachine{
      * @param type  : The type of the variable to be stored.
      */
     @Override
-    public void setGlobalVariable(String key, Object value, VariableType type) {
-        globalMap.put(key, value);
-        globalTypeMap.put(key, type);
+    public void setVariable(String key, Object value, VariableType type) {
+        valueMap.put(key, value);
+        typeMap.put(key, type);
         pushAlarm();
     }
 
@@ -87,11 +86,11 @@ public class StateMachineV2 implements StateMachine{
      * @return The type of the variable.
      */
     @Override
-    public VariableType getGlobalVariableType(String key) throws InterpretationException {
-        if (!globalTypeMap.containsKey(key)) {
+    public VariableType getVariableType(String key) throws InterpretationException {
+        if (!typeMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable \"%s\" is not defined in the global scope, therefore its type cannot be determined", key));
         }
-        return globalTypeMap.get(key);
+        return typeMap.get(key);
     }
 
     /**
@@ -101,11 +100,11 @@ public class StateMachineV2 implements StateMachine{
      * @return An Object representation of the value of the variable.
      */
     @Override
-    public Object getGlobalValueInGeneralForm(String key) throws InterpretationException {
-        if (!globalMap.containsKey(key)) {
+    public Object getValueInGeneralForm(String key) throws InterpretationException {
+        if (!valueMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable \"%s\" is not defined in the global scope, therefore its value cannot be determined", key));
         }
-        return globalMap.get(key);
+        return valueMap.get(key);
     }
 
     /**
@@ -115,11 +114,11 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void removeVariable(String key) throws InterpretationException {
-        if (!globalMap.containsKey(key)) {
+        if (!valueMap.containsKey(key)) {
             throw new InterpretationException(String.format("The variable \"%s\" is not defined in the global scope, therefore it cannot be removed",key));
         }
-        globalMap.remove(key);
-        globalTypeMap.remove(key);
+        valueMap.remove(key);
+        typeMap.remove(key);
         pushAlarm();
     }
 
@@ -128,8 +127,8 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void resetState() {
-        globalMap.clear();
-        globalTypeMap.clear();
+        valueMap.clear();
+        typeMap.clear();
         pushAlarm();
     }
 
@@ -140,8 +139,8 @@ public class StateMachineV2 implements StateMachine{
      * @return A Map representation of the StateMachine.
      */
     @Override
-    public Map<String, Object> listOfGlobalVariables() {
-        return Collections.unmodifiableMap(globalMap);
+    public Map<String, Object> listOfVariables() {
+        return Collections.unmodifiableMap(valueMap);
     }
 
     /**
@@ -161,12 +160,9 @@ public class StateMachineV2 implements StateMachine{
      * @return A boolean value indicating whether the variable key is defined in the StateMachine.
      */
     @Override
-    public boolean containsGlobalVariable(String key) {
-        return globalMap.containsKey(key);
+    public boolean containsVariable(String key) {
+        return valueMap.containsKey(key);
     }
-
-
-
 
     /**
      * Push notifications to observers whenever there's change within the StateMachine.
@@ -184,7 +180,7 @@ public class StateMachineV2 implements StateMachine{
     @Override
     public String toString() {
         String ans = "The variables are\n";
-        for (Map.Entry entry : globalMap.entrySet()) {
+        for (Map.Entry entry : valueMap.entrySet()) {
             ans += entry.getKey() + " = " + entry.getValue() + "\n";
         }
         return ans;
@@ -199,24 +195,9 @@ public class StateMachineV2 implements StateMachine{
     @Override
     public Object getValue(String key) throws InterpretationException {
             try {
-                return getGlobalValueInGeneralForm(key);
+                return getValueInGeneralForm(key);
             } catch (InterpretationException e1) {
                 throw new InterpretationException(String.format("The variable \"%s\" is not defined either in the local or global scope, so its value cannot be determined", key));
-            }
-    }
-
-    /**
-     * Look at the local variable and then the global variables for the queried variable.
-     *
-     * @return The type of the variable.
-     * @param key
-     */
-    @Override
-    public VariableType getVariableType(String key) throws InterpretationException {
-            try {
-                return getGlobalVariableType(key);
-            } catch (InterpretationException e1) {
-                throw new InterpretationException(String.format("The variable \"%s\" is not defined either in the local or global scope, so its type cannot be determined", key));
             }
     }
 }
