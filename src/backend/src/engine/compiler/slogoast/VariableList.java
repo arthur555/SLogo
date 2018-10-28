@@ -50,18 +50,6 @@ public class VariableList implements Expression {
     }
 
     /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
-    }
-
-    /**
      * @return The List of Variable objects contained in this VariableList object.
      */
     List<Variable> getListOfVariables() {

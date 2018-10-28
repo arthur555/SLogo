@@ -55,18 +55,6 @@ public class Variable implements Expression {
     }
 
     /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
-    }
-
-    /**
      * This method returns the String representation of the variable name.
      *
      * @return The String representation of the name of the variable.

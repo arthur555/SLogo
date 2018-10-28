@@ -4,6 +4,7 @@ import engine.compiler.storage.StateMachine;
 import engine.errors.IllegalParameterException;
 import javafx.collections.ObservableMap;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Predicate;
 

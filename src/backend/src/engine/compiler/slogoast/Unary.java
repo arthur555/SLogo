@@ -74,16 +74,4 @@ public class Unary implements Expression {
         }
         return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);
     }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
-    }
 }
