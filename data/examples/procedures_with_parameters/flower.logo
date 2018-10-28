@@ -1,25 +1,25 @@
-to arc [ :incr :degrees ]
+to :arc [ :incr :degrees ]
 [
-  repeat quotient :degrees 2
+  repeat (quotient :degrees 2)
   [
     fd :incr rt 2
   ]
 ]
 
-to petal [ :size ]
+to :petal [ :size ]
 [
   repeat 2
   [
-    arc :size 60
+    atan :size 60
     rt 120
   ]
 ]
 
-to flower [ :length ]
+to :flower [ :length ]
 [
   repeat 6
   [
-    petal :length
+    :petal [:length]
     rt 60
   ]
 ]
