@@ -46,17 +46,6 @@ public class CrudeStateMachine implements StateMachine {
         return aggregateMap.containsKey(key);
     }
 
-    /**
-     * Returns true if the variable is defined in the local StateMachine and false otherwise.
-     *
-     * @param key : The String name of the local variable to be queried.
-     * @return A boolean value indicating whether the variable key is defined in the local scope.
-     */
-    @Override
-    public boolean containsLocalVariable(String key) {
-        return false;
-    }
-
     public void pushAlarm() { observers.forEach(StateMachineObserver::notifyListener);}
 
     /**
@@ -152,99 +141,6 @@ public class CrudeStateMachine implements StateMachine {
         pushAlarm();
     }
 
-    /**
-     * Set a local integer value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    @Override
-    public void setLocalInteger(String key, int value) {
-
-    }
-
-    /**
-     * Set a local double value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    @Override
-    public void setLocalDouble(String key, double value) {
-
-    }
-
-    /**
-     * Set a local String value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    @Override
-    public void setLocalString(String key, String value) {
-
-    }
-
-    /**
-     * Set an Expression value for a key.
-     *
-     * @param key
-     * @param value
-     */
-    @Override
-    public void setLocalExpression(String key, Expression value) {
-
-    }
-
-    /**
-     * Set a "local" variable that overwrites the global variable with the same name for the duration before the local variable is deleted.
-     *
-     * @param key   : A String representation of the name of the variable.
-     * @param value : The value of the local variable to be stored, in the most general form of Object.
-     * @param type  : The type of object to be stored.
-     */
-    @Override
-    public void setLocalVariable(String key, Object value, VariableType type) {
-
-    }
-
-    /**
-     * Remove the local variable, either deleting the local variable if it is not set in the global dictionary, or restore its value to the global value.
-     *
-     * @param key : A String representation of the name of the variable to be removed.
-     */
-    @Override
-    public void removeLocalVariable(String key) {
-
-    }
-
-    /**
-     * Get the variable type of the local variable.
-     *
-     * @param key : The String name of the variable to query.
-     */
-    @Override
-    public VariableType getLocalVariableType(String key) {
-        return null;
-    }
-
-    /**
-     * Get the value of the local variable in the most general form.
-     *
-     * @param key : The String name of the variable to query.
-     */
-    @Override
-    public Object getLocalValueInGeneralForm(String key) {
-        return null;
-    }
-
-    /**
-     * Set the value of a variable in the StateMachine by taking in three parameters, identifying automatically what type the variable is.
-     *
-     * @param key   : The String name of the variable.
-     * @param value : The value of the variable to be stored in the Object format.
-     * @param type  : The type of the variable to be stored.
-     */
     @Override
     public void setGlobalVariable(String key, Object value, VariableType type) {
         if (type == VariableType.INTEGER) {

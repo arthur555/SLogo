@@ -63,6 +63,12 @@ public class TurtleManagerImpl implements TurtleManager {
 
     @Override
     public int tell(List<Integer> turtleIDs) {
+        turtleIDs.stream().filter(idx -> !turtleModels.containsKey(idx)).forEach(idx -> {
+            try {
+                addTurtle(idx);
+            } catch (IllegalParameterException e) { }
+        });
+
         if(turtleIDs.isEmpty()) selected.clear();
         else selected = checkWildcard(turtleIDs);
         selectionListeners.forEach(listener -> listener.selectionUpdated(selected));

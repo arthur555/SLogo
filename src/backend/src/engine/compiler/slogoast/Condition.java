@@ -54,11 +54,25 @@ public class Condition implements Expression {
                 return 0;
             } else {
                 double ret = 0;
-                for (int i = 1 ; i <= times; i++) {
-                    turtleManager.memory().setLocalInteger(LOOP_COUNT, i);
+                for (int i = 1; i <= times; i++) {
+
+                    boolean reset = turtleManager.memory().containsGlobalVariable(LOOP_COUNT);
+                    int old = 0;
+                    if (reset) {
+                        old = (int) turtleManager.memory().getValue(LOOP_COUNT);
+                    }
+
+
+                    turtleManager.memory().setInteger(LOOP_COUNT, i);
                     ret = expressionList.interpret(turtleManager);
+
+
+                    if (reset) {
+                        turtleManager.memory().setGlobalVariable(LOOP_COUNT, old, VariableType.INTEGER);
+                    } else {
+                        turtleManager.memory().removeVariable(LOOP_COUNT);
+                    }
                 }
-                turtleManager.memory().removeLocalVariable(LOOP_COUNT);
                 return ret;
             }
         }
