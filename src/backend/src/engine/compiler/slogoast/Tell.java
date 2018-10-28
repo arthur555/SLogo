@@ -4,6 +4,9 @@ import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class implements the Tell grammar.
  *
@@ -27,7 +30,11 @@ public class Tell implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("Tell")) {
-            // TODO
+            List<Integer> indices = new ArrayList<>();
+            for (Expression index: turtles.getListOfExpressions()){
+                indices.add((int)index.evaluate(turtleManager));
+            }
+            turtleManager.tell(indices);
         }
         return 0;
     }
