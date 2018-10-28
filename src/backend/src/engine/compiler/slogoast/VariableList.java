@@ -43,6 +43,9 @@ public class VariableList implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         double ret = 0;
+        if (variableList.isEmpty()) {
+            return ret;
+        }
         for (Variable var : variableList) {
             ret = var.interpret(turtleManager);
         }
