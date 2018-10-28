@@ -1,6 +1,7 @@
 package controller;
 
 import engine.api.EngineAPI;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import view.CommandView;
@@ -9,6 +10,8 @@ import view.HistoryView;
 public class EditorController {
     private static final char NEWLINE = '\n';
     private static final String BLANK = "";
+
+    private static final Clipboard clipboard = Clipboard.getSystemClipboard();
 
     private EngineAPI engineApi;
     private CommandView commandView;
@@ -33,6 +36,11 @@ public class EditorController {
         else if(e.getCode() == KeyCode.LEFT) commandView.left();
         else if(e.getCode() == KeyCode.RIGHT) commandView.right();
         else if(e.getCode() == KeyCode.QUOTE) commandView.insert(e.isShiftDown() ? '\"' : '\'');
+        else if (e.isControlDown() && e.getCode() == KeyCode.V) {
+            for (char code : clipboard.getString().toCharArray()) {
+                commandView.insert(code);
+            }
+        }
         else if (e.getCode() != KeyCode.COMMAND) {
             char code = (char) e.getCode().getCode();
             if(Character.isAlphabetic(code)) code = (char) (e.isShiftDown() ? code : code+'a'-'A');
