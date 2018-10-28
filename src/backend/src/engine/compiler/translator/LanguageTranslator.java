@@ -40,7 +40,6 @@ public class LanguageTranslator implements Translator {
         if (syntax == null || syntax.isEmpty()) {
             return;
         }
-        System.out.println(syntax);
         var resources = ResourceBundle.getBundle(syntax);
         for (var key : Collections.list(resources.getKeys())) {
             var regex = resources.getString(key);
