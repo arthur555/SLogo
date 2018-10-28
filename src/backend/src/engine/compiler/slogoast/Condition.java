@@ -54,12 +54,12 @@ public class Condition implements Expression {
                 return 0;
             } else {
                 double ret = 0;
-                for (int i = 1 ; i <= times; i++) {
+                for (int i = 1; i <= times; i++) {
 
                     boolean reset = turtleManager.memory().containsGlobalVariable(LOOP_COUNT);
                     int old = 0;
-                    if (reset){
-                        old = (int)turtleManager.memory().getValue(LOOP_COUNT);
+                    if (reset) {
+                        old = (int) turtleManager.memory().getValue(LOOP_COUNT);
                     }
 
 
@@ -67,13 +67,13 @@ public class Condition implements Expression {
                     ret = expressionList.interpret(turtleManager);
 
 
-                    if (reset){
+                    if (reset) {
                         turtleManager.memory().setGlobalVariable(LOOP_COUNT, old, VariableType.INTEGER);
-                    } else{
+                    } else {
                         turtleManager.memory().removeVariable(LOOP_COUNT);
                     }
                 }
-
+                return ret;
             }
         }
         return 0;

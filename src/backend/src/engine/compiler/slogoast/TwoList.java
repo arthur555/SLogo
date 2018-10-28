@@ -36,12 +36,21 @@ public class TwoList implements Expression{
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         double ret = 0;
         if (myToken.getString().equals("Ask")) {
-            TurtleOperations<ExpressionList> ops = (TurtleOperations<ExpressionList>) listB;
+
+            List<Integer> oldSelected = turtleManager.selected();
+
             List<Integer> indices = new ArrayList<>();
             for (Expression index: listA.getListOfExpressions()){
                 indices.add((int)index.evaluate(turtleManager));
             }
-            ret = turtleManager.ask(indices, ops).evaluate(turtleManager);
+
+            turtleManager.tell(indices);
+
+            for (Expression op: listB.getListOfExpressions()){
+                ret = op.evaluate(turtleManager);
+            }
+
+            turtleManager.tell(oldSelected);
         } else if (myToken.getString().equals("AskWith")) {
             // TODO
         }
