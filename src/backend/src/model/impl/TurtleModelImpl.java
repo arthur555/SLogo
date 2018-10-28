@@ -32,6 +32,13 @@ public class TurtleModelImpl implements TurtleModel {
         return visible ? TRUE : FALSE;
     }
 
+    @Override
+    public double forward(double by) {
+        double stepX = by*Math.cos(Math.toRadians(pa.angle()));
+        double stepY = by*Math.sin(Math.toRadians(pa.angle()));
+        return moveTo(pa.x()+stepX, pa.y()+stepY, false);
+    }
+
     public double moveTo(double x, double y, boolean forcePenUp){
         var dx = x - pa.x();
         var dy = y - pa.y();

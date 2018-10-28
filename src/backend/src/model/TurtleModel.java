@@ -9,6 +9,7 @@ public interface TurtleModel {
 
     double setPenDown(boolean down);
     double setVisible(boolean visible);
+    double forward(double by);
     double moveTo(double x, double y, boolean forcePenUp);
     double setAngle(double angle);
     double getX();
