@@ -42,18 +42,20 @@ public class VariableList implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        double ret = 0;
+        if (variableList.isEmpty()) {
+            return ret;
+        }
+        for (Variable var : variableList) {
+            ret = var.interpret(turtleManager);
+        }
+        return ret;
     }
 
     /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
+     * @return The List of Variable objects contained in this VariableList object.
      */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+    List<Variable> getListOfVariables() {
+        return variableList;
     }
 }

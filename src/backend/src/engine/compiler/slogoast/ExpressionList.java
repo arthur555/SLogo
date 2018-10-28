@@ -41,20 +41,20 @@ public class ExpressionList implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        double ret = 0;
+        if (expressionList.isEmpty()) {
+            return ret;
+        }
+        for (Expression expr : expressionList) {
+            ret = expr.interpret(turtleManager);
+        }
+        return ret;
     }
 
     /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
+     * @return The actual List of Expression associated with this ExpressionList object.
      */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+    List<Expression> getListOfExpressions() {
+        return expressionList;
     }
-
-
 }

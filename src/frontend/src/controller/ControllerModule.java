@@ -9,6 +9,7 @@ import view.ViewModule;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ControllerModule {
     public static final List<String> LANGUAGES = Collections.unmodifiableList(
@@ -34,10 +35,11 @@ public class ControllerModule {
             TabbedApp app,
             ModelModule modelModule,
             EngineAPI engineApi,
-            ViewModule viewModule
+            ViewModule viewModule,
+            Consumer<String> setEngineLanguage
     ) {
-        editorController = new EditorController(DEFAULT_LANG, viewModule.commandView(), viewModule.historyView(), engineApi);
-        sidebarController = new SidebarController(DEFAULT_LANG, app, viewModule.sidebarView(), modelModule.turtleManager());
+        editorController = new EditorController(viewModule.commandView(), viewModule.historyView(), engineApi);
+        sidebarController = new SidebarController(DEFAULT_LANG, app, viewModule.sidebarView(), modelModule.turtleManager(), setEngineLanguage);
         canvasController = new CanvasController(modelModule.turtleManager(), viewModule.canvasView());
         assemble();
         setupTopLevelHandler(viewModule.mainView().view());

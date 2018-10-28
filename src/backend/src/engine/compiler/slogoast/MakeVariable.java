@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -40,21 +41,9 @@ public class MakeVariable implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("MakeVariable")) {
-            // TODO
-        }
-        // turtleManager.memory().setDouble("x"+((int) (Math.random() * 1000)), Math.random()); // just to test integration with the view
-        return 0;
-    }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+            double ret = myExpr.evaluate(turtleManager);
+            turtleManager.memory().setVariable(myVar.getVariableName(), ret, VariableType.DOUBLE);
+            return ret;
+        } return 0;
     }
 }

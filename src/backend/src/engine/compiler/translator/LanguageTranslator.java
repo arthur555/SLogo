@@ -37,7 +37,7 @@ public class LanguageTranslator implements Translator {
      */
     @Override
     public void addPatterns (String syntax) throws MissingResourceException {
-        if (syntax.isEmpty() || syntax == null) {
+        if (syntax == null || syntax.isEmpty()) {
             return;
         }
         var resources = ResourceBundle.getBundle(syntax);

@@ -124,10 +124,6 @@ public class CrudeParser implements Parser {
         if (ifElsePair.getKey() != null) {
             return ifElsePair;
         }
-        Pair<Expression, Integer> userFunctionPair = parseUserFunction(index);
-        if (userFunctionPair.getKey() != null) {
-            return userFunctionPair;
-        }
         Pair<Expression, Integer> makeUserInstructionPair = parseMakeUserInstruction(index);
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
@@ -147,6 +143,10 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
         if (expressionListPair.getKey() != null) {
             return expressionListPair;
+        }
+        Pair<Expression, Integer> userFunctionPair = parseUserFunction(index);
+        if (userFunctionPair.getKey() != null) {
+            return userFunctionPair;
         }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
@@ -178,7 +178,7 @@ public class CrudeParser implements Parser {
      */
     private Pair<Expression, Integer> parseQuaternary(int index) throws CommandSyntaxException {
         Pair<Expression, Integer> nullPair = new Pair<>(null, index);
-        Pair<Token, Integer> quaternaryPair = parseToken(index, "Ternary");
+        Pair<Token, Integer> quaternaryPair = parseToken(index, "Quaternary");
         if (quaternaryPair.getKey() == null) {
             return nullPair;
         }
@@ -274,7 +274,7 @@ public class CrudeParser implements Parser {
         if (makeUserInstructionPair.getKey() == null) {
             return nullPair;
         }
-        Pair<Expression, Integer> commandPair = parseVariable(index);
+        Pair<Expression, Integer> commandPair = parseVariable(makeUserInstructionPair.getValue());
         if (commandPair.getKey() == null) {
             throw generateSyntaxException("Missing a valid variable name to store the user-made function after the \"to\" keyword", commandPair.getValue());
         }
@@ -300,7 +300,13 @@ public class CrudeParser implements Parser {
             return nullPair;
         }
         int pointer = listStartPair.getValue();
-        List<Variable> variableList = new LinkedList<>();
+        List<Variable> variableList = new ArrayList<>();
+        if (pointer == myTokens.size()) {
+            throw generateSyntaxException("An expression cannot be closed by a \"[\"", pointer);
+        }
+        if (myTokens.get(pointer).getType().equals("ListEnd")) {
+            return new Pair<>(new VariableList(listStart, variableList, listEnd), pointer + 1);
+        }
         while (true) {
             Pair<Expression, Integer> listPair = parseVariable(pointer);
             if (listPair.getKey() == null) {
@@ -329,7 +335,7 @@ public class CrudeParser implements Parser {
         if (variablePair.getKey() == null) {
             return nullPair;
         }
-        Pair<Expression, Integer> expressionListPair = parseVariableList(variablePair.getValue());
+        Pair<Expression, Integer> expressionListPair = parseExpressionList(variablePair.getValue());
         if (expressionListPair.getKey() == null) {
             return nullPair;
         }
@@ -421,7 +427,13 @@ public class CrudeParser implements Parser {
             return nullPair;
         }
         int pointer = listStartPair.getValue();
-        List<Expression> expressionList = new LinkedList<>();
+        List<Expression> expressionList = new ArrayList<>();
+        if (pointer == myTokens.size()) {
+            throw generateSyntaxException("An expression cannot be closed by a \"[\"", pointer);
+        }
+        if (myTokens.get(pointer).getType().equals("ListEnd")) {
+            return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), pointer + 1);
+        }
         while (true) {
             Pair<Expression, Integer> listPair = parseExpression(pointer);
             if (listPair.getKey() == null) {
@@ -453,6 +465,9 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> expressionPair = parseExpression(conditionPair.getValue());
         if (expressionPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for expression value after a keyword in the repeat or if loop", expressionPair.getValue());
+        }
+        if (!(expressionPair.getKey() instanceof Group) && !(expressionPair.getKey() instanceof Variable) && !(expressionPair.getKey() instanceof Direct)) {
+            throw generateSyntaxException("The expression directly after the keyword in a repeat or if statement has to be a direct command, a constant or an expression (including a single variable) bracketed by \"()\"", expressionPair.getValue());
         }
         Pair<Expression, Integer> expressionListPair = parseExpressionList(expressionPair.getValue());
         if (expressionListPair.getKey() == null) {
@@ -547,7 +562,7 @@ public class CrudeParser implements Parser {
         if (middlePair.getKey() == null) {
             throw generateSyntaxException("Illegal expression for a Group after the \"(\" symbol", middlePair.getValue());
         }
-        Pair<Token, Integer> groupEndPair = parseToken(index, "GroupEnd");
+        Pair<Token, Integer> groupEndPair = parseToken(middlePair.getValue(), "GroupEnd");
         if (groupEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \")\" symbol for a Group after a valid expression", groupEndPair.getValue());
         }

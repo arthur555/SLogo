@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -47,22 +48,32 @@ public class DoTimes implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("DoTimes")) {
-            // TODO
+            int limitInt = (int) limit.evaluate(turtleManager);
+            if (limitInt < 1) {
+                return 0;
+            } else {
+                String variableName = var.getVariableName();
+
+                boolean reset = turtleManager.memory().containsVariable(variableName);
+                var old = 0;
+                if (reset){
+                    old = (int)turtleManager.memory().getValue(variableName);
+                }
+
+                double ret = 0;
+                for (int i = 1; i <= limitInt; i++) {
+                    turtleManager.memory().setInteger(variableName, i);
+                    ret = expressionList.interpret(turtleManager);
+                }
+                if (reset){
+                    turtleManager.memory().setVariable(variableName, old, VariableType.DOUBLE);
+                } else{
+                    turtleManager.memory().removeVariable(variableName);
+                }
+
+                return ret;
+            }
         }
         return 0;
     }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
-    }
-
-
 }

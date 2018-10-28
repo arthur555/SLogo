@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -35,18 +36,33 @@ public class Variable implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        String variableName = myToken.getString();
+        Object value = turtleManager.memory().getValue(variableName);
+        VariableType type = turtleManager.memory().getVariableType(variableName);
+        if (type == VariableType.STRING) {
+            throw new InterpretationException(String.format("The variable \"%s\" defined as a String", variableName));
+        } else if (type == VariableType.EXPRESSION) {
+            MakeUserInstruction statement = (MakeUserInstruction) value;
+            if (!statement.getParameters().getListOfVariables().isEmpty()) {
+                throw new InterpretationException(String.format("The user-defined function \"%s\" takes %d parameters, please give a list of the required number of parameters", statement.getParameters().getListOfVariables().size()));
+            }
+            return statement.getExpressionList().interpret(turtleManager);
+        } else if (type == VariableType.DOUBLE) {
+            Double temp = (Double) value;
+            return temp.doubleValue();
+        } else if (type == VariableType.INTEGER) {
+            Integer temp = (Integer) value;
+            return temp.intValue();
+        }
         return 0;
     }
 
     /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
+     * This method returns the String representation of the variable name.
      *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
+     * @return The String representation of the name of the variable.
      */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+    public String getVariableName() {
+        return myToken.getString();
     }
 }

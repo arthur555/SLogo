@@ -1,38 +1,28 @@
 package view;
 
 import javafx.animation.Animation;
-import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.SequentialTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.util.Duration;
+import javafx.scene.shape.Rectangle;
 import model.ClearListener;
 import model.TurtleModel;
-import view.utils.ImageUtils;
 import view.utils.AnimationQueue;
-
-import java.util.ArrayList;
-import java.util.Queue;
+import view.utils.ImageUtils;
 
 /**
  *  Takes care of one single Turtle
  */
 public class TurtleView implements ClearListener {
     public static final int TURTLE_SIZE = 50;
-    public static final int SCREEN_SIZE = 560;
     public static final int ANIMATION_LIMIT = 200;
 
     private Group views;
@@ -45,11 +35,10 @@ public class TurtleView implements ClearListener {
     private double tempX;
     private double tempY;
     private double oldAngle;
-
+    private TurtleModel model;
 
     public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
         views = new Group();
-
         turtleImg = ImageUtils.getImageFromUrl("turtle_1.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView(turtleImg);
         turtle.setX(turtleModel.getX());
@@ -69,6 +58,9 @@ public class TurtleView implements ClearListener {
         duration.bind(durationModel);
         animationQueue = new AnimationQueue(ANIMATION_LIMIT);
         bindObservable(turtleModel);
+
+        model = turtleModel;
+        model.registerClearListener(this);
     }
 
     private void bindObservable(TurtleModel turtleModel) {
@@ -94,28 +86,22 @@ public class TurtleView implements ClearListener {
 
             if(n.toMillis() > duration.doubleValue()) return;
             if(capturedPenDown) {
-                var temp = views.getChildren().get(views.getChildren().size()-1);
-                if (temp.getClass().getSimpleName().equals("Path"))
-                {
-                    views.getChildren().remove(views.getChildren().size()-1);
+                var temp = views.getChildren().get(views.getChildren().size() - 1);
+                if (temp.getClass().getSimpleName().equals("Path")) {
+                    views.getChildren().remove(views.getChildren().size() - 1);
                 }
-                if(newX!=turtle.getX() || newY!=turtle.getY())
-                    views.getChildren().add(makePath(newX, newY, n.toMillis(),turtle.getX()+TURTLE_SIZE/2,turtle.getY()+TURTLE_SIZE/2)); }
+                if (newX != turtle.getX() || newY != turtle.getY()) {
+                    views.getChildren().add(makePath(newX, newY, n.toMillis(), turtle.getX() + TURTLE_SIZE / 2, turtle.getY() + TURTLE_SIZE / 2));
+                }
+            }
         });
         animation.setOnFinished(e -> {
-            /*views.getChildren().remove(turtle);
-            System.out.println(turtle.getTranslateX());
-            System.out.println(turtle.getTranslateY());
-            turtle = new ImageView(turtleImg);
-            */
             views.getChildren().add(new Group());
             turtle.setTranslateX(0);
             turtle.setTranslateY(0);
             turtle.setX(newX);
             turtle.setY(newY);
             turtle.setRotate(newAngle);
-            //turtle.visibleProperty().bind(turtleModel.isVisibleModel());
-            //views.getChildren().add(turtle);
             animationQueue.getPlaying().set(false);
             views.getChildren().add(new Group());
         });
@@ -133,8 +119,7 @@ public class TurtleView implements ClearListener {
         return path;
     }
 
-
-
+    public ImageView turtle() { return turtle; }
     public Group views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }
     public void setPenColor(Color c) { penColor = c; }

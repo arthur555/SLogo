@@ -1,6 +1,7 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -13,6 +14,7 @@ public class Condition implements Expression {
     private Token condition;
     private Expression expr;
     private ExpressionList expressionList;
+    private static final String LOOP_COUNT = ":repcount";
 
     public Condition(Token a, Expression val, ExpressionList list) {
         condition = a;
@@ -41,24 +43,34 @@ public class Condition implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (condition.getString().equals("If")) {
-            // TODO
+            if (expr.evaluate(turtleManager) != 0) {
+                return expressionList.interpret(turtleManager);
+            } else {
+                return 0;
+            }
         } else if (condition.getString().equals("Repeat")) {
-            // TODO
+            int times = (int) expr.evaluate(turtleManager);
+            if (times <= 0) {
+                return 0;
+            } else {
+                boolean reset = turtleManager.memory().containsVariable(LOOP_COUNT);
+                int oldValue = 0;
+                if (reset) {
+                    oldValue = (int) turtleManager.memory().getValue(LOOP_COUNT);
+                }
+                double ret = 0;
+                for (int i = 1; i <= times; i++) {
+                    turtleManager.memory().setInteger(LOOP_COUNT, i);
+                    ret = expressionList.interpret(turtleManager);
+                }
+                if (reset) {
+                    turtleManager.memory().setVariable(LOOP_COUNT, oldValue, VariableType.INTEGER);
+                } else {
+                    turtleManager.memory().removeVariable(LOOP_COUNT);
+                }
+                return ret;
+            }
         }
         return 0;
     }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
-    }
-
-
 }

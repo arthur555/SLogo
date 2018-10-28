@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author Haotian Wang
  */
-public class CrudeLexer implements Lexer{
+public class CrudeLexer implements Lexer {
     private static final String PREFIX = "engine/compiler/languages/";
     private static final String DEFAULT_LANGUAGE = "English";
     private static final String SYNTAX = "Syntax";
@@ -112,7 +112,7 @@ public class CrudeLexer implements Lexer{
                 end--;
                 String chunk = input.substring(start, end + 1);
                 String type = myType.getSymbol(chunk);
-                if (type.equals("Comment") || type.equals("Whitespace")) {
+                if (type.equals("Comment") || type.equals("Whitespace") || type.equals("Newline")) {
                     start = end + 1;
                     end++;
                     continue;

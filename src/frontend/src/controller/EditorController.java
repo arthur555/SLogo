@@ -1,37 +1,30 @@
 package controller;
 
 import engine.api.EngineAPI;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import view.CommandView;
 import view.HistoryView;
 
-import java.util.Arrays;
-
 public class EditorController {
     private static final char NEWLINE = '\n';
     private static final String BLANK = "";
 
+    private static final Clipboard clipboard = Clipboard.getSystemClipboard();
+
     private EngineAPI engineApi;
     private CommandView commandView;
     private HistoryView historyView;
-    private String lang;
 
-    public EditorController(String lang, CommandView commandView, HistoryView historyView, EngineAPI engineApi) {
-        this.lang = lang;
+    public EditorController(CommandView commandView, HistoryView historyView, EngineAPI engineApi) {
         this.commandView = commandView;
         this.historyView = historyView;
         this.historyView.registerOnHistoryClick(s -> {
             commandView.clear();
             for(char ch : s.toCharArray()) commandView.insert(ch);
         });
-        this.commandView.setLang(lang);
         this.engineApi = engineApi;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
-        this.commandView.setLang(lang);
     }
 
     public void handleKeyPressed(KeyEvent e) {
@@ -43,6 +36,11 @@ public class EditorController {
         else if(e.getCode() == KeyCode.LEFT) commandView.left();
         else if(e.getCode() == KeyCode.RIGHT) commandView.right();
         else if(e.getCode() == KeyCode.QUOTE) commandView.insert(e.isShiftDown() ? '\"' : '\'');
+        else if (e.isControlDown() && e.getCode() == KeyCode.V) {
+            for (char code : clipboard.getString().toCharArray()) {
+                commandView.insert(code);
+            }
+        }
         else if (e.getCode() != KeyCode.COMMAND) {
             char code = (char) e.getCode().getCode();
             if(Character.isAlphabetic(code)) code = (char) (e.isShiftDown() ? code : code+'a'-'A');

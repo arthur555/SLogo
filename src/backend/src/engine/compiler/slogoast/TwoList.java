@@ -3,6 +3,11 @@ package engine.compiler.slogoast;
 import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
+import model.TurtleModel;
+import model.TurtleOperations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class implements the TwoList grammar.
@@ -29,22 +34,44 @@ public class TwoList implements Expression{
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        double ret = 0;
+        List<Integer> oldSelected = turtleManager.selected();
         if (myToken.getString().equals("Ask")) {
-            // TODO
-        } else if (myToken.getString().equals("AskWith")) {
-            // TODO
-        }
-        return 0;
-    }
 
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     * @param turtleManager @return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+            List<Integer> indices = new ArrayList<>();
+            for (Expression index: listA.getListOfExpressions()){
+                indices.add((int)index.evaluate(turtleManager));
+            }
+
+            turtleManager.tell(indices);
+
+            for (Expression op: listB.getListOfExpressions()){
+                ret = op.evaluate(turtleManager);
+            }
+
+        } else if (myToken.getString().equals("AskWith")) {
+            Expression check = listA.getListOfExpressions().get(0);
+
+            List<Integer> indices = new ArrayList<>();
+
+            List<Integer> testIndex = new ArrayList<>();
+            for (var index: turtleManager.turtleModels().keySet()){
+                testIndex.add(index);
+                turtleManager.tell(testIndex);
+                if (check.evaluate(turtleManager) != 0){
+                    indices.add(index);
+                }
+                testIndex.clear();
+            }
+
+            if (indices.size() >= 1){
+                turtleManager.tell(indices);
+                for (Expression op: listB.getListOfExpressions()){
+                    ret = op.interpret(turtleManager);
+                }
+            }
+        }
+        turtleManager.tell(oldSelected);
+        return ret;
     }
 }

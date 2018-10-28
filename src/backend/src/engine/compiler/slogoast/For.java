@@ -1,6 +1,8 @@
 package engine.compiler.slogoast;
 
 import engine.compiler.Token;
+import engine.compiler.storage.StateMachine;
+import engine.compiler.storage.VariableType;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -49,23 +51,26 @@ public class For implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        double ret = 0;
         if (myToken.getString().equals("For")) {
-            // TODO
+            String variableName = var.getVariableName();
+            boolean reset = turtleManager.memory().containsVariable(variableName);
+            double old = 0;
+            if (reset){
+                old = (double)turtleManager.memory().getValue(variableName);
+            }
+
+            StateMachine memory = turtleManager.memory();
+            for (double counter = min.evaluate(turtleManager); counter < max.evaluate(turtleManager);  counter += step.evaluate(turtleManager)){
+                memory.setVariable(var.getVariableName(), counter, VariableType.DOUBLE);
+                ret = expressionList.interpret(turtleManager);
+            }
+            if (reset){
+                turtleManager.memory().setVariable(variableName, old, VariableType.DOUBLE);
+            } else{
+                turtleManager.memory().removeVariable(variableName);
+            }
         }
-        return 0;
+        return ret;
     }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
-    }
-
-
 }

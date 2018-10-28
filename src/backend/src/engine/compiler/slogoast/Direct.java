@@ -53,6 +53,7 @@ public class Direct implements Expression {
         }
         else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
+            turtleManager.setAngle(0);
             return turtleManager.moveTo(0,0,true);
         }
         else if (myToken.getString().equals("XCoordinate")) {
@@ -77,17 +78,5 @@ public class Direct implements Expression {
             return Double.parseDouble(myToken.getString());
         }
         return 0;
-    }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
     }
 }

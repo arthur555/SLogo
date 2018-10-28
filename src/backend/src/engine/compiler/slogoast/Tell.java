@@ -4,6 +4,9 @@ import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class implements the Tell grammar.
  *
@@ -27,19 +30,12 @@ public class Tell implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("Tell")) {
-            // TODO
+            List<Integer> indices = new ArrayList<>();
+            for (Expression index: turtles.getListOfExpressions()){
+                indices.add((int)index.evaluate(turtleManager));
+            }
+            turtleManager.tell(indices);
         }
-        return 0;
-    }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     * @param turtleManager @return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
         return 0;
     }
 }

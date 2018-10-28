@@ -17,14 +17,19 @@ public class TurtleManagerImpl implements TurtleManager {
     private StateMachine memory;
     private ObservableMap<Integer, TurtleModel> turtleModels;
     private List<Integer> selected;
+    private List<SelectionListener> selectionListeners;
 
     public TurtleManagerImpl() {
         turtleModels = FXCollections.observableMap(new HashMap<>());
-        selected = List.of(ModelModule.INITIAL_TURTLE_ID);
+        selected = new ArrayList<>(ModelModule.INITIAL_TURTLE_ID);
+        selectionListeners = new ArrayList<>();
     }
 
     @Override
-    public int id() { return selected.get(selected.size()-1); }
+    public int id() {
+        if(selected.isEmpty()) return -1;
+        else return selected.get(selected.size()-1);
+    }
 
     @Override
     public List<Integer> selected() { return selected; }
@@ -58,36 +63,64 @@ public class TurtleManagerImpl implements TurtleManager {
 
     @Override
     public int tell(List<Integer> turtleIDs) {
-        selected = checkWildcard(turtleIDs);
+        turtleIDs.stream().filter(idx -> !turtleModels.containsKey(idx)).forEach(idx -> {
+            try {
+                addTurtle(idx);
+            } catch (IllegalParameterException e) { }
+        });
+
+        if(turtleIDs.isEmpty()) selected.clear();
+        else selected = checkWildcard(turtleIDs);
+        selectionListeners.forEach(listener -> listener.selectionUpdated(selected));
         return id();
     }
 
-    @Override
-    public <T> T ask(List<Integer> indices, TurtleOperations<T> ops) {
-        var results = checkWildcard(indices)
-                .stream()
-                .map(idx -> ops.op(turtleModels.get(idx)))
-                .collect(Collectors.toList());
-        return results.get(results.size()-1);
-    }
-
-    @Override
-    public <T> T askWith(Predicate<TurtleModel> p, TurtleOperations<T> ops) {
-        var results = turtleModels
-                .keySet()
-                .stream()
-                .map(turtleModels::get)
-                .filter(p)
-                .map(ops::op)
-                .collect(Collectors.toList());
-        return results.get(results.size()-1);
-    }
 
     @Override
     public StateMachine memory() { return memory; }
 
     @Override
     public void equipMemory(StateMachine memory) { this.memory = memory; }
+
+    @Override
+    public int setBackground(int index) { // hmmm
+        return 0;
+    }
+
+    @Override
+    public int setPenColor(int index) {
+        return 0;
+    }
+
+    @Override
+    public int setPenSize(int pixels) {
+        return 0;
+    }
+
+    @Override
+    public int setShape(int index) {
+        return 0;
+    }
+
+    @Override
+    public int setPalette(int index, int r, int g, int b) {
+        return 0;
+    }
+
+    @Override
+    public int penColor() {
+        return 0;
+    }
+
+    @Override
+    public int shape() {
+        return 0;
+    }
+
+    @Override
+    public void registerSelectionListener(SelectionListener listener) {
+        selectionListeners.add(listener);
+    }
 
     private <T> T batchOperation(TurtleOperations<T> ops) {
         var results = selected
@@ -104,6 +137,8 @@ public class TurtleManagerImpl implements TurtleManager {
     @Override
     public double setVisible(boolean visible) { return batchOperation(t -> t.setVisible(visible)); }
 
+    @Override
+    public double forward(double by) { return batchOperation(t -> t.forward(by)); }
 
     @Override
     public double moveTo(double x, double y, boolean forcePenUp) { return batchOperation(t -> t.moveTo(x, y, forcePenUp)); }

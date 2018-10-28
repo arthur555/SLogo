@@ -41,22 +41,14 @@ public class IfElse implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
+        double ret = 0;
         if (myToken.getString().equals("IfElse")) {
-            // TODO
+            if (expr.evaluate(turtleManager) != 0){
+                ret = expressionListA.evaluate(turtleManager);
+            } else{
+                ret = expressionListB.evaluate(turtleManager);
+            }
         }
-        return 0;
+        return ret;
     }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
-    }
-
 }

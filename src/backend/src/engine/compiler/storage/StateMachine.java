@@ -1,8 +1,9 @@
 package engine.compiler.storage;
 
+import engine.compiler.slogoast.Expression;
 import engine.errors.InterpretationException;
 
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ public interface StateMachine {
      * @param key
      * @param value
      */
-    public void setDouble(String key, double value);
+    void setDouble(String key, double value);
 
     /**
      * Set an int value for a variable.
@@ -25,7 +26,7 @@ public interface StateMachine {
      * @param key
      * @param value
      */
-    public void setInteger(String key, int value);
+    void setInteger(String key, int value);
 
     /**
      * Set a String value for a variable.
@@ -33,27 +34,52 @@ public interface StateMachine {
      * @param key
      * @param value
      */
-    public void setString(String key, String value);
+    void setString(String key, String value);
+
+    /**
+     * Set an Expression value for a variable.
+     *
+     * @param key
+     * @param function
+     */
+    void setExpression(String key, Expression function);
+
+    /**
+     * Set a local integer value for a key.
+     *
+     * @param key
+     * @param value
+     */
+
+    void setVariable(String key, Object value, VariableType type);
 
     /**
      * Get the type of the variable, either a double, an integer or a function.
      *
      * @param key
-     * @return A String representation of the type of the variable.
+     * @return The type of the variable.
      */
-    String getVariableType(String key);
+    VariableType getVariableType(String key) throws InterpretationException;
+
+    /**
+     * Get the value of the variable as an Object from the aggregate map.
+     *
+     * @param key
+     * @return An Object representation of the value of the variable.
+     */
+    Object getValueInGeneralForm(String key) throws InterpretationException;
 
     /**
      * Remove the key entry from the map.
      *
      * @param key
      */
-    public void removeVariable(String key) throws InterpretationException;
+    void removeVariable(String key) throws InterpretationException;
 
     /**
      * Clear all state variables in the state machine.
      */
-    public void resetState();
+    void resetState();
 
     /**
      * Present the internal storage of the StateMachine in a map format.
@@ -61,15 +87,38 @@ public interface StateMachine {
      *
      * @return A Map representation of the StateMachine.
      */
-    public Map<String, Object> listOfVariables();
+    Map<String, Object> listOfVariables();
 
     /**
      *  Allow any observers to register as an observer to this StateMachine.
      */
-    public void register(StateMachineObserver observer);
+    void register(StateMachineObserver observer);
 
     /**
-     *  Push notifications to observers whenever there's change within the StateMachine.
+     * Returns true if the variable is already defined in the StateMachine and false otherwise.
+     *
+     * @param key: The String name of the variable to be queried.
+     * @return A boolean value indicating whether the variable key is defined in the StateMachine.
      */
-    public void pushAlarm();
+    boolean containsVariable(String key);
+
+    /**
+     * Push notifications to observers whenever there's change within the StateMachine.
+     */
+    void pushAlarm();
+
+    /**
+     * Present the internal storage of the StateMachine in a list format, separated by newline.
+     *
+     * @return A String representation of the StateMachine.
+     */
+    String toString();
+
+    /**
+     * Look at the local variable and then the global variables for the queried variable.
+     *
+     * @return The value of the variable.
+     * @param key
+     */
+    Object getValue(String key) throws InterpretationException;
 }

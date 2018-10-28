@@ -38,16 +38,12 @@ public class Unary implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         double head = turtleManager.getAngle(); //in radians
-        double x = turtleManager.getX();
-        double y = turtleManager.getY();
         double value = myExpr.evaluate(turtleManager);
         if (myToken.getString().equals("Forward")){
-            double stepX = value*Math.cos(Math.toRadians(head));
-            double stepY = value*Math.sin(Math.toRadians(head));
-            return turtleManager.moveTo(x+stepX, y+stepY, false);
+            return turtleManager.forward(value);
         }
         else if (myToken.getString().equals("Backward")){
-            return turtleManager.moveTo(x-value*Math.cos(Math.toRadians(head)), y-value*Math.sin(Math.toRadians(head)), false);
+            return turtleManager.forward(-value);
         }
         else if (myToken.getString().equals("Right")){
             return turtleManager.setAngle((head + value)%360);
@@ -76,19 +72,6 @@ public class Unary implements Expression {
         else if (myToken.getString().equals("Not")){
             return (value == 0) ? 1:0;
         }
-
         return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);
-    }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
     }
 }

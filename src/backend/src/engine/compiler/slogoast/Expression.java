@@ -3,6 +3,8 @@ package engine.compiler.slogoast;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
+import java.io.*;
+
 /**
  * This is an abstract class that all AST nodes shall extend from.
  *
@@ -32,5 +34,35 @@ public interface Expression {
      * @param turtleManager@return A double value returned by evaluating the expression.
      * @throws InterpretationException
      */
-    double evaluate(TurtleManager turtleManager) throws InterpretationException;
+    default double evaluate(TurtleManager turtleManager) throws InterpretationException {
+        return interpret(turtleManager);
+        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(baos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            oos.writeObject(turtleManager);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(bais);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        TurtleManager deepClone = null;
+        try {
+            deepClone = (TurtleManager) ois.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return interpret(deepClone);*/
+    }
 }

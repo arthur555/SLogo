@@ -1,5 +1,7 @@
 package engine.compiler.slogoast;
 
+import engine.compiler.storage.StateMachine;
+import engine.compiler.storage.StateMachineV2;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -36,18 +38,33 @@ public class UserFunction implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
-    }
+        MakeUserInstruction function = (MakeUserInstruction) turtleManager.memory().getValueInGeneralForm(myVariable.getVariableName());
+        VariableList desiredParameters = function.getParameters();
+        ExpressionList desiredExpressions = function.getExpressionList();
+        if (desiredParameters.getListOfVariables().size() != parameters.getListOfExpressions().size()) {
+            throw new InterpretationException(String.format("The number of expressions passed in, %d, does not match the number of desired parameters defined earlier, %d", parameters.getListOfExpressions().size(), desiredParameters.getListOfVariables().size()));
+        }
+        if (parameters.getListOfExpressions().isEmpty()) {
+            return desiredExpressions.interpret(turtleManager);
+        }
 
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        StateMachine oldGlobalMemory = new StateMachineV2();
+
+        for (int i = 0; i < parameters.getListOfExpressions().size(); i++) {
+            var desiredParameter = desiredParameters.getListOfVariables().get(i).getVariableName();
+            if (turtleManager.memory().containsVariable(desiredParameter)){
+                oldGlobalMemory.setDouble(desiredParameter, (double)turtleManager.memory().getValue(desiredParameter));
+            }
+            turtleManager.memory().setDouble(desiredParameter, parameters.getListOfExpressions().get(i).evaluate(turtleManager));
+        }
+        double ret = desiredExpressions.interpret(turtleManager);
+        for (int i = 0; i < desiredParameters.getListOfVariables().size(); i++) {
+            var desiredParameter = desiredParameters.getListOfVariables().get(i).getVariableName();
+            turtleManager.memory().removeVariable(desiredParameters.getListOfVariables().get(i).getVariableName());
+            if (oldGlobalMemory.containsVariable(desiredParameter)){
+                turtleManager.memory().setDouble(desiredParameter, (double)oldGlobalMemory.getValue(desiredParameter));
+            }
+        }
+        return ret;
     }
 }
