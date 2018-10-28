@@ -58,6 +58,7 @@ public class TurtleView implements ClearListener {
         bindObservable(turtleModel);
 
         model = turtleModel;
+        model.registerClearListener(this);
     }
 
     private void bindObservable(TurtleModel turtleModel) {
