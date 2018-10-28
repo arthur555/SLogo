@@ -56,10 +56,8 @@ public class CanvasView {
             double upper = turtle.getY()+ turtle.getParent().getTranslateY();
             double width = turtle.getImage().getWidth();
 
-            if(selection.getBoundsInParent().intersects(left, upper, width, width))
-                indices.add(e.getKey());
-
-            if(e.getValue().turtle().getLayoutBounds().intersects(selection.getBoundsInParent())) {
+            if(e.getValue().turtle().getLayoutBounds().intersects(selection.getBoundsInParent())||
+                    selection.getBoundsInParent().intersects(left, upper, width, width)) {
                 indices.add(e.getKey());
             }
         } return indices;
