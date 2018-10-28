@@ -39,7 +39,7 @@ public class Group implements Expression {
      */
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return myExpr.interpret(turtleManager);
     }
 
     /**
@@ -51,6 +51,6 @@ public class Group implements Expression {
      */
     @Override
     public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return 0;
+        return interpret(turtleManager);
     }
 }
