@@ -44,6 +44,9 @@ public class UserFunction implements Expression {
         if (desiredParameters.getListOfVariables().size() != parameters.getListOfExpressions().size()) {
             throw new InterpretationException(String.format("The number of expressions passed in, %d, does not match the number of desired parameters defined earlier, %d", parameters.getListOfExpressions().size(), desiredParameters.getListOfVariables().size()));
         }
+        if (parameters.getListOfExpressions().isEmpty()) {
+            return desiredExpressions.interpret(turtleManager);
+        }
 
         StateMachine oldGlobalMemory = new StateMachineV2();
 
