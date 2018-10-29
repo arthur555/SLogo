@@ -2,6 +2,7 @@ package view;
 
 import engine.compiler.storage.StateMachine;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -14,6 +15,7 @@ public class VariableView implements StateMachineObserver {
     private static final int VALUE_WIDTH = 150;
     private static final int MAX_LENGTH = 15;
     private static final String DOTDOTDOT = "...";
+    private static final int DOUBLE_CLICK = 2;
 
     private ScrollPane root;
     private VBox variableView;
@@ -37,9 +39,18 @@ public class VariableView implements StateMachineObserver {
     @Override
     public void notifyListener() {
         variableView.getChildren().clear(); // we can optimize this if we need to
-        stateMachine.listOfVariables().forEach( (k, v) ->
-                variableView.getChildren().add(keyValueText(variableView.getChildren().size(), k, v))
-        );
+        stateMachine.listOfVariables().forEach( (k, v) -> {
+            var kvPane = keyValueText(variableView.getChildren().size(), k, v);
+            kvPane.setOnMouseClicked(e -> {
+                if(e.getClickCount() >= DOUBLE_CLICK) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(k);
+                    alert.setContentText(v.toString());
+                    alert.showAndWait();
+                }
+            });
+            variableView.getChildren().add(kvPane);
+        });
     }
 
     private GridPane keyValueText(int idx, String key, Object value) {
