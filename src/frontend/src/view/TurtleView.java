@@ -15,13 +15,14 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import model.ClearListener;
 import model.TurtleModel;
+import model.UIListener;
 import view.utils.AnimationQueue;
 import view.utils.ImageUtils;
 
 /**
  *  Takes care of one single Turtle
  */
-public class TurtleView implements ClearListener {
+public class TurtleView implements ClearListener, UIListener {
     public static final int TURTLE_SIZE = 50;
     public static final int ANIMATION_LIMIT = 200;
 
@@ -128,5 +129,25 @@ public class TurtleView implements ClearListener {
     public void clear() {
         views.getChildren().clear();
         views.getChildren().add(turtle);
+    }
+
+    @Override
+    public void setBackground(String colorStr) {
+        
+    }
+
+    @Override
+    public void setPenColor(String colorStr) {
+
+    }
+
+    @Override
+    public void setPenSize(int pixels) {
+
+    }
+
+    @Override
+    public void setShape(String shapeStr) {
+
     }
 }

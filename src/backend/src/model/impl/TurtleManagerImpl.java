@@ -2,6 +2,7 @@ package model.impl;
 
 import engine.compiler.storage.StateMachine;
 import engine.errors.IllegalParameterException;
+import engine.errors.InterpretationException;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -10,7 +11,6 @@ import model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TurtleManagerImpl implements TurtleManager {
@@ -75,7 +75,6 @@ public class TurtleManagerImpl implements TurtleManager {
         return id();
     }
 
-
     @Override
     public StateMachine memory() { return memory; }
 
@@ -83,44 +82,10 @@ public class TurtleManagerImpl implements TurtleManager {
     public void equipMemory(StateMachine memory) { this.memory = memory; }
 
     @Override
-    public int setBackground(int index) { // hmmm
-        return 0;
-    }
-
-    @Override
-    public int setPenColor(int index) {
-        return 0;
-    }
-
-    @Override
-    public int setPenSize(int pixels) {
-        return 0;
-    }
-
-    @Override
-    public int setShape(int index) {
-        return 0;
-    }
-
-    @Override
-    public int setPalette(int index, int r, int g, int b) {
-        return 0;
-    }
-
-    @Override
-    public int penColor() {
-        return 0;
-    }
-
-    @Override
-    public int shape() {
-        return 0;
-    }
-
-    @Override
     public void registerSelectionListener(SelectionListener listener) {
         selectionListeners.add(listener);
     }
+
 
     private <T> T batchOperation(TurtleOperations<T> ops) {
         var results = selected
@@ -164,6 +129,47 @@ public class TurtleManagerImpl implements TurtleManager {
     @Override
     public double clear() { return batchOperation(TurtleModel::clear); }
 
+    @Override
+    public int setBackground(int index) {
+        return batchOperation(t -> {
+            try {
+                return t.setBackground(index);
+            } catch (InterpretationException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        });
+    }
+
+    @Override
+    public int setPenColor(int index) {
+        return batchOperation(t -> {
+            try {
+                return t.setPenColor(index);
+            } catch (InterpretationException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        });
+    }
+
+    @Override
+    public int setPenSize(int pixels) {
+        return batchOperation(t -> t.setPenSize(pixels));
+    }
+
+    @Override
+    public int setShape(int index) {
+        return batchOperation(t -> {
+            try {
+                return t.setShape(index);
+            } catch (InterpretationException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        });
+    }
+
     /**
      *  Used for individual turtles only
      */
@@ -176,4 +182,6 @@ public class TurtleManagerImpl implements TurtleManager {
     public PosAndAngle posAndAngleModel() { return null; }
     @Override
     public void registerClearListener(ClearListener cl) { }
+    @Override
+    public void registerUIListener(UIListener listener) { }
 }

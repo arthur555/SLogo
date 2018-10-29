@@ -1,6 +1,7 @@
 package model;
 
 import engine.compiler.storage.StateMachine;
+import engine.errors.InterpretationException;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public interface TurtleModel {
@@ -22,7 +23,17 @@ public interface TurtleModel {
     SimpleBooleanProperty isVisibleModel();
     PosAndAngle posAndAngleModel();
 
+    /**
+     * I honestly feel like this shouldn't be here ... but it's easy to do
+     * @blame inchan hwang
+     */
+    int setBackground(int index) throws InterpretationException;
+    int setPenColor(int index) throws InterpretationException;
+    int setPenSize(int pixels);
+    int setShape(int index) throws InterpretationException;
+
     StateMachine memory();
     void registerClearListener(ClearListener cl);
+    void registerUIListener(UIListener ul);
     double clear();
 }

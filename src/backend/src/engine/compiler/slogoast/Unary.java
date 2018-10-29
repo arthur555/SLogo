@@ -72,6 +72,18 @@ public class Unary implements Expression {
         else if (myToken.getString().equals("Not")){
             return (value == 0) ? 1:0;
         }
-        return turtleManager.moveTo(turtleManager.getX()+100, turtleManager.getY()+100, false);
+        else if (myToken.getString().equals("SetBackground")) {
+            return turtleManager.setBackground((int) value);
+        }
+        else if (myToken.getString().equals("SetPenColor")) {
+            return turtleManager.setPenColor((int) value);
+        }
+        else if (myToken.getString().equals("SetPenSize")) {
+            return turtleManager.setPenSize((int) value);
+        }
+        else if(myToken.getString().equals("SetShape")) {
+            return turtleManager.setShape((int) value);
+        }
+        return 0;
     }
 }
