@@ -2,6 +2,7 @@ package engine.compiler.slogoast;
 
 import engine.compiler.Token;
 import engine.errors.InterpretationException;
+import model.PosAndAngle;
 import model.TurtleManager;
 
 /**
@@ -49,12 +50,12 @@ public class Direct implements Expression {
             return turtleManager.setVisible(false);
         }
         else if (myToken.getString().equals("Home")) {
-            return turtleManager.moveTo(0,0,false);
+            return turtleManager.moveTo(PosAndAngle.X_BUF,PosAndAngle.Y_BUF,false);
         }
         else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
             turtleManager.setAngle(0);
-            return turtleManager.moveTo(0,0,false);
+            return turtleManager.moveTo(PosAndAngle.X_BUF,PosAndAngle.Y_BUF,false);
         }
         else if (myToken.getString().equals("XCoordinate")) {
             return turtleManager.getX();
