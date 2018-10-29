@@ -47,11 +47,6 @@ public interface TurtleManager extends TurtleModel {
     ObservableMap<Integer, TurtleModel> turtleModels();
 
     /**
-     *  Runs ops on every selected turtles
-     */
-    <T> T foreach(TurtleOperations<T> ops);
-
-    /**
      * Selects all the turtles with given IDs
      * All operations will operate only to these selected turtles
      * @return id()

@@ -45,14 +45,8 @@ public class CanvasView {
         selection.setStroke(Color.BLACK);
         selection.setStrokeWidth(5.0);
         root.getChildren().add(selection);
-        duration.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                for (TurtleView tv: turtleViews.values())
-                {
-                    tv.setStrokeSize(newValue.doubleValue());
-                }
-            }
+        duration.addListener((observable, oldValue, newValue) -> {
+            for (TurtleView tv: turtleViews.values()) tv.setPenSize(newValue.intValue());
         });
     }
 
