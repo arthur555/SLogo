@@ -19,6 +19,10 @@ public class StateMachineV2 implements StateMachine{
         typeMap = new HashMap<>();
         valueMap = new HashMap<>();
         observers = new ArrayList<>();
+
+        valueMap.put("ColorIndex1", "#FF0000");
+        valueMap.put("ColorIndex2", "#00FF00");
+        valueMap.put("ColorIndex3", "#0000FF");
     }
 
     /**

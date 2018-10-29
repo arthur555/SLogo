@@ -2,6 +2,7 @@ package model.impl;
 
 import engine.compiler.storage.StateMachine;
 import engine.errors.IllegalParameterException;
+import engine.errors.InterpretationException;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -10,7 +11,6 @@ import model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TurtleManagerImpl implements TurtleManager {
@@ -48,15 +48,6 @@ public class TurtleManagerImpl implements TurtleManager {
     @Override
     public ObservableMap<Integer, TurtleModel> turtleModels() { return turtleModels; }
 
-    @Override
-    public <T> T foreach(TurtleOperations<T> ops) {
-        var results = selected
-                .stream()
-                .map(idx -> ops.op(turtleModels.get(idx)))
-                .collect(Collectors.toList());
-        return results.get(results.size()-1);
-    }
-
     private List<Integer> checkWildcard(List<Integer> indices) {
         return indices.contains(ALL) ? new ArrayList<>(turtleModels.keySet()) : indices;
     }
@@ -75,46 +66,13 @@ public class TurtleManagerImpl implements TurtleManager {
         return id();
     }
 
-
     @Override
     public StateMachine memory() { return memory; }
 
     @Override
-    public void equipMemory(StateMachine memory) { this.memory = memory; }
-
-    @Override
-    public int setBackground(int index) { // hmmm
-        return 0;
-    }
-
-    @Override
-    public int setPenColor(int index) {
-        return 0;
-    }
-
-    @Override
-    public int setPenSize(int pixels) {
-        return 0;
-    }
-
-    @Override
-    public int setShape(int index) {
-        return 0;
-    }
-
-    @Override
-    public int setPalette(int index, int r, int g, int b) {
-        return 0;
-    }
-
-    @Override
-    public int penColor() {
-        return 0;
-    }
-
-    @Override
-    public int shape() {
-        return 0;
+    public void equipMemory(StateMachine memory) {
+        turtleModels.values().forEach(model -> model.equipMemory(memory));
+        this.memory = memory;
     }
 
     @Override
@@ -122,52 +80,85 @@ public class TurtleManagerImpl implements TurtleManager {
         selectionListeners.add(listener);
     }
 
-    private <T> T batchOperation(TurtleOperations<T> ops) {
-        var results = selected
-                .stream()
-                .map(turtleModels::get)
-                .map(ops::op)
-                .collect(Collectors.toList());
+
+    private <T> T batchOperation(TurtleOperations<T> ops) throws InterpretationException {
+        if(selected.size() == 0) throw new InterpretationException("ugh");
+        var results = new ArrayList<T>();
+        ObservableMap<Integer, TurtleModel> integerTurtleModelObservableMap = turtleModels;
+        for (Integer integer : selected) {
+            TurtleModel turtleModel = integerTurtleModelObservableMap.get(integer);
+            T op = ops.op(turtleModel);
+            results.add(op);
+        }
         return results.get(results.size()-1);
     }
 
     @Override
-    public double setPenDown(boolean down) { return batchOperation(t -> t.setPenDown(down)); }
+    public double setPenDown(boolean down) throws InterpretationException {
+        return batchOperation(t -> t.setPenDown(down));
+    }
 
     @Override
-    public double setVisible(boolean visible) { return batchOperation(t -> t.setVisible(visible)); }
+    public double setVisible(boolean visible) throws InterpretationException {
+        return batchOperation(t -> t.setVisible(visible));
+    }
 
     @Override
-    public double forward(double by) { return batchOperation(t -> t.forward(by)); }
+    public double forward(double by) throws InterpretationException {
+        return batchOperation(t -> t.forward(by));
+    }
 
     @Override
-    public double moveTo(double x, double y, boolean forcePenUp) { return batchOperation(t -> t.moveTo(x, y, forcePenUp)); }
+    public double moveTo(double x, double y, boolean forcePenUp) throws InterpretationException {
+        return batchOperation(t -> t.moveTo(x, y, forcePenUp));
+    }
 
     @Override
-    public double setAngle(double angle) { return batchOperation(t -> t.setAngle(angle)); }
+    public double setAngle(double angle) throws InterpretationException {
+        return batchOperation(t -> t.setAngle(angle));
+    }
 
     @Override
-    public double getX() { return batchOperation(TurtleModel::getX); }
+    public double getX() throws InterpretationException { return batchOperation(TurtleModel::getX); }
 
     @Override
-    public double getY() { return batchOperation(TurtleModel::getY); }
+    public double getY() throws InterpretationException { return batchOperation(TurtleModel::getY); }
 
     @Override
-    public double getAngle() { return batchOperation(TurtleModel::getAngle); }
+    public double getAngle() throws InterpretationException{ return batchOperation(TurtleModel::getAngle); }
 
     @Override
-    public boolean isPenDown() { return batchOperation(TurtleModel::isPenDown);}
+    public boolean isPenDown() throws InterpretationException{ return batchOperation(TurtleModel::isPenDown);}
 
     @Override
-    public boolean isVisible() { return batchOperation(TurtleModel::isVisible); }
+    public boolean isVisible() throws InterpretationException{ return batchOperation(TurtleModel::isVisible); }
 
     @Override
-    public double clear() { return batchOperation(TurtleModel::clear); }
+    public double clear() throws InterpretationException { return batchOperation(TurtleModel::clear); }
+
+    @Override
+    public int setBackground(int index) throws InterpretationException{
+        return batchOperation(t -> t.setBackground(index));
+    }
+
+    @Override
+    public int setPenColor(int index)throws InterpretationException {
+        return batchOperation(t -> t.setPenColor(index));
+    }
+
+    @Override
+    public int setPenSize(int pixels)throws InterpretationException {
+        return batchOperation(t -> t.setPenSize(pixels));
+    }
+
+    @Override
+    public int setShape(int index) throws InterpretationException{
+        return batchOperation(t -> t.setShape(index));
+    }
 
     /**
      *  Used for individual turtles only
      */
-
     @Override
     public SimpleBooleanProperty isPenDownModel() { return null; }
     @Override
@@ -176,4 +167,6 @@ public class TurtleManagerImpl implements TurtleManager {
     public PosAndAngle posAndAngleModel() { return null; }
     @Override
     public void registerClearListener(ClearListener cl) { }
+    @Override
+    public void registerUIListener(UIListener listener) { }
 }

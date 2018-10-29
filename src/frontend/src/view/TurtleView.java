@@ -1,11 +1,13 @@
 package view;
 
+import engine.errors.InterpretationException;
 import javafx.animation.Animation;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -15,13 +17,16 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import model.ClearListener;
 import model.TurtleModel;
+import model.UIListener;
 import view.utils.AnimationQueue;
 import view.utils.ImageUtils;
+
+import java.util.function.Consumer;
 
 /**
  *  Takes care of one single Turtle
  */
-public class TurtleView implements ClearListener {
+public class TurtleView implements ClearListener, UIListener {
     public static final int TURTLE_SIZE = 50;
     public static final int ANIMATION_LIMIT = 200;
 
@@ -37,18 +42,27 @@ public class TurtleView implements ClearListener {
     private double tempY;
     private double oldAngle;
     private TurtleModel model;
+    private Consumer<Color> bgColorChange;
 
-    public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
+    public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel, Consumer<Color> bgColorChange) {
         views = new Group();
         turtleImg = ImageUtils.getImageFromUrl("turtle_1.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView(turtleImg);
-        turtle.setX(turtleModel.getX());
-        turtle.setY(turtleModel.getY());
+        try {
+            turtle.setX(turtleModel.getX());
+            turtle.setY(turtleModel.getY());
+            turtle.setRotate(-turtleModel.getAngle());
+        } catch (InterpretationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Something went wrong...");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
         tempX = turtle.getX()+ TURTLE_SIZE/2;
         tempY = turtle.getY()+ TURTLE_SIZE/2;
         oldAngle = 0;
         strokeSize = 1;
-        turtle.setRotate(-turtleModel.getAngle());
         turtle.visibleProperty().bind(turtleModel.isVisibleModel());
         views.getChildren().add(turtle);
 
@@ -61,8 +75,11 @@ public class TurtleView implements ClearListener {
         animationQueue = new AnimationQueue(ANIMATION_LIMIT);
         bindObservable(turtleModel);
 
+        this.bgColorChange = bgColorChange;
+
         model = turtleModel;
         model.registerClearListener(this);
+        model.registerUIListener(this);
     }
 
     private void bindObservable(TurtleModel turtleModel) {
@@ -122,7 +139,6 @@ public class TurtleView implements ClearListener {
         return path;
     }
 
-    public void setStrokeSize(double strokeSize){this.strokeSize = strokeSize;}
     public ImageView turtle() { return turtle; }
     public Group views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }
@@ -133,4 +149,17 @@ public class TurtleView implements ClearListener {
         views.getChildren().clear();
         views.getChildren().add(turtle);
     }
+
+    @Override
+    public void setBackground(String colorStr) { bgColorChange.accept(Color.valueOf(colorStr)); }
+
+    @Override
+    public void setPenColor(String colorStr) { penColor = Color.valueOf(colorStr); }
+
+    @Override
+    public void setPenSize(int pixels) { this.strokeSize = pixels; }
+
+    @Override
+    public void setShape(String shapeStr) { }
+    // parse the shapeString
 }

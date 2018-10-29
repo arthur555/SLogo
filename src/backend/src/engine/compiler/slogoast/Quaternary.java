@@ -35,11 +35,11 @@ public class Quaternary implements Expression {
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("SetPalette")) {
             double indexNum = firstArg.evaluate(turtleManager);
-            String index = "colorIndex" + (int)indexNum;
+            String index = "ColorIndex" + (int)indexNum;
             String hex = "#" + decimalToHex(secondArg.evaluate(turtleManager)) +
                     decimalToHex(thirdArg.evaluate(turtleManager)) +
                             decimalToHex(fourthArg.evaluate(turtleManager));
-            turtleManager.memory().setString(firstArg.toString(), hex);
+            turtleManager.memory().setString(index, hex);
             return indexNum;
         }
         return 0;
@@ -49,7 +49,7 @@ public class Quaternary implements Expression {
         if (num < 0 || num > 255){
             throw new InterpretationException("RGB value not between range 0 and 255");
         }
-        return Integer.toHexString( (int) num);
+        return String.format("%02X", (int) num);
     }
 
     /**

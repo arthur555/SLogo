@@ -21,8 +21,9 @@ import java.util.List;
 public class SidebarView {
     public static final int SIDEBAR_VIEW_WIDTH = 75;
 
-    private static final int BUTTON_MARGIN = 10;
-    private static final int BUTTON_SIZE = 50;
+    private static final int BUTTON_MARGIN = 15;
+    private static final int BUTTON_SIZE = 40;
+    private static final int SLIDER_HEIGHT = 110;
 
     private static final int NEW_INSTANCE_BUTTON = 0;
     private static final int BACKGROUND_BUTTON = 1;
@@ -53,18 +54,22 @@ public class SidebarView {
     ));
 
     private static final String DURATION_TOOLTIP = "Adjust the duration of single movement";
-
+    private static final String STROKE_TOOLTIP = "Adjust the stroke of lines";
     private static final double ANIMATION_DURATION_MIN = 10;
     private static final double ANIMATION_DURATION_MAX = 2000;
-    private static final double ANIMATION_DURATION_PRECISION = 100;
+    private static final double ANIMATION_DURATION_PRECISION = 400;
+    private static final double STROKE_MIN = 1;
+    private static final double STROKE_MAX = 10;
+    private static final double STROKE_PRECISION = 2;
 
     private Pane root;
     private VBox icons;
     private List<StackPane> buttons;
     private List<Tooltip> tooltips;
     private ColorPicker backgroundColor, penColor;
-    private StackPane animationDurationWrapper;
+    private VBox animationDurationWrapper;
     private Slider animationDuration;
+    private Slider strokeSize;
 
     SidebarView() {
         root = new Pane();
@@ -99,6 +104,7 @@ public class SidebarView {
                 image = i == BACKGROUND_BUTTON ? backgroundColor : penColor;
             } else image = new ImageView(ICONS.get(i));
             button = new StackPane(image);
+            button.setAlignment(Pos.BASELINE_LEFT);
             button.getStyleClass().add("sidebar-box");
             var tooltip = setTooltip(button, TOOLTIPS.get(i));
             buttons.add(button);
@@ -109,18 +115,25 @@ public class SidebarView {
     }
 
     private void setupSliders() {
-        animationDurationWrapper = new StackPane();
-        animationDuration = new Slider(
-                ANIMATION_DURATION_MIN,
-                ANIMATION_DURATION_MAX,
-                ANIMATION_DURATION_PRECISION
-        );
+        animationDurationWrapper = new VBox();
+        animationDurationWrapper.setSpacing(BUTTON_MARGIN);
+        animationDuration = new Slider(ANIMATION_DURATION_MIN, ANIMATION_DURATION_MAX, ANIMATION_DURATION_PRECISION);
+        strokeSize = new Slider(STROKE_MIN, STROKE_MAX, STROKE_PRECISION);
+        strokeSize.setMin(1);
         animationDuration.setOrientation(Orientation.VERTICAL);
         animationDuration.setShowTickMarks(true);
         animationDuration.setShowTickLabels(true);
+        animationDuration.setMaxHeight(SLIDER_HEIGHT);
+
+        strokeSize.setOrientation(Orientation.VERTICAL);
+        strokeSize.setShowTickLabels(true);
+        strokeSize.setShowTickMarks(true);
+        strokeSize.setMaxHeight(SLIDER_HEIGHT);
         setTooltip(animationDuration, DURATION_TOOLTIP);
+        setTooltip(strokeSize, STROKE_TOOLTIP);
         animationDurationWrapper.getChildren().add(animationDuration);
-        animationDurationWrapper.setAlignment(Pos.CENTER);
+        animationDurationWrapper.getChildren().add(strokeSize);
+        animationDurationWrapper.setAlignment(Pos.TOP_LEFT);
     }
 
     private Tooltip setTooltip(Node node, String text) {
@@ -144,5 +157,6 @@ public class SidebarView {
     public StackPane languageButton() { return buttons.get(LANGUAGE_BUTTON); }
     public StackPane helpButton() { return buttons.get(HELP_BUTTON); }
     public Slider speedSlider() { return animationDuration; }
+    public Slider strokeSlider(){return strokeSize;}
     public StackPane multiTurtle(){return buttons.get(MULTI_TURTLE_BUTTON);}
 }

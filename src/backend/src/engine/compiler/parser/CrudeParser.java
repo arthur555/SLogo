@@ -204,7 +204,7 @@ public class CrudeParser implements Parser {
         if (fourthPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for the the fourth part of expression in quaternary grammar", thirdPair.getValue());
         }
-        return new Pair<>(new Quaternary(quaternaryPair.getKey(), firstPair.getKey(), secondPair.getKey(), thirdPair.getKey(), fourthPair.getKey()), secondPair.getValue());
+        return new Pair<>(new Quaternary(quaternaryPair.getKey(), firstPair.getKey(), secondPair.getKey(), thirdPair.getKey(), fourthPair.getKey()), fourthPair.getValue());
     }
 
     /**

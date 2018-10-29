@@ -3,6 +3,8 @@ package view;
 import app.SLogoApp;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -26,13 +28,16 @@ public class CanvasView {
 
     private Pane root;
     private SimpleDoubleProperty duration;
+    private SimpleDoubleProperty stroke;
     private Map<Integer, TurtleView> turtleViews;
     private Rectangle selection;
+
 
     public CanvasView() {
         root = new Pane();
         setBackgroundColor(Color.WHITE);
         duration = new SimpleDoubleProperty();
+        stroke = new SimpleDoubleProperty();
         turtleViews = new HashMap<>();
         selection = new Rectangle(0, 0, 0, 0);
         selection.setOpacity(0.1);
@@ -40,10 +45,13 @@ public class CanvasView {
         selection.setStroke(Color.BLACK);
         selection.setStrokeWidth(5.0);
         root.getChildren().add(selection);
+        duration.addListener((observable, oldValue, newValue) -> {
+            for (TurtleView tv: turtleViews.values()) tv.setPenSize(newValue.intValue());
+        });
     }
 
     public void addTurtle(int id, TurtleModel model) {
-        var newView = new TurtleView(model, duration);
+        var newView = new TurtleView(model, duration, this::setBackgroundColor);
         turtleViews.put(id, newView);
         root.getChildren().addAll(newView.views());
     }
@@ -70,7 +78,9 @@ public class CanvasView {
         }
     }
 
+
     public Rectangle selection() { return selection; }
+    public DoubleProperty strokeProperty(){return stroke;}
     public DoubleProperty durationProperty() { return duration; }
     public void setImage(int idx, Image img) { turtleViews.get(idx).setTurtleImage(img); }
     public void setBackgroundColor(Color c) { root.setBackground(BackgroundUtils.coloredBackground(c)); }

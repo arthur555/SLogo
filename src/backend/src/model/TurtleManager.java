@@ -47,11 +47,6 @@ public interface TurtleManager extends TurtleModel {
     ObservableMap<Integer, TurtleModel> turtleModels();
 
     /**
-     *  Runs ops on every selected turtles
-     */
-    <T> T foreach(TurtleOperations<T> ops);
-
-    /**
      * Selects all the turtles with given IDs
      * All operations will operate only to these selected turtles
      * @return id()
@@ -64,21 +59,6 @@ public interface TurtleManager extends TurtleModel {
     StateMachine memory();
     void equipMemory(StateMachine memory);
 
-    /**
-     * I honestly feel like this shouldn't be here ... but it's easy to do
-     * @blame inchan hwang
-     */
-    int setBackground(int index);
-
-    /**
-     * But these should definitely be here
-     */
-    int setPenColor(int index);
-    int setPenSize(int pixels);
-    int setShape(int index);
-    int setPalette(int index, int r, int g, int b);
-    int penColor();
-    int shape();
-
     void registerSelectionListener(SelectionListener listener);
+    void registerUIListener(UIListener listener);
 }
