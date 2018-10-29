@@ -72,7 +72,9 @@
 .variable-view {
     -fx-padding: 10 10 10 10;
 }
-
+.split-pane{
+    -fx-background-color: #FFFFFF;
+}
 .variable-view-bg {
     -fx-background: #F3FFC4;
 }

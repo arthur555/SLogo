@@ -2,6 +2,7 @@ package controller;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.MapChangeListener;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,6 +21,7 @@ public class CanvasController implements SelectionListener {
     private TurtleManager turtleManager;
     private CanvasView canvasView;
     private double selectionX, selectionY;
+    private double pivotX, pivotY;
 
     public CanvasController(TurtleManager turtleManager, CanvasView canvasView) {
         this.turtleManager = turtleManager;
@@ -28,6 +30,7 @@ public class CanvasController implements SelectionListener {
         setupTurtleManager();
         selectionX = selectionY = 0;
         setupSelectionRectangle();
+        setupZoom();
     }
 
     private void setupSelectionRectangle() {
@@ -52,6 +55,34 @@ public class CanvasController implements SelectionListener {
             canvasView.selection().setWidth(0);
             canvasView.selection().setHeight(0);
         });
+    }
+
+    private void setupZoom(){
+        canvasView.view().setOnScroll(e ->{
+            double delta = 1.1;
+            if (e.getDeltaY()<0)
+                delta = 1/delta;
+            else{
+                pivotX = e.getSceneX();
+                pivotY = e.getSceneY();
+            }
+            for (Node i :canvasView.view().getChildren())
+            {
+                if(i.getClass().getSimpleName().equals("Rectangle")){
+                    continue;
+                }
+                i.setScaleX(i.getScaleX()*delta);
+                i.setScaleY(i.getScaleY()*delta);
+                adjust(i, pivotX, pivotY, delta-1);
+            }
+        });
+    }
+
+    private void adjust(Node n, double sceneX, double sceneY, double f){
+        double dx = (sceneX - (n.getBoundsInParent().getWidth()/2 + n.getBoundsInParent().getMinX()));
+        double dy = (sceneY - (n.getBoundsInParent().getHeight()/2 + n.getBoundsInParent().getMinY()));
+        n.setTranslateX(n.getTranslateX()-f*dx);
+        n.setTranslateY(n.getTranslateY()-f*dy);
     }
 
     private void setupTurtleManager() {

@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -50,11 +51,18 @@ public class CanvasView {
     public List<Integer> turtlesInSelection() {
         var indices = new ArrayList<Integer>();
         for(var e : turtleViews.entrySet()) {
-            if(e.getValue().turtle().intersects(selection.getBoundsInParent())) {
+            ImageView turtle = e.getValue().turtle();
+            double left = turtle.getX()+turtle.getParent().getTranslateX();
+            double upper = turtle.getY()+ turtle.getParent().getTranslateY();
+            double width = turtle.getImage().getWidth();
+
+            if(e.getValue().turtle().getLayoutBounds().intersects(selection.getBoundsInParent())||
+                    selection.getBoundsInParent().intersects(left, upper, width, width)) {
                 indices.add(e.getKey());
             }
         } return indices;
     }
+
 
     public void highlightSelected(List<Integer> selected) {
         for (var idx : turtleViews.keySet()) {
