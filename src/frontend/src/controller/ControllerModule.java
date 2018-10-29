@@ -21,7 +21,8 @@ public class ControllerModule {
                     "Italian",
                     "Portuguese",
                     "Russian",
-                    "Spanish"
+                    "Spanish",
+                    "Urdu"
             )
     );
 
