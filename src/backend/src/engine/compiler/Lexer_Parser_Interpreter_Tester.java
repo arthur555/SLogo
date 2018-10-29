@@ -24,7 +24,13 @@ public class Lexer_Parser_Interpreter_Tester {
     public static void main(String[] args) {
         Lexer lexer = new CrudeLexer();
 //        String test = "dotimes [:d 4] [fd sin 50 back 5 6]";
-        String test = "for [ x 4 4 -1] [fd 50]";
+        String test = "to square [ :distance ]\n" +
+                "[\n" +
+                "  repeat 4 [\n" +
+                "    fd :distance\n" +
+                "    rt 90\n" +
+                "  ]\n" +
+                "]";
         try {
             lexer.readString(test);
         } catch (UndefinedKeywordException e) {
