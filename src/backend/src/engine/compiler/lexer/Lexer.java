@@ -30,7 +30,7 @@ public interface Lexer {
     /**
      * Reset the language dictionary to use the default language only, which is English.
      */
-    public void resetLanguage() throws MissingResourceException;
+    void resetLanguage() throws MissingResourceException;
 
     /**
      * Set the language dictionary to use the designated languages.
@@ -38,7 +38,7 @@ public interface Lexer {
      * @param languages: A String array of languages
      * @throws MissingResourceException
      */
-    public void setLanguage(String... languages) throws MissingResourceException;
+    void setLanguage(String... languages) throws MissingResourceException;
 
     /**
      * Add more languages to the internal dictionary.
@@ -46,5 +46,5 @@ public interface Lexer {
      * @param languages: A String array of languages.
      * @throws MissingResourceException
      */
-    public void addLanguage(String... languages) throws MissingResourceException;
+    void addLanguage(String... languages) throws MissingResourceException;
 }

@@ -1,6 +1,5 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -13,14 +12,10 @@ import java.util.List;
  * @author Haotian Wang
  */
 public class VariableList implements Expression {
-    private Token listStart;
     private List<Variable> variableList;
-    private Token listEnd;
 
-    public VariableList(Token start, List<Variable> list, Token end) {
-        listStart = start;
+    public VariableList(List<Variable> list) {
         variableList = list;
-        listEnd = end;
     }
 
     /**

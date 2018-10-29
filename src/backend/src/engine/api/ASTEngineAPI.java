@@ -35,7 +35,7 @@ public class ASTEngineAPI implements EngineAPI {
     }
 
     @Override
-    public double processString(String str) throws ClassNotFoundException, UndefinedKeywordException, CommandSyntaxException, InterpretationException {
+    public double processString(String str) throws UndefinedKeywordException, CommandSyntaxException, InterpretationException {
         lexer.readString(str);
         List<Token> listOfTokens = lexer.getTokens();
         parser.readTokens(listOfTokens);

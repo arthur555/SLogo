@@ -30,7 +30,7 @@ public class AnimationQueue {
         playing.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue==false && !queue.isEmpty())
+                if (!newValue && !queue.isEmpty())
                 {
                     playNew();
                 }
@@ -38,7 +38,7 @@ public class AnimationQueue {
         });
     }
 
-    public void playNew( ){
+    private void playNew(){
         Animation toPlay = queue.pop();
         playing.set(true);
         toPlay.play();
@@ -66,7 +66,7 @@ public class AnimationQueue {
             toAdd = new SequentialTransition(turtle,rt);
         }
         queue.add(toAdd);
-        if(playing.get() == false)
+        if(!playing.get())
             playNew();
         return toAdd;
     }

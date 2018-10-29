@@ -3,11 +3,11 @@ package view.utils;
 import java.util.*;
 
 public class Language {
-    public static final int COMMANDS = 0;
-    public static final int QUERIES = 1;
-    public static final int MATH_OPS = 2;
-    public static final int BOOLEAN_OPS = 3;
-    public static final int KEYWORDS = 4;
+    private static final int COMMANDS = 0;
+    private static final int QUERIES = 1;
+    private static final int MATH_OPS = 2;
+    private static final int BOOLEAN_OPS = 3;
+    private static final int KEYWORDS = 4;
 
     private static final String REF_PATH = "ref/";
     private static final String BOOLEAN_OPS_PATH = "booleanops";
@@ -30,7 +30,7 @@ public class Language {
             )
     );
 
-    public static Set<String> extractPrefix(int which) { return extractPrefixes(REF.get(which)); }
+    private static Set<String> extractPrefix(int which) { return extractPrefixes(REF.get(which)); }
     public static Set<String> extractPrefixes(ResourceBundle bundle) {
         var keywords = new LinkedHashSet<String>();
         var suffixes = bundle.getString(SUFFIX).split(SEP);
