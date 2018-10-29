@@ -20,6 +20,7 @@ public class Tell implements Expression {
         myToken = token;
         turtles = list;
     }
+
     /**
      * This method lets the AST act on a Turtle model.
      *
@@ -37,5 +38,15 @@ public class Tell implements Expression {
             turtleManager.tell(indices);
         }
         return 0;
+    }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%s %s}", myToken.getString(), turtles.toString());
     }
 }

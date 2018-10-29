@@ -24,7 +24,8 @@ public class Lexer_Parser_Interpreter_Tester {
     public static void main(String[] args) {
         Lexer lexer = new CrudeLexer();
 //        String test = "dotimes [:d 4] [fd sin 50 back 5 6]";
-        String test = "for [ x 4 4 -1] [fd 50]";
+        String test = "make :random sum 1 random 100\n" +
+                "fd :random";
         try {
             lexer.readString(test);
         } catch (UndefinedKeywordException e) {
