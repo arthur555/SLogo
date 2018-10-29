@@ -51,4 +51,14 @@ public class Quaternary implements Expression {
         }
         return Integer.toHexString( (int) num);
     }
+
+    /**
+     * This method gives a String representation of the Expression node enclosed by curly braces.
+     *
+     * @return A String representation of the abstract syntax tree node.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%s %s %s %s %s}", myToken.getString(), firstArg.toString(), secondArg.toString(), thirdArg.toString(), fourthArg.toString());
+    }
 }
