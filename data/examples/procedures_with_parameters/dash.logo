@@ -6,10 +6,10 @@ to :dash [ :count :size ]
   ]
 ]
 
-[:dash [20 8]
+:dash [20 8]
 rt 60
 :dash [8 20]
 rt 60
-:dash [10 10]]
+:dash [10 10]
 
 
