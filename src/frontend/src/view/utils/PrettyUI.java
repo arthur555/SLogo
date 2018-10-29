@@ -36,7 +36,7 @@ public class PrettyUI {
 
     private static final Set<String> keywords = Language.keywords();
     private static final Set<String> commands = Language.nonKeywords();
-;
+
 
     private static Text textWithStyle(String text, String styleClass) {
         var ret = new Text(text);
@@ -57,7 +57,7 @@ public class PrettyUI {
         else {
             var ret = new ArrayList<Text>();
             var prefix = text.substring(0, idx);
-            var suffix = text.substring(idx+split.length(), text.length());
+            var suffix = text.substring(idx+split.length());
             if(prefix.length() > 0) ret.addAll(textWithColor(prefix, color, size));
             ret.addAll(textWithColor(split, SYNTAX_PLAIN, size));
             ret.addAll(textWithColor(suffix+SPACE, color, size));

@@ -9,5 +9,5 @@ public enum VariableType {
     STRING,
     DOUBLE,
     INTEGER,
-    EXPRESSION;
+    EXPRESSION
 }

@@ -38,10 +38,9 @@ public class MakeUserInstruction implements Expression {
      *
      * @param turtleManager : The TurtleManager that is affected by applying the abstract syntax tree.
      * @return A double value returned by evaluating the expression.
-     * @throws InterpretationException
      */
     @Override
-    public double interpret(TurtleManager turtleManager) throws InterpretationException {
+    public double interpret(TurtleManager turtleManager) {
         if (action.getString().equals("MakeUserInstruction")) {
             turtleManager.memory().setExpression(myVar.getVariableName(), this);
         }

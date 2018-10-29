@@ -1,6 +1,5 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -13,15 +12,12 @@ import java.util.List;
  * @author Haotian Wang
  */
 public class ExpressionList implements Expression {
-    private Token listStart;
     private List<Expression> expressionList;
-    private Token listEnd;
 
-    public ExpressionList(Token start, List<Expression> list, Token end) {
-        listStart = start;
+    public ExpressionList(List<Expression> list) {
         expressionList = list;
-        listEnd = end;
     }
+
     /**
      * This method gives a String representation of the Expression node enclosed by curly braces.
      *

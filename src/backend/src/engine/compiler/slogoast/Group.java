@@ -1,6 +1,5 @@
 package engine.compiler.slogoast;
 
-import engine.compiler.Token;
 import engine.errors.InterpretationException;
 import model.TurtleManager;
 
@@ -10,13 +9,9 @@ import model.TurtleManager;
  * @author Haotian Wang
  */
 public class Group implements Expression {
-    private Token groupStart;
-    private Token groupEnd;
     private Expression myExpr;
 
-    public Group(Token start, Expression a, Token end) {
-        groupStart = start;
-        groupEnd = end;
+    public Group(Expression a) {
         myExpr = a;
     }
 

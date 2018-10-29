@@ -131,7 +131,7 @@ public class SidebarController {
         try {
             turtleManager.addTurtle(turtleManager.id() + 1);
         } catch (IllegalParameterException error) {
-            System.out.println("");
+            System.out.println();
         }
     }
 }

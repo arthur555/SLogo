@@ -33,7 +33,7 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void setDouble(String key, double value) {
-        setVariable(key, new Double(value), VariableType.DOUBLE);
+        setVariable(key, value, VariableType.DOUBLE);
     }
 
     /**
@@ -44,7 +44,7 @@ public class StateMachineV2 implements StateMachine{
      */
     @Override
     public void setInteger(String key, int value) {
-        setVariable(key, new Integer(value), VariableType.INTEGER);
+        setVariable(key, value, VariableType.INTEGER);
     }
 
     /**

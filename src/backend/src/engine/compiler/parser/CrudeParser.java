@@ -311,7 +311,7 @@ public class CrudeParser implements Parser {
             throw generateSyntaxException("An expression cannot be closed by a \"[\"", pointer);
         }
         if (myTokens.get(pointer).getType().equals("ListEnd")) {
-            return new Pair<>(new VariableList(listStart, variableList, listEnd), pointer + 1);
+            return new Pair<>(new VariableList(variableList), pointer + 1);
         }
         while (true) {
             Pair<Expression, Integer> listPair = parseVariable(pointer);
@@ -328,7 +328,7 @@ public class CrudeParser implements Parser {
         if (listEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
-        return new Pair<>(new VariableList(listStart, variableList, listEnd), listEndPair.getValue());
+        return new Pair<>(new VariableList(variableList), listEndPair.getValue());
     }
 
     /**
@@ -438,7 +438,7 @@ public class CrudeParser implements Parser {
             throw generateSyntaxException("An expression cannot be closed by a \"[\"", pointer);
         }
         if (myTokens.get(pointer).getType().equals("ListEnd")) {
-            return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), pointer + 1);
+            return new Pair<>(new ExpressionList(expressionList), pointer + 1);
         }
         while (true) {
             Pair<Expression, Integer> listPair = parseExpression(pointer);
@@ -455,7 +455,7 @@ public class CrudeParser implements Parser {
         if (listEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \"]\" symbol to end a list of expressions", listEndPair.getValue());
         }
-        return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), listEndPair.getValue());
+        return new Pair<>(new ExpressionList(expressionList), listEndPair.getValue());
     }
 
     /**
@@ -572,7 +572,7 @@ public class CrudeParser implements Parser {
         if (groupEndPair.getKey() == null) {
             throw generateSyntaxException("Missing \")\" symbol for a Group after a valid expression", groupEndPair.getValue());
         }
-        return new Pair<>(new Group(groupStart, middlePair.getKey(), groupEnd), groupEndPair.getValue());
+        return new Pair<>(new Group(middlePair.getKey()), groupEndPair.getValue());
     }
 
     /**
