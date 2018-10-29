@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class MainView {
+    public static final double split = 0.7f;
     private static final String ROOT_CSS_CLASS = "root";
 
     private GridPane root;
@@ -48,7 +49,7 @@ public class MainView {
         center.setMinWidth(SLogoApp.APP_SCREEN_WIDTH);
         center.setMaxWidth(SLogoApp.APP_SCREEN_WIDTH);
         center.setOrientation(Orientation.VERTICAL);
-        center.setDividerPositions(0.7f);
+        center.setDividerPositions(split);
 
         center.getItems().addAll(canvasView.view(), commandView.view());
     }
