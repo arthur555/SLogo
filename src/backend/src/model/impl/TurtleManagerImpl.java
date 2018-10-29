@@ -82,7 +82,7 @@ public class TurtleManagerImpl implements TurtleManager {
 
 
     private <T> T batchOperation(TurtleOperations<T> ops) throws InterpretationException {
-        if(selected.size() == 0) throw new InterpretationException("ugh");
+        if(selected.size() == 0) throw new InterpretationException("None of the turtles were selected.");
         var results = new ArrayList<T>();
         ObservableMap<Integer, TurtleModel> integerTurtleModelObservableMap = turtleModels;
         for (Integer integer : selected) {

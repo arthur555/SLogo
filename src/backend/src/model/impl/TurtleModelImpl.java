@@ -74,7 +74,7 @@ public class TurtleModelImpl implements TurtleModel {
 
     @Override
     public int setBackground(int index) throws InterpretationException {
-        var colorStr = memory.getValue("ColorIndex"+String.valueOf(index)).toString();
+        var colorStr = memory.getValue("ColorIndex" + String.valueOf(index)).toString();
         uiListeners.forEach(listener -> listener.setBackground(colorStr));
         return index;
     }

@@ -9,8 +9,6 @@ import javafx.scene.text.Text;
 import view.utils.PrettyUI;
 import engine.compiler.storage.StateMachineObserver;
 
-import java.io.Serializable;
-
 public class VariableView implements StateMachineObserver {
     private static final int VARIABLE_VIEW_WIDTH = HistoryView.HISTORY_VIEW_WIDTH - 20;
     private static final int KEY_VALUE_MARGIN = 150;
