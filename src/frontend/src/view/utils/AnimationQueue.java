@@ -50,8 +50,6 @@ public class AnimationQueue {
 
 
     public Animation makeAnimation(ImageView turtle, Path path, Double newAngle, DoubleProperty duration, double oldAngle){
-        System.out.println(path);
-        System.out.println(newAngle);
         if (queue.size()>= limit)
             throw new StackOverflowError("The animation Queue is overloaded");
         var pt = new PathTransition(Duration.millis(duration.doubleValue()),path,turtle);
@@ -70,7 +68,6 @@ public class AnimationQueue {
         queue.add(toAdd);
         if(playing.get() == false)
             playNew();
-        System.out.println(toAdd);
         return toAdd;
     }
 

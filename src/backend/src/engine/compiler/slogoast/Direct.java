@@ -37,7 +37,7 @@ public class Direct implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("PenUp")) {
-            return turtleManager.setPenDown(true);
+            return turtleManager.setPenDown(false);
         }
         else if (myToken.getString().equals("PenDown")) {
             return turtleManager.setPenDown(true);
@@ -49,12 +49,12 @@ public class Direct implements Expression {
             return turtleManager.setVisible(false);
         }
         else if (myToken.getString().equals("Home")) {
-            return turtleManager.moveTo(0,0,true);
+            return turtleManager.moveTo(0,0,false);
         }
         else if (myToken.getString().equals("ClearScreen")) {
             turtleManager.clear();
             turtleManager.setAngle(0);
-            return turtleManager.moveTo(0,0,true);
+            return turtleManager.moveTo(0,0,false);
         }
         else if (myToken.getString().equals("XCoordinate")) {
             return turtleManager.getX();
