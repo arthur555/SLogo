@@ -5,8 +5,11 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 public class MainView {
     private static final String ROOT_CSS_CLASS = "root";
@@ -58,6 +61,7 @@ public class MainView {
         right.setMaxWidth(HistoryView.HISTORY_VIEW_WIDTH);
         right.setOrientation(Orientation.VERTICAL);
         right.setDividerPositions(0.5f);
+        right.getStyleClass().add("split-pane");
 
         right.getItems().addAll(variableView.view(), historyView.view());
     }

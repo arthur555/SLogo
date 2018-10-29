@@ -42,8 +42,11 @@ public class Variable implements Expression {
         if (type == VariableType.STRING) {
             throw new InterpretationException(String.format("The variable \"%s\" defined as a String", variableName));
         } else if (type == VariableType.EXPRESSION) {
-            Expression statement = (Expression) value;
-            return statement.interpret(turtleManager);
+            MakeUserInstruction statement = (MakeUserInstruction) value;
+            if (!statement.getParameters().getListOfVariables().isEmpty()) {
+                throw new InterpretationException(String.format("The user-defined function \"%s\" takes %d parameters, please give a list of the required number of parameters", statement.getParameters().getListOfVariables().size()));
+            }
+            return statement.getExpressionList().interpret(turtleManager);
         } else if (type == VariableType.DOUBLE) {
             Double temp = (Double) value;
             return temp.doubleValue();
@@ -52,18 +55,6 @@ public class Variable implements Expression {
             return temp.intValue();
         }
         return 0;
-    }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
     }
 
     /**

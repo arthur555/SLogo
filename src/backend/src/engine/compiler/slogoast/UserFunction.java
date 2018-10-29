@@ -44,6 +44,9 @@ public class UserFunction implements Expression {
         if (desiredParameters.getListOfVariables().size() != parameters.getListOfExpressions().size()) {
             throw new InterpretationException(String.format("The number of expressions passed in, %d, does not match the number of desired parameters defined earlier, %d", parameters.getListOfExpressions().size(), desiredParameters.getListOfVariables().size()));
         }
+        if (parameters.getListOfExpressions().isEmpty()) {
+            return desiredExpressions.interpret(turtleManager);
+        }
 
         StateMachine oldGlobalMemory = new StateMachineV2();
 
@@ -63,17 +66,5 @@ public class UserFunction implements Expression {
             }
         }
         return ret;
-    }
-
-    /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
     }
 }

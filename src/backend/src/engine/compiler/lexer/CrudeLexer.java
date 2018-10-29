@@ -112,7 +112,7 @@ public class CrudeLexer implements Lexer {
                 end--;
                 String chunk = input.substring(start, end + 1);
                 String type = myType.getSymbol(chunk);
-                if (type.equals("Comment") || type.equals("Whitespace")) {
+                if (type.equals("Comment") || type.equals("Whitespace") || type.equals("Newline")) {
                     start = end + 1;
                     end++;
                     continue;

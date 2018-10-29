@@ -3,6 +3,7 @@ package engine.compiler.storage;
 import engine.compiler.slogoast.Expression;
 import engine.errors.InterpretationException;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**

@@ -124,10 +124,6 @@ public class CrudeParser implements Parser {
         if (ifElsePair.getKey() != null) {
             return ifElsePair;
         }
-        Pair<Expression, Integer> userFunctionPair = parseUserFunction(index);
-        if (userFunctionPair.getKey() != null) {
-            return userFunctionPair;
-        }
         Pair<Expression, Integer> makeUserInstructionPair = parseMakeUserInstruction(index);
         if (makeUserInstructionPair.getKey() != null) {
             return makeUserInstructionPair;
@@ -147,6 +143,10 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> expressionListPair = parseExpressionList(index);
         if (expressionListPair.getKey() != null) {
             return expressionListPair;
+        }
+        Pair<Expression, Integer> userFunctionPair = parseUserFunction(index);
+        if (userFunctionPair.getKey() != null) {
+            return userFunctionPair;
         }
         Pair<Expression, Integer> directPair = parseDirect(index);
         if (directPair.getKey() != null) {
@@ -300,7 +300,13 @@ public class CrudeParser implements Parser {
             return nullPair;
         }
         int pointer = listStartPair.getValue();
-        List<Variable> variableList = new LinkedList<>();
+        List<Variable> variableList = new ArrayList<>();
+        if (pointer == myTokens.size()) {
+            throw generateSyntaxException("An expression cannot be closed by a \"[\"", pointer);
+        }
+        if (myTokens.get(pointer).getType().equals("ListEnd")) {
+            return new Pair<>(new VariableList(listStart, variableList, listEnd), pointer + 1);
+        }
         while (true) {
             Pair<Expression, Integer> listPair = parseVariable(pointer);
             if (listPair.getKey() == null) {
@@ -421,7 +427,13 @@ public class CrudeParser implements Parser {
             return nullPair;
         }
         int pointer = listStartPair.getValue();
-        List<Expression> expressionList = new LinkedList<>();
+        List<Expression> expressionList = new ArrayList<>();
+        if (pointer == myTokens.size()) {
+            throw generateSyntaxException("An expression cannot be closed by a \"[\"", pointer);
+        }
+        if (myTokens.get(pointer).getType().equals("ListEnd")) {
+            return new Pair<>(new ExpressionList(listStart, expressionList, listEnd), pointer + 1);
+        }
         while (true) {
             Pair<Expression, Integer> listPair = parseExpression(pointer);
             if (listPair.getKey() == null) {
@@ -453,6 +465,9 @@ public class CrudeParser implements Parser {
         Pair<Expression, Integer> expressionPair = parseExpression(conditionPair.getValue());
         if (expressionPair.getKey() == null) {
             throw generateSyntaxException("Illegal format for expression value after a keyword in the repeat or if loop", expressionPair.getValue());
+        }
+        if (!(expressionPair.getKey() instanceof Group) && !(expressionPair.getKey() instanceof Variable) && !(expressionPair.getKey() instanceof Direct)) {
+            throw generateSyntaxException("The expression directly after the keyword in a repeat or if statement has to be a direct command, a constant or an expression (including a single variable) bracketed by \"()\"", expressionPair.getValue());
         }
         Pair<Expression, Integer> expressionListPair = parseExpressionList(expressionPair.getValue());
         if (expressionListPair.getKey() == null) {

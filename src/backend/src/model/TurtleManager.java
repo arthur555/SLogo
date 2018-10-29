@@ -4,6 +4,7 @@ import engine.compiler.storage.StateMachine;
 import engine.errors.IllegalParameterException;
 import javafx.collections.ObservableMap;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -56,20 +57,6 @@ public interface TurtleManager extends TurtleModel {
      * @return id()
      */
     int tell(List<Integer> turtleIDs);
-
-    /**
-     * Performs the operation given by `ops` to all the turtles with the given IDs
-     * It does not alter the previous selection
-     * @return result of last command or 0 if there weren't any operations
-     */
-    <T> T ask(List<Integer> indices, TurtleOperations<T> ops);
-
-    /**
-     * Performs the operation given by `ops` to all the turtles that satisfy the predicate
-     * It does not alter the previous selection
-     * @return result of last command or 0 if there weren't any operations
-     */
-    <T> T askWith(Predicate<TurtleModel> p, TurtleOperations<T> ops);
 
     /**
      * @return StateMachine

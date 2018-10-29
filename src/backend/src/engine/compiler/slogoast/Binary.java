@@ -86,16 +86,4 @@ public class Binary implements Expression {
         }
         return 0;
     }
-
-    /**
-     * This method evaluates the return value of the expression.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
-    }
 }

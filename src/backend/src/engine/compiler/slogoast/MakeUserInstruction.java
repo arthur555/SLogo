@@ -49,18 +49,6 @@ public class MakeUserInstruction implements Expression {
     }
 
     /**
-     * This method evaluates the return value of the expression, without applying actual effects on the turtle.
-     *
-     *
-     * @param turtleManager@return A double value returned by evaluating the expression.
-     * @throws InterpretationException
-     */
-    @Override
-    public double evaluate(TurtleManager turtleManager) throws InterpretationException {
-        return interpret(turtleManager);
-    }
-
-    /**
      * Get the variableList object associated with this MakeUserInstruction class.
      *
      * @return A VariableList object.
