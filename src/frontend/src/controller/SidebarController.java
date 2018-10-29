@@ -64,6 +64,7 @@ public class SidebarController {
         this.editorController = editorController;
         this.canvasController = canvasController;
         canvasController.bindDuration(sidebar.speedSlider().valueProperty());
+        canvasController.bindStroke(sidebar.strokeSlider().valueProperty());
     }
 
     private void setupHandlers() {

@@ -8,10 +8,10 @@ to random_move [ :fdmin :fdmax :ltmin :ltmax ]
 [
   repeat 100
   [
-    lt random_in_range :ltmin :ltmax
-    fd random_in_range :fdmin :fdmax
+    lt random_in_range [:ltmin :ltmax]
+    fd random_in_range [:fdmin :fdmax]
   ]
 ]
 
 
-random_move 5 15 -10 5
+random_move [5 15 -10 5]

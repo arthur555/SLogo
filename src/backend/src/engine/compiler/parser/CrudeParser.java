@@ -75,7 +75,13 @@ public class CrudeParser implements Parser {
     private Expression parseGoal() throws CommandSyntaxException {
         Pair<Expression, Integer> resultPair = parseExpression(0);
         if (resultPair.getKey() == null || resultPair.getValue() != myTokens.size()) {
-            throw new CommandSyntaxException("The input command cannot be parsed.");
+            myTokens.add(listEnd);
+            myTokens.add(0, listStart);
+            resultPair = parseExpressionList(0);
+            if (resultPair.getKey() == null || resultPair.getValue() != myTokens.size()) {
+                throw new CommandSyntaxException("The input command cannot be parsed.");
+            }
+            return resultPair.getKey();
         } else {
             return resultPair.getKey();
         }
