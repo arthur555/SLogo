@@ -30,6 +30,7 @@ public class VariableView implements StateMachineObserver {
 
         this.stateMachine = stateMachine;
         this.stateMachine.register(this);
+        notifyListener();
 
         root = new ScrollPane();
         root.getStyleClass().add("variable-view-bg");

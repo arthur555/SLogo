@@ -43,7 +43,7 @@ public class CanvasView {
     }
 
     public void addTurtle(int id, TurtleModel model) {
-        var newView = new TurtleView(model, duration);
+        var newView = new TurtleView(model, duration, this::setBackgroundColor);
         turtleViews.put(id, newView);
         root.getChildren().addAll(newView.views());
     }

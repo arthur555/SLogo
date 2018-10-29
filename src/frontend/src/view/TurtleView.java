@@ -19,6 +19,8 @@ import model.UIListener;
 import view.utils.AnimationQueue;
 import view.utils.ImageUtils;
 
+import java.util.function.Consumer;
+
 /**
  *  Takes care of one single Turtle
  */
@@ -38,8 +40,9 @@ public class TurtleView implements ClearListener, UIListener {
     private double tempY;
     private double oldAngle;
     private TurtleModel model;
+    private Consumer<Color> bgColorChange;
 
-    public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel) {
+    public TurtleView(TurtleModel turtleModel, DoubleProperty durationModel, Consumer<Color> bgColorChange) {
         views = new Group();
         turtleImg = ImageUtils.getImageFromUrl("turtle_1.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView(turtleImg);
@@ -136,22 +139,15 @@ public class TurtleView implements ClearListener, UIListener {
     }
 
     @Override
-    public void setBackground(String colorStr) {
-        
-    }
+    public void setBackground(String colorStr) { bgColorChange.accept(Color.valueOf(colorStr)); }
 
     @Override
-    public void setPenColor(String colorStr) {
-
-    }
+    public void setPenColor(String colorStr) { penColor = Color.valueOf(colorStr); }
 
     @Override
-    public void setPenSize(int pixels) {
-
-    }
+    public void setPenSize(int pixels) { this.strokeSize = pixels; }
 
     @Override
-    public void setShape(String shapeStr) {
-
-    }
+    public void setShape(String shapeStr) { }
+    // parse the shapeString
 }
