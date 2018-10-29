@@ -117,7 +117,14 @@ public class CrudeLexer implements Lexer {
                     end++;
                     continue;
                 } else if (type.equals("Command")) {
-                    chunk = myLanguage.getSymbol(chunk);
+                    try {
+                        chunk = myLanguage.getSymbol(chunk);
+                    } catch (UndefinedKeywordException e) {
+                        myTokens.add(new Token(chunk, "Variable"));
+                        start = end + 1;
+                        end++;
+                        continue;
+                    }
                     type = myGrammerMap.get(chunk);
                     start = end + 1;
                     end++;
@@ -126,7 +133,7 @@ public class CrudeLexer implements Lexer {
                     end++;
                 }
                 myTokens.add(new Token(chunk, type));
-            } catch (CommandSyntaxException e) {
+            } catch (UndefinedKeywordException e) {
                 end++;
             }
         }
