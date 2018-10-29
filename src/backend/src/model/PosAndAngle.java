@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PosAndAngle {
+    public static final double X_BUF = 375;
+    public static final double Y_BUF = (X_BUF+25)*0.7-25;
+
     private double x, y, angle;
     private List<PosAndAngleListener> listeners;
 
     public PosAndAngle(double x, double y, double angle) {
-        this.x = x;
-        this.y = y;
+        this.x = x+X_BUF;
+        this.y = y+Y_BUF;
         this.angle = angle;
         listeners = new ArrayList<>();
     }
