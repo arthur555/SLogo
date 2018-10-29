@@ -74,6 +74,12 @@ public class Direct implements Expression {
         else if (myToken.getString().equals("Pi")){
             return Math.PI;
         }
+        else if (myToken.getString().equals("ID")){
+            return turtleManager.selected().get(turtleManager.selected().size() - 1);
+        }
+        else if (myToken.getString().equals("Turtles")){
+            return turtleManager.turtleModels().keySet().size();
+        }
         else if (myToken.getType().equals("Constant")){
             return Double.parseDouble(myToken.getString());
         }
