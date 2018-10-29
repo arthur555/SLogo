@@ -34,8 +34,21 @@ public class Quaternary implements Expression {
     @Override
     public double interpret(TurtleManager turtleManager) throws InterpretationException {
         if (myToken.getString().equals("SetPalette")) {
-            // TODO
+            double indexNum = firstArg.evaluate(turtleManager);
+            String index = "colorIndex" + (int)indexNum;
+            String hex = "#" + decimalToHex(secondArg.evaluate(turtleManager)) +
+                    decimalToHex(thirdArg.evaluate(turtleManager)) +
+                            decimalToHex(fourthArg.evaluate(turtleManager));
+            turtleManager.memory().setString(firstArg.toString(), hex);
+            return indexNum;
         }
         return 0;
+    }
+
+    private String decimalToHex(double num) throws InterpretationException {
+        if (num < 0 || num > 255){
+            throw new InterpretationException("RGB value not between range 0 and 255");
+        }
+        return Integer.toHexString( (int) num);
     }
 }

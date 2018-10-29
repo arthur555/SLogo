@@ -31,6 +31,7 @@ public class TurtleView implements ClearListener, UIListener {
     private ImageView turtle;
     private Image turtleImg;
     private Color penColor;
+    private double strokeSize;
     private DoubleProperty duration;
     private AnimationQueue animationQueue;
     private double tempX;
@@ -47,6 +48,7 @@ public class TurtleView implements ClearListener, UIListener {
         tempX = turtle.getX()+ TURTLE_SIZE/2;
         tempY = turtle.getY()+ TURTLE_SIZE/2;
         oldAngle = 0;
+        strokeSize = 1;
         turtle.setRotate(-turtleModel.getAngle());
         turtle.visibleProperty().bind(turtleModel.isVisibleModel());
         views.getChildren().add(turtle);
@@ -117,9 +119,11 @@ public class TurtleView implements ClearListener, UIListener {
         double currentY = turtle.getY()+TURTLE_SIZE/2+o/duration.doubleValue() *(newY-turtle.getY());
         path.getElements().add(new LineTo(currentX,currentY));
         path.setStroke(penColor);
+        path.setStrokeWidth(strokeSize);
         return path;
     }
 
+    public void setStrokeSize(double strokeSize){this.strokeSize = strokeSize;}
     public ImageView turtle() { return turtle; }
     public Group views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }

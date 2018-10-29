@@ -1,6 +1,7 @@
 package engine.compiler.translator;
 
 import engine.errors.CommandSyntaxException;
+import engine.errors.UndefinedKeywordException;
 
 import java.util.MissingResourceException;
 
@@ -29,9 +30,9 @@ public interface Translator {
      *
      * @param text: The raw input String.
      * @return A String that represents the meaning of the input String. For example "forward" or "fd" is actually "Forward".
-     * @throws CommandSyntaxException
+     * @throws UndefinedKeywordException
      */
-    String getSymbol(String text) throws CommandSyntaxException;
+    String getSymbol(String text) throws UndefinedKeywordException;
 
     /**
      * This method checks whether an input command is indeed defined in the properties files.
