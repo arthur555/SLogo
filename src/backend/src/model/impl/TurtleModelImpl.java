@@ -27,6 +27,9 @@ public class TurtleModelImpl implements TurtleModel {
         this.memory = memory;
     }
 
+    @Override
+    public void equipMemory(StateMachine memory) { this.memory = memory; }
+
     public double setPenDown(boolean down){
         penDown.setValue(down);
         return down ? TRUE : FALSE;

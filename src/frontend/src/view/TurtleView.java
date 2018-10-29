@@ -1,11 +1,13 @@
 package view;
 
+import engine.errors.InterpretationException;
 import javafx.animation.Animation;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -46,13 +48,21 @@ public class TurtleView implements ClearListener, UIListener {
         views = new Group();
         turtleImg = ImageUtils.getImageFromUrl("turtle_1.png", TURTLE_SIZE, TURTLE_SIZE);
         turtle = new ImageView(turtleImg);
-        turtle.setX(turtleModel.getX());
-        turtle.setY(turtleModel.getY());
+        try {
+            turtle.setX(turtleModel.getX());
+            turtle.setY(turtleModel.getY());
+            turtle.setRotate(-turtleModel.getAngle());
+        } catch (InterpretationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Something went wrong...");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
         tempX = turtle.getX()+ TURTLE_SIZE/2;
         tempY = turtle.getY()+ TURTLE_SIZE/2;
         oldAngle = 0;
         strokeSize = 1;
-        turtle.setRotate(-turtleModel.getAngle());
         turtle.visibleProperty().bind(turtleModel.isVisibleModel());
         views.getChildren().add(turtle);
 
@@ -65,8 +75,11 @@ public class TurtleView implements ClearListener, UIListener {
         animationQueue = new AnimationQueue(ANIMATION_LIMIT);
         bindObservable(turtleModel);
 
+        this.bgColorChange = bgColorChange;
+
         model = turtleModel;
         model.registerClearListener(this);
+        model.registerUIListener(this);
     }
 
     private void bindObservable(TurtleModel turtleModel) {
@@ -126,7 +139,6 @@ public class TurtleView implements ClearListener, UIListener {
         return path;
     }
 
-    public void setStrokeSize(double strokeSize){this.strokeSize = strokeSize;}
     public ImageView turtle() { return turtle; }
     public Group views() { return views; }
     public void setTurtleImage(Image v) { turtleImg = v; turtle.setImage(v); }
