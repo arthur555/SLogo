@@ -1,6 +1,7 @@
 package engine.compiler.translator;
 
 import engine.errors.CommandSyntaxException;
+import engine.errors.UndefinedKeywordException;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -64,16 +65,16 @@ public class TypeTranslator implements Translator {
      *
      * @param text: The input raw String
      * @return The associated String symbol that the raw string represents.
-     * @throws CommandSyntaxException: When the input raw String is not defined in the resources/languages properties files, a CommandSyntaxException is thrown, containing a message about which String is not defined.
+     * @throws UndefinedKeywordException: When the input raw String is not defined in the resources/languages properties files, a CommandSyntaxException is thrown, containing a message about which String is not defined.
      */
     @Override
-    public String getSymbol (String text) throws CommandSyntaxException {
+    public String getSymbol (String text) throws UndefinedKeywordException {
         for (var e : mySymbols) {
             if (match(text, e.getValue())) {
                 return e.getKey();
             }
         }
-        throw new CommandSyntaxException("\"" + text + "\"" + NO_MATCH);
+        throw new UndefinedKeywordException("\"" + text + "\"" + NO_MATCH);
     }
 
     /**
@@ -87,7 +88,7 @@ public class TypeTranslator implements Translator {
         try {
             getSymbol(text);
             return true;
-        } catch (CommandSyntaxException e) {
+        } catch (UndefinedKeywordException e) {
             return false;
         }
     }
